@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Приглашение на той</title>
+<meta name="description" content="Ответьте на приглашение: придёте или нет — организаторы увидят ответ сразу.">
+<meta name="robots" content="noindex">
+<meta property="og:title" content="Приглашение на той">
+<meta property="og:description" content="Ответьте, придёте ли вы — это займёт пару секунд.">
+<meta property="og:image" content="https://toimanagerapp.github.io/og.png">
+<meta name="theme-color" content="#E24B66">
+<link rel="icon" href="../favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<main class="wrap">
+  <div class="top">
+    <a class="brand" href="../"><img src="../icon-192.png" alt=""><span data-t="app">Той Менеджер</span></a>
+    <div class="lang" role="group" aria-label="Язык / Тил">
+      <button type="button" data-lang="ky">Кыр</button>
+      <button type="button" data-lang="ru">Рус</button>
+    </div>
+  </div>
+
+  <!-- загрузка -->
+  <section id="loading" class="stack" aria-busy="true">
+    <div class="hero"><div class="skeleton" style="width:40%;opacity:.5"></div><div class="skeleton" style="width:80%;height:28px;margin-top:12px;opacity:.5"></div></div>
+    <div class="card"><div class="skeleton"></div><div class="skeleton" style="width:60%;margin-top:10px"></div></div>
+  </section>
+
+  <!-- приглашение не найдено -->
+  <section id="missing" class="card stack" hidden>
+    <h2 data-t="missingTitle">Приглашение не найдено</h2>
+    <p class="muted" data-t="missingText">Возможно, ссылка скопирована не полностью или организатор удалил приглашение. Попросите прислать ссылку ещё раз.</p>
+  </section>
+
+  <!-- основное -->
+  <section id="main" class="stack" hidden>
+    <div class="hero">
+      <div class="eyebrow" data-t="invite">Приглашение</div>
+      <h1 id="title"></h1>
+      <p class="greet" id="greet"></p>
+    </div>
+
+    <div class="card">
+      <div class="row" id="whenRow">
+        <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg></div>
+        <div><div class="label" data-t="when">Когда</div><div class="value" id="when"></div><div class="muted" id="countdown"></div></div>
+      </div>
+      <div class="row" id="whereRow">
+        <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></div>
+        <div><div class="label" data-t="where">Где</div><div class="value" id="venue"></div><div class="muted" id="address"></div>
+          <div class="links">
+            <a class="chip" id="map2gis" target="_blank" rel="noopener" data-t="map">Открыть в 2ГИС</a>
+            <button class="chip" type="button" id="ics" data-t="calendar">В календарь</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- форма ответа -->
+    <div class="card stack" id="answerCard">
+      <h2 data-t="question">Сможете прийти?</h2>
+      <div class="choice">
+        <button class="btn btn-secondary yes" type="button" id="yesBtn" aria-pressed="false" data-t="yes">Приду</button>
+        <button class="btn btn-secondary no" type="button" id="noBtn" aria-pressed="false" data-t="no">Не смогу</button>
+      </div>
+      <div class="step" id="countRow" hidden>
+        <div><div class="value" data-t="howMany">Сколько вас будет?</div><div class="muted" data-t="withYou">вместе с вами</div></div>
+        <div class="ctrl">
+          <button type="button" id="minus" aria-label="Меньше">−</button>
+          <output id="count" aria-live="polite">1</output>
+          <button type="button" id="plus" aria-label="Больше">+</button>
+        </div>
+      </div>
+      <button class="btn btn-primary" type="button" id="send" disabled data-t="send">Отправить ответ</button>
+      <p class="err" id="err" role="alert" hidden></p>
+    </div>
+
+    <!-- ответ принят -->
+    <div class="card done" id="doneCard" hidden aria-live="polite">
+      <div class="mark" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path id="markPath" d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <h2 id="doneTitle"></h2>
+      <p class="muted" id="doneText"></p>
+      <div class="links" style="justify-content:center;margin-top:14px"><button class="chip" type="button" id="change" data-t="change">Изменить ответ</button></div>
+    </div>
+
+    <p class="muted" id="pastNote" hidden data-t="past">Этот той уже прошёл.</p>
+
+    <a class="card promo" href="../">
+      <img src="../icon-192.png" alt="">
+      <span><span class="value" data-t="promoTitle">Готовите свой той?</span><br><span class="muted" data-t="promoText">Гости, приглашения, конверты и бюджет — в приложении «Той Менеджер».</span></span>
+    </a>
+  </section>
+
+  <footer><a href="../privacy/" data-t="privacy">Политика конфиденциальности</a></footer>
+</main>
+
+<script>
+(() => {
+  const SB = 'https://ybygcijdpswvqrkxyimi.supabase.co';
+  const KEY = 'sb_publishable_AMNeSGIK-aTmllo1Q13bNw_aTCbRkPn'; // публичный ключ: даёт доступ только к ответу по приглашению
+
+  // Кыргызские тексты — черновик, нужна вычитка носителем языка
+  const T = {
+    ru: {
+      app: 'Той Менеджер', invite: 'Приглашение', when: 'Когда', where: 'Где', map: 'Открыть в 2ГИС', calendar: 'В календарь',
+      question: 'Сможете прийти?', yes: 'Приду', no: 'Не смогу', howMany: 'Сколько вас будет?', withYou: 'вместе с вами',
+      send: 'Отправить ответ', sending: 'Отправляем…', change: 'Изменить ответ', past: 'Этот той уже прошёл.',
+      promoTitle: 'Готовите свой той?', promoText: 'Гости, приглашения, конверты и бюджет — в приложении «Той Менеджер».',
+      privacy: 'Политика конфиденциальности',
+      missingTitle: 'Приглашение не найдено',
+      missingText: 'Возможно, ссылка скопирована не полностью или организатор удалил приглашение. Попросите прислать ссылку ещё раз.',
+      greet: (n) => `Ассалому алейкум, ${n}! Приглашаем вас на наш той.`,
+      yesTitle: 'Спасибо! Ждём вас', yesText: (c) => `Организаторы увидят, что вы придёте${c > 1 ? `, вас будет ${c}` : ''}.`,
+      noTitle: 'Спасибо за ответ', noText: 'Организаторы увидят, что вы не сможете прийти.',
+      error: 'Не удалось отправить. Проверьте интернет и попробуйте ещё раз.', loadError: 'Не удалось загрузить приглашение. Проверьте интернет и обновите страницу.',
+      days: (d) => d === 0 ? 'Сегодня!' : d === 1 ? 'Завтра' : `Через ${d} ${plural(d, ['день', 'дня', 'дней'])}`,
+      months: ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
+      weekdays: ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'],
+      date: (d, m, w, t, T) => `${d} ${T.months[m]}, ${T.weekdays[w]} · ${t}`,
+      less: 'Меньше', more: 'Больше',
+    },
+    ky: {
+      app: 'Той Менеджер', invite: 'Чакыруу', when: 'Качан', where: 'Кайда', map: '2ГИСте ачуу', calendar: 'Календарга кошуу',
+      question: 'Келе аласызбы?', yes: 'Келем', no: 'Келе албайм', howMany: 'Канча киши болосуздар?', withYou: 'өзүңүздү кошо',
+      send: 'Жоопту жөнөтүү', sending: 'Жөнөтүлүүдө…', change: 'Жоопту өзгөртүү', past: 'Бул той өтүп кетти.',
+      promoTitle: 'Той камдап жатасызбы?', promoText: 'Коноктор, чакыруулар, конверттер жана бюджет — «Той Менеджер» тиркемесинде.',
+      privacy: 'Купуялык саясаты',
+      missingTitle: 'Чакыруу табылган жок',
+      missingText: 'Шилтеме толук көчүрүлбөй калган же уюштуруучу чакырууну өчүргөн болушу мүмкүн. Шилтемени кайра жөнөтүүсүн сураныңыз.',
+      greet: (n) => `Ассалому алейкум, ${n}! Сизди тоюбузга чакырабыз.`,
+      yesTitle: 'Рахмат! Сизди күтөбүз', yesText: (c) => `Уюштуруучулар сиздин келериңизди көрүшөт${c > 1 ? `, ${c} киши` : ''}.`,
+      noTitle: 'Жообуңуз үчүн рахмат', noText: 'Уюштуруучулар сиздин келе албасыңызды көрүшөт.',
+      error: 'Жөнөтүлгөн жок. Интернетти текшерип, кайра аракет кылыңыз.', loadError: 'Чакыруу жүктөлгөн жок. Интернетти текшерип, баракты жаңыртыңыз.',
+      days: (d) => d === 0 ? 'Бүгүн!' : d === 1 ? 'Эртең' : `${d} күндөн кийин`,
+      months: ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'],
+      weekdays: ['жекшемби', 'дүйшөмбү', 'шейшемби', 'шаршемби', 'бейшемби', 'жума', 'ишемби'],
+      date: (d, m, w, t, T) => `${d}-${T.months[m]}, ${T.weekdays[w]} · ${t}`,
+      less: 'Азыраак', more: 'Көбүрөөк',
+    },
+  };
+  function plural(n, [one, few, many]) {
+    const a = n % 10, b = n % 100;
+    return a === 1 && b !== 11 ? one : a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many;
+  }
+  const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+                  set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+  let lang = store.get('lang') || ((navigator.language || '').startsWith('ky') ? 'ky' : 'ru');
+
+  const $ = (id) => document.getElementById(id);
+  const token = new URLSearchParams(location.search).get('t') || location.hash.slice(1);
+  let inv = null, answer = null, count = 1;
+
+  async function rpc(name, body) {
+    const r = await fetch(`${SB}/rest/v1/rpc/${name}`, {
+      method: 'POST', headers: { apikey: KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(body),
+    });
+    if (!r.ok) { const e = new Error(await r.text()); e.status = r.status; throw e; }
+    const txt = await r.text();
+    return txt ? JSON.parse(txt) : null;
+  }
+
+  function bishkek(iso) {           // время тоя по Бишкеку (UTC+6)
+    const d = new Date(Date.parse(iso) + 6 * 3600e3);
+    const p = (n) => String(n).padStart(2, '0');
+    return { d: d.getUTCDate(), m: d.getUTCMonth(), w: d.getUTCDay(), y: d.getUTCFullYear(), t: `${p(d.getUTCHours())}:${p(d.getUTCMinutes())}` };
+  }
+  function daysLeft(iso) {
+    const b = bishkek(iso), now = bishkek(new Date().toISOString());
+    return Math.round((Date.UTC(b.y, b.m, b.d) - Date.UTC(now.y, now.m, now.d)) / 864e5);
+  }
+
+  function render() {
+    const L = T[lang];
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-t]').forEach((el) => { const v = L[el.dataset.t]; if (typeof v === 'string') el.textContent = v; });
+    document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+    $('minus').setAttribute('aria-label', L.less); $('plus').setAttribute('aria-label', L.more);
+    if (!inv) return;
+    $('title').textContent = inv.toi_title;
+    document.title = `${L.invite}: ${inv.toi_title}`;
+    $('greet').textContent = L.greet(inv.guest_name.split(/\s+/)[0]);
+    if (inv.starts_at) {
+      const b = bishkek(inv.starts_at), dl = daysLeft(inv.starts_at);
+      $('when').textContent = L.date(b.d, b.m, b.w, b.t, L);
+      $('countdown').textContent = dl >= 0 ? L.days(dl) : '';
+      $('whenRow').hidden = false;
+    } else $('whenRow').hidden = true;
+    const place = [inv.venue_name, inv.venue_address].filter(Boolean);
+    $('whereRow').hidden = place.length === 0;
+    $('venue').textContent = inv.venue_name || inv.venue_address || '';
+    $('address').textContent = inv.venue_name && inv.venue_address ? inv.venue_address : '';
+    $('map2gis').href = `https://2gis.kg/search/${encodeURIComponent(place.join(', '))}`;
+    $('ics').hidden = !inv.starts_at;
+    $('count').textContent = count;
+    $('yesBtn').setAttribute('aria-pressed', String(answer === 'yes'));
+    $('noBtn').setAttribute('aria-pressed', String(answer === 'no'));
+    $('countRow').hidden = answer !== 'yes';
+    $('send').disabled = !answer;
+    if (inv.rsvp === 'yes' || inv.rsvp === 'no') {
+      $('doneTitle').textContent = inv.rsvp === 'yes' ? L.yesTitle : L.noTitle;
+      $('doneText').textContent = inv.rsvp === 'yes' ? L.yesText(inv.rsvp_count || 1) : L.noText;
+      $('doneCard').classList.toggle('no', inv.rsvp === 'no');
+      $('markPath').setAttribute('d', inv.rsvp === 'yes' ? 'M5 12.5l4.5 4.5L19 7.5' : 'M6 12h12');
+    }
+  }
+
+  function showAnswered(on) {
+    $('answerCard').hidden = on;
+    $('doneCard').hidden = !on;
+  }
+
+  async function load() {
+    if (!token) { $('loading').hidden = true; $('missing').hidden = false; return; }
+    try {
+      inv = await rpc('public_invitation', { p_token: token });
+    } catch (e) {
+      $('loading').hidden = true;
+      if (e.status === 400 || e.status === 404) { $('missing').hidden = false; return; }   // неверный токен
+      $('missing').hidden = false;
+      $('missing').querySelector('p').textContent = T[lang].loadError;
+      return;
+    }
+    $('loading').hidden = true;
+    if (!inv) { $('missing').hidden = false; return; }
+    count = inv.rsvp_count || inv.party_size || 1;
+    answer = inv.rsvp === 'yes' || inv.rsvp === 'no' ? inv.rsvp : null;
+    const past = inv.starts_at && daysLeft(inv.starts_at) < 0;
+    $('main').hidden = false;
+    $('pastNote').hidden = !past;
+    if (past) { $('answerCard').hidden = true; $('doneCard').hidden = !(inv.rsvp === 'yes' || inv.rsvp === 'no'); $('change').hidden = true; }
+    else showAnswered(inv.rsvp === 'yes' || inv.rsvp === 'no');
+    render();
+  }
+
+  $('yesBtn').onclick = () => { answer = 'yes'; render(); };
+  $('noBtn').onclick = () => { answer = 'no'; render(); };
+  $('minus').onclick = () => { count = Math.max(1, count - 1); render(); };
+  $('plus').onclick = () => { count = Math.min(50, count + 1); render(); };
+  $('change').onclick = () => { showAnswered(false); render(); };
+  $('send').onclick = async () => {
+    const L = T[lang];
+    $('send').disabled = true; $('send').textContent = L.sending; $('err').hidden = true;
+    try {
+      await rpc('public_rsvp', { p_token: token, p_answer: answer, p_count: answer === 'yes' ? count : 0 });
+      inv.rsvp = answer; inv.rsvp_count = answer === 'yes' ? count : 0;
+      showAnswered(true);
+    } catch {
+      $('err').textContent = L.error; $('err').hidden = false;
+    }
+    $('send').textContent = L.send;
+    render();
+  };
+  document.querySelectorAll('[data-lang]').forEach((b) => b.onclick = () => { lang = b.dataset.lang; store.set('lang', lang); render(); });
+
+  // Файл для календаря телефона (.ics)
+  $('ics').onclick = () => {
+    const start = new Date(inv.starts_at), end = new Date(start.getTime() + 5 * 3600e3);
+    const f = (d) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+    const esc = (s) => String(s || '').replace(/([,;\\])/g, '\\$1');
+    const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Toi Manager//RU', 'BEGIN:VEVENT',
+      `UID:${token}@toimanager`, `DTSTAMP:${f(new Date())}`, `DTSTART:${f(start)}`, `DTEND:${f(end)}`,
+      `SUMMARY:${esc(inv.toi_title)}`, `LOCATION:${esc([inv.venue_name, inv.venue_address].filter(Boolean).join(', '))}`,
+      'BEGIN:VALARM', 'TRIGGER:-P1D', 'ACTION:DISPLAY', `DESCRIPTION:${esc(inv.toi_title)}`, 'END:VALARM',
+      'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
+    a.download = 'toi.ics'; document.body.appendChild(a); a.click(); a.remove();
+  };
+
+  render();
+  load();
+})();
+</script>
+</body>
+</html>
