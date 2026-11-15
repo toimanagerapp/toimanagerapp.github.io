@@ -90,3 +90,8 @@ footer a { color: var(--muted); }
 .feat { display: grid; gap: 10px; }
 [hidden] { display: none !important; }
 @media (prefers-reduced-motion: reduce) { .skeleton { animation: none; } }
+/* Барсёнок выглядывает из-за карточки: картинка дважды — снизу целиком, сверху только лапы поверх карточки */
+.peek { position: relative; }
+.peek > img { display: block; width: 100%; height: auto; }
+.peek > img.paws { position: absolute; top: 0; left: 0; pointer-events: none; }
+.peek > .card { margin: -7.33% 3% 0; padding-top: calc(7.33% + 14px); border-radius: 26px; }
