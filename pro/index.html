@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Безлимит для тоя</title>
+<meta name="description" content="«Безлимит» для тоя в приложении «Той Менеджер»: сколько угодно гостей, действует год.">
+<meta property="og:title" content="Безлимит для тоя — Той Менеджер">
+<meta property="og:description" content="Сколько угодно гостей в вашем тое. Оплата через MBank или O!Деньги.">
+<meta property="og:image" content="https://toimanagerapp.github.io/og.png">
+<meta name="theme-color" content="#E24B66">
+<link rel="icon" href="../favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<style>
+  .num-input { width: 100%; min-height: 56px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface);
+    font: inherit; font-size: 24px; font-weight: 700; letter-spacing: 0.08em; text-align: center; color: var(--ink); padding: 0 12px; }
+  .num-input::placeholder { color: #CDBFC1; font-weight: 500; }
+  .num-input:focus, .field:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(210, 63, 89, 0.15); }
+  .field { width: 100%; min-height: 50px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface);
+    font: inherit; font-size: 16px; color: var(--ink); padding: 0 14px; }
+  .flabel { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 6px; display: block; }
+  .price { font-size: 40px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
+  .price small { font-size: 18px; font-weight: 600; color: var(--muted); }
+  .meter { height: 6px; border-radius: 3px; background: #F3EDEE; overflow: hidden; margin-top: 8px; }
+  .meter i { display: block; height: 100%; background: #E2A93B; border-radius: 3px; }
+  .qr { display: block; width: 100%; max-width: 260px; margin: 4px auto 0; border-radius: 16px; border: 1px solid var(--line); background: #fff; }
+  .pay-row { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+  .pay-row b { font-size: 18px; user-select: all; }
+  ol.steps { margin: 0; padding-left: 22px; } ol.steps li { margin: 6px 0; }
+  .note { background: #FEF3DC; border-radius: 14px; padding: 12px 14px; font-size: 14px; }
+  details summary { cursor: pointer; font-weight: 600; min-height: 32px; }
+  details p { margin-top: 6px; }
+  .ok-card { background: var(--success-soft); border: 1px solid #BFE8D6; }
+</style>
+</head>
+<body>
+<main class="wrap stack">
+  <div class="top">
+    <a class="brand" href="../"><img src="../icon-192.png" alt=""><span>Той Менеджер</span></a>
+    <div class="lang" role="group" aria-label="Язык / Тил">
+      <button type="button" data-lang="ky">Кыр</button>
+      <button type="button" data-lang="ru">Рус</button>
+    </div>
+  </div>
+
+  <section class="hero stack">
+    <h1 data-t="title">Безлимит для тоя</h1>
+    <p style="opacity:.95" data-t="lead">Сколько угодно гостей в вашем тое. Действует год — на подготовку, сам той и подсчёт конвертов.</p>
+  </section>
+
+  <!-- 1. номер тоя -->
+  <section class="card stack" id="findCard">
+    <div>
+      <label class="flabel" for="num" data-t="numLabel">Номер тоя</label>
+      <input class="num-input" id="num" inputmode="numeric" autocomplete="off" maxlength="7" placeholder="000 000">
+      <p class="muted" style="font-size:14px;margin-top:8px" data-t="numHint">В приложении: Ещё → Тариф. Номер есть и на карточке «Бесплатно — до 35 человек».</p>
+    </div>
+    <button class="btn btn-primary" type="button" id="find" data-t="find">Продолжить</button>
+    <p class="err" id="findErr" role="alert" hidden></p>
+  </section>
+
+  <!-- 2. той найден -->
+  <section class="stack" id="toiBlock" hidden>
+    <div class="card">
+      <div class="pay-row"><span class="label" data-t="toiLabel">Той</span><b id="toiNum"></b></div>
+      <p class="muted" id="toiDate" style="margin-top:4px"></p>
+      <p style="margin-top:10px" id="toiPeople"></p>
+      <div class="meter" aria-hidden="true"><i id="toiMeter"></i></div>
+      <button class="chip" type="button" id="other" style="margin-top:12px" data-t="other">Другой номер</button>
+    </div>
+
+    <div class="card ok-card stack" id="proActive" hidden>
+      <h2 id="proActiveTitle"></h2>
+      <p data-t="proActiveText">Добавляйте гостей без ограничений. Если нужно продлить — оплатите ещё раз, срок продлится на год.</p>
+    </div>
+
+    <div class="card ok-card stack" id="pending" hidden aria-live="polite">
+      <h2 data-t="pendingTitle">Заявку получили</h2>
+      <p data-t="pendingText">Проверим оплату и откроем безлимит в течение дня. В приложении потяните экран вниз, чтобы обновить.</p>
+    </div>
+
+    <!-- оплата -->
+    <div class="card stack" id="payCard">
+      <div>
+        <div class="price"><span id="price">990</span> <small data-t="som">сом</small></div>
+        <p class="muted" style="margin-top:6px" data-t="once">Один раз за этот той, действует год</p>
+      </div>
+      <h2 style="margin:4px 0 0" id="howTitle" data-t="howTitle">Как оплатить</h2>
+      <ol class="steps" id="steps">
+        <li id="stepQr" data-t="stepQr">Оплатите по QR в приложении MBank или O!&#8288;Деньги: «Оплата по QR» → «Выбрать из галереи», если открыли эту страницу на телефоне.</li>
+        <li id="stepPhone" hidden><span data-t="stepPhone">Или переводом по номеру телефона</span>: <b id="payPhone" style="user-select:all"></b> <span id="payBank" class="muted"></span></li>
+        <li data-t="stepComment">Если в банке есть поле «Комментарий» — укажите номер тоя.</li>
+        <li data-t="stepClaim">Нажмите «Я оплатил» ниже.</li>
+      </ol>
+      <img class="qr" id="qr" alt="QR для оплаты" hidden>
+      <a class="chip" id="qrSave" download="toi-manager-qr.png" style="align-self:center" hidden data-t="qrSave">Сохранить QR в галерею</a>
+      <p class="note" id="noPay" hidden data-t="noPay">Реквизиты для оплаты появятся здесь совсем скоро. Если нужно срочно — напишите на toimanager.app@gmail.com с номером тоя.</p>
+    </div>
+
+    <!-- заявка -->
+    <div class="card stack" id="claimCard">
+      <h2 style="margin:0" data-t="claimTitle">После оплаты</h2>
+      <div>
+        <label class="flabel" for="payer" data-t="payerLabel">Имя отправителя — как в банке</label>
+        <input class="field" id="payer" autocomplete="name" maxlength="100">
+        <p class="muted" style="font-size:13px;margin-top:6px" data-t="payerHint">Например, «Айбек Т.» — так мы найдём ваш платёж.</p>
+      </div>
+      <div>
+        <label class="flabel" for="phone" data-t="phoneLabel">Телефон для связи (необязательно)</label>
+        <input class="field" id="phone" type="tel" autocomplete="tel" maxlength="30" placeholder="0700 123 456">
+      </div>
+      <button class="btn btn-primary" type="button" id="claim" disabled data-t="claim">Я оплатил</button>
+      <p class="err" id="claimErr" role="alert" hidden></p>
+    </div>
+  </section>
+
+  <section class="card stack doc">
+    <h2 style="margin:0" data-t="faqTitle">Вопросы</h2>
+    <details><summary data-t="q1">Что бесплатно?</summary><p class="muted" data-t="a1">До 35 человек в тое — считаются все приглашённые вместе с семьями. Гости, пришедшие без приглашения, в лимит не входят: у входа их всегда можно отметить.</p></details>
+    <details><summary data-t="q2">На что действует оплата?</summary><p class="muted" data-t="a2">На один той — тот, чей номер вы ввели. Вся команда тоя (родня, помощники) пользуется безлимитом без отдельной оплаты. Срок — год, но не меньше 90 дней после тоя.</p></details>
+    <details><summary data-t="q3">Оплатил, но безлимит не открылся</summary><p class="muted" data-t="a3">Обычно открываем в течение дня. Если прошло больше суток — напишите на toimanager.app@gmail.com, укажите номер тоя и имя отправителя.</p></details>
+  </section>
+
+  <footer><a href="../privacy/" data-t="privacy">Политика конфиденциальности</a></footer>
+</main>
+
+<script>
+(() => {
+  const SB = 'https://ybygcijdpswvqrkxyimi.supabase.co';
+  const KEY = 'sb_publishable_AMNeSGIK-aTmllo1Q13bNw_aTCbRkPn'; // публичный ключ
+  // Реквизиты для оплаты. qr — файл картинки QR в этой папке (например 'qr.png'); phone — номер для перевода.
+  const PAY = { qr: '', phone: '', bank: '' };
+
+  // Кыргызские тексты — черновик, нужна вычитка носителем языка
+  const T = {
+    ru: {
+      title: 'Безлимит для тоя', lead: 'Сколько угодно гостей в вашем тое. Действует год — на подготовку, сам той и подсчёт конвертов.',
+      numLabel: 'Номер тоя', numHint: 'В приложении: Ещё → Тариф. Номер есть и на карточке «Бесплатно — до 35 человек».',
+      find: 'Продолжить', finding: 'Ищем…', other: 'Другой номер', toiLabel: 'Той',
+      notFound: 'Той с таким номером не найден. Проверьте 6 цифр.', numBad: 'Номер тоя — 6 цифр', loadError: 'Не удалось загрузить. Проверьте интернет.',
+      people: (p, l) => p >= l ? `В списке ${p} из ${l} бесплатных — лимит исчерпан` : `В списке ${p} из ${l} бесплатных`,
+      proActive: (d) => `Безлимит открыт до ${d}`,
+      proActiveText: 'Добавляйте гостей без ограничений. Если нужно продлить — оплатите ещё раз, срок продлится на год.',
+      pendingTitle: 'Заявку получили', pendingText: 'Проверим оплату и откроем безлимит в течение дня. В приложении потяните экран вниз, чтобы обновить.',
+      som: 'сом', once: 'Один раз за этот той, действует год', howTitle: 'Как оплатить',
+      stepQr: 'Оплатите по QR в приложении MBank или O!\u2060Деньги: «Оплата по QR» → «Выбрать из галереи», если открыли эту страницу на телефоне.',
+      stepPhone: 'Или переводом по номеру телефона', stepComment: 'Если в банке есть поле «Комментарий» — укажите номер тоя.',
+      stepClaim: 'Нажмите «Я оплатил» ниже.', qrSave: 'Сохранить QR в галерею',
+      noPay: 'Реквизиты для оплаты появятся здесь совсем скоро. Если нужно срочно — напишите на toimanager.app@gmail.com с номером тоя.',
+      claimTitle: 'После оплаты', payerLabel: 'Имя отправителя — как в банке', payerHint: 'Например, «Айбек Т.» — так мы найдём ваш платёж.',
+      phoneLabel: 'Телефон для связи (необязательно)', claim: 'Я оплатил', sending: 'Отправляем…',
+      claimError: 'Не удалось отправить. Проверьте интернет и попробуйте ещё раз.',
+      faqTitle: 'Вопросы', q1: 'Что бесплатно?',
+      a1: 'До 35 человек в тое — считаются все приглашённые вместе с семьями. Гости, пришедшие без приглашения, в лимит не входят: у входа их всегда можно отметить.',
+      q2: 'На что действует оплата?',
+      a2: 'На один той — тот, чей номер вы ввели. Вся команда тоя (родня, помощники) пользуется безлимитом без отдельной оплаты. Срок — год, но не меньше 90 дней после тоя.',
+      q3: 'Оплатил, но безлимит не открылся',
+      a3: 'Обычно открываем в течение дня. Если прошло больше суток — напишите на toimanager.app@gmail.com, укажите номер тоя и имя отправителя.',
+      privacy: 'Политика конфиденциальности',
+      months: ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
+      date: (d, m, y, T) => `${d} ${T.months[m]} ${y}`, toiDate: (s) => `Дата тоя: ${s}`, noDate: 'Дата тоя не указана',
+    },
+    ky: {
+      title: 'Той үчүн чексиз', lead: 'Тойго каалагандай конок кошуңуз. Бир жылга жарактуу — даярдыкка, тойдун өзүнө жана конверттерди эсептөөгө.',
+      numLabel: 'Тойдун номери', numHint: 'Тиркемеде: Дагы → Тариф. Номер «Акысыз — 35 кишиге чейин» карточкасында да бар.',
+      find: 'Улантуу', finding: 'Изделүүдө…', other: 'Башка номер', toiLabel: 'Той',
+      notFound: 'Мындай номердеги той табылган жок. 6 санды текшериңиз.', numBad: 'Тойдун номери — 6 сан', loadError: 'Жүктөлгөн жок. Интернетти текшериңиз.',
+      people: (p, l) => p >= l ? `Тизмеде ${p} / ${l} акысыз — лимит бүттү` : `Тизмеде ${p} / ${l} акысыз`,
+      proActive: (d) => `Чексиз ${d} чейин ачык`,
+      proActiveText: 'Конокторду чектөөсүз кошуңуз. Узартуу керек болсо — кайра төлөңүз, мөөнөт бир жылга узарат.',
+      pendingTitle: 'Өтүнмө кабыл алынды', pendingText: 'Төлөмдү текшерип, бир күндүн ичинде ачабыз. Тиркемеде жаңыртуу үчүн экранды ылдый тартыңыз.',
+      som: 'сом', once: 'Ушул той үчүн бир жолу, бир жылга', howTitle: 'Кантип төлөө керек',
+      stepQr: 'MBank же O!\u2060Деньги тиркемесинде QR аркылуу төлөңүз: «QR менен төлөө» → «Галереядан тандоо», эгер бул баракты телефондон ачсаңыз.',
+      stepPhone: 'Же телефон номери аркылуу которуу', stepComment: 'Банкта «Комментарий» талаасы болсо — тойдун номерин жазыңыз.',
+      stepClaim: 'Төмөндөгү «Төлөдүм» баскычын басыңыз.', qrSave: 'QRди галереяга сактоо',
+      noPay: 'Төлөм реквизиттери жакында ушул жерде пайда болот. Шашылыш болсо — toimanager.app@gmail.com дарегине тойдун номери менен жазыңыз.',
+      claimTitle: 'Төлөгөндөн кийин', payerLabel: 'Жөнөтүүчүнүн аты — банктагыдай', payerHint: 'Мисалы, «Айбек Т.» — ушундай төлөмүңүздү табабыз.',
+      phoneLabel: 'Байланыш үчүн телефон (милдеттүү эмес)', claim: 'Төлөдүм', sending: 'Жөнөтүлүүдө…',
+      claimError: 'Жөнөтүлгөн жок. Интернетти текшерип, кайра аракет кылыңыз.',
+      faqTitle: 'Суроолор', q1: 'Эмне акысыз?',
+      a1: 'Тойго 35 кишиге чейин — үй-бүлөсү менен чакырылгандардын баары эсептелет. Чакырусуз келген коноктор лимитке кирбейт: аларды кире бериште дайыма белгилесе болот.',
+      q2: 'Төлөм эмнеге жарактуу?',
+      a2: 'Бир тойго — номерин киргизген тойго. Тойдун бүт командасы (тууган-урук, жардамчылар) өзүнчө төлөбөй эле колдонот. Мөөнөтү — бир жыл, бирок тойдон кийин 90 күндөн кем эмес.',
+      q3: 'Төлөдүм, бирок ачылган жок',
+      a3: 'Адатта бир күндүн ичинде ачабыз. Бир суткадан ашса — toimanager.app@gmail.com дарегине тойдун номерин жана жөнөтүүчүнүн атын жазыңыз.',
+      privacy: 'Купуялык саясаты',
+      months: ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'],
+      date: (d, m, y, T) => `${y}-ж. ${d}-${T.months[m]}`, toiDate: (s) => `Тойдун күнү: ${s}`, noDate: 'Тойдун күнү көрсөтүлгөн эмес',
+    },
+  };
+  const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+                  set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+  let lang = store.get('lang') || ((navigator.language || '').startsWith('ky') ? 'ky' : 'ru');
+  const $ = (id) => document.getElementById(id);
+  let info = null, num = null, claimed = false;
+
+  async function rpc(name, body) {
+    const r = await fetch(`${SB}/rest/v1/rpc/${name}`, {
+      method: 'POST', headers: { apikey: KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(body),
+    });
+    if (!r.ok) { const e = new Error(await r.text()); e.status = r.status; throw e; }
+    const txt = await r.text();
+    return txt ? JSON.parse(txt) : null;
+  }
+  const fmtNum = (n) => String(n).replace(/(\d{3})(\d{3})/, '$1 $2');
+  function fmtDay(iso, L) {
+    const d = new Date(Date.parse(iso) + 6 * 3600e3);   // по Бишкеку
+    return L.date(d.getUTCDate(), d.getUTCMonth(), d.getUTCFullYear(), L);
+  }
+
+  function render() {
+    const L = T[lang];
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-t]').forEach((el) => { const v = L[el.dataset.t]; if (typeof v === 'string') el.textContent = v; });
+    document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+    document.title = L.title;
+    // реквизиты
+    $('qr').hidden = $('qrSave').hidden = !PAY.qr;
+    if (PAY.qr) { $('qr').src = PAY.qr; $('qrSave').href = PAY.qr; }
+    $('stepQr').hidden = !PAY.qr;
+    $('stepPhone').hidden = !PAY.phone;
+    $('payPhone').textContent = PAY.phone; $('payBank').textContent = PAY.bank ? `(${PAY.bank})` : '';
+    const hasPay = Boolean(PAY.qr || PAY.phone);
+    $('noPay').hidden = hasPay;
+    $('steps').hidden = $('howTitle').hidden = !hasPay;
+    if (!info) return;
+    $('toiNum').textContent = `№ ${fmtNum(info.num)}`;
+    $('toiDate').textContent = info.starts_at ? L.toiDate(fmtDay(info.starts_at, L)) : L.noDate;
+    const pro = Boolean(info.pro_until);
+    $('toiPeople').textContent = pro ? '' : L.people(info.people, info.limit);
+    $('toiPeople').hidden = pro;
+    $('toiMeter').parentElement.hidden = pro;
+    $('toiMeter').style.width = `${Math.min(100, (info.people / info.limit) * 100)}%`;
+    $('price').textContent = Number(info.price).toLocaleString('ru-RU');
+    $('proActive').hidden = !pro;
+    if (pro) $('proActiveTitle').textContent = L.proActive(fmtDay(info.pro_until, L));
+    const pending = info.pending_claim || claimed;
+    $('pending').hidden = !pending;
+    $('payCard').hidden = pending;
+    $('claimCard').hidden = pending || !(PAY.qr || PAY.phone);
+    $('claim').disabled = !$('payer').value.trim();
+  }
+
+  async function find() {
+    const L = T[lang];
+    const digits = $('num').value.replace(/\D/g, '');
+    $('findErr').hidden = true;
+    if (digits.length !== 6) { $('findErr').textContent = L.numBad; $('findErr').hidden = false; return; }
+    $('find').disabled = true; $('find').textContent = L.finding;
+    try {
+      info = await rpc('public_pay_info', { p_num: Number(digits) });
+      if (!info) { $('findErr').textContent = L.notFound; $('findErr').hidden = false; }
+      else {
+        num = Number(digits); claimed = false;
+        history.replaceState(null, '', `?n=${digits}`);
+        $('findCard').hidden = true; $('toiBlock').hidden = false;
+      }
+    } catch {
+      $('findErr').textContent = L.loadError; $('findErr').hidden = false;
+    }
+    $('find').disabled = false; $('find').textContent = L.find;
+    render();
+  }
+
+  $('num').addEventListener('input', () => {
+    const d = $('num').value.replace(/\D/g, '').slice(0, 6);
+    $('num').value = d.length > 3 ? `${d.slice(0, 3)} ${d.slice(3)}` : d;
+  });
+  $('num').addEventListener('keydown', (e) => { if (e.key === 'Enter') find(); });
+  $('find').onclick = find;
+  $('other').onclick = () => { info = null; $('toiBlock').hidden = true; $('findCard').hidden = false; $('num').focus(); history.replaceState(null, '', location.pathname); };
+  $('payer').addEventListener('input', render);
+  $('claim').onclick = async () => {
+    const L = T[lang];
+    $('claim').disabled = true; $('claim').textContent = L.sending; $('claimErr').hidden = true;
+    try {
+      await rpc('public_pay_claim', { p_num: num, p_payer_name: $('payer').value.trim(), p_phone: $('phone').value.trim() || null });
+      claimed = true;
+      render();
+      $('pending').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch {
+      $('claimErr').textContent = L.claimError; $('claimErr').hidden = false;
+    }
+    $('claim').textContent = L.claim;
+    render();
+  };
+  document.querySelectorAll('[data-lang]').forEach((b) => b.onclick = () => { lang = b.dataset.lang; store.set('lang', lang); render(); });
+
+  const pre = (new URLSearchParams(location.search).get('n') || '').replace(/\D/g, '');
+  render();
+  if (pre.length === 6) { $('num').value = `${pre.slice(0, 3)} ${pre.slice(3)}`; find(); }
+})();
+</script>
+</body>
+</html>
