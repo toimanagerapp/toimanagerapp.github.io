@@ -252,6 +252,7 @@
     if (m.includes('user not found')) return 'Пользователь с такой почтой не найден — пусть сначала войдёт в приложение';
     if (m.includes('toi not found')) return 'Той не найден';
     if (m.includes('yourself')) return 'Себя удалить нельзя';
+    if (m.includes('permanent admin')) return 'Это постоянный владелец — его нельзя убрать';
     if (m.includes('vendor not found')) return 'Карточка не найдена';
     if (m.includes('bad price')) return 'Проверьте цену';
     if (m.includes('bad days')) return 'Проверьте число дней';
@@ -288,6 +289,7 @@
     const { data: { session } } = await sb.auth.getSession();
     $('loading').hidden = true;
     if (!session) { $('loginView').hidden = false; return; }
+    try { await rpc('admin_claim'); } catch (e) { /* функции может ещё не быть — не мешает входу */ }
     try { me = await rpc('admin_me'); } catch (e) { me = null; }
     if (!me) {
       $('denyText').textContent = `${session.user.email} — не администратор. Попросите владельца добавить вас.`;
