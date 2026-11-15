@@ -94,4 +94,4 @@ footer a { color: var(--muted); }
 .peek { position: relative; }
 .peek > img { display: block; width: 100%; height: auto; }
 .peek > img.paws { position: absolute; top: 0; left: 0; pointer-events: none; }
-.peek > .card { margin: -7.33% 3% 0; padding-top: calc(7.33% + 14px); border-radius: 26px; }
+.peek > .card { margin: -9.74% 3% 0; padding-top: calc(9.74% + 14px); border-radius: 26px; }
