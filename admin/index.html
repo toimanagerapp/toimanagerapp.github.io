@@ -72,6 +72,29 @@
   .nowrap { white-space: nowrap; }
   table.wide { min-width: 560px; }
   @media (max-width: 560px) { .who span.mail { display: none; } }
+  /* Каталог */
+  .seg { display: inline-flex; gap: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+  .seg button { border: 0; background: transparent; font: inherit; font-size: 14px; font-weight: 700; color: var(--muted); padding: 7px 14px; border-radius: 999px; cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent-dark); }
+  .vrow { display: grid; grid-template-columns: 64px 1fr auto; gap: 12px; align-items: center; }
+  .thumb { width: 64px; height: 64px; border-radius: 14px; object-fit: cover; background: var(--accent-soft); display: grid; place-items: center; color: var(--accent-dark); font-weight: 800; }
+  .photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
+  .ph { position: relative; aspect-ratio: 1; border-radius: 14px; overflow: hidden; background: var(--accent-soft); }
+  .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ph .tools { position: absolute; inset: auto 4px 4px 4px; display: flex; gap: 4px; justify-content: space-between; }
+  .ph .tools button { border: 0; border-radius: 8px; background: rgba(30,26,46,.72); color: #fff; font: inherit; font-size: 13px; font-weight: 800; min-width: 30px; height: 30px; cursor: pointer; }
+  .ph .cover { position: absolute; top: 6px; left: 6px; background: var(--ink); color: #fff; font-size: 11px; font-weight: 800; padding: 2px 7px; border-radius: 999px; }
+  .ph.add { display: grid; place-items: center; border: 2px dashed #D8CFF1; background: var(--surface); cursor: pointer; color: var(--accent-dark); font-weight: 800; text-align: center; font-size: 14px; padding: 6px; }
+  .fgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .fgrid .wide2 { grid-column: 1 / -1; }
+  textarea.input { min-height: 110px; padding: 12px 14px; resize: vertical; line-height: 1.45; }
+  .pv { max-width: 320px; border-radius: 22px; overflow: hidden; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); }
+  .pv .img { aspect-ratio: 4 / 3; background: var(--hero); }
+  .pv .img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pv .body { padding: 12px 14px 14px; }
+  .pv .ad { font-size: 11px; font-weight: 800; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; }
+  .switch { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; cursor: pointer; }
+  .switch input { width: 20px; height: 20px; accent-color: #5B3FD6; }
 </style>
 </head>
 <body>
@@ -104,6 +127,7 @@
     <nav class="tabs" role="tablist" aria-label="Разделы">
       <button role="tab" data-tab="claims" aria-selected="true">Заявки <span class="count" id="claimsCount" hidden></span></button>
       <button role="tab" data-tab="search">Поиск</button>
+      <button role="tab" data-tab="catalog">Каталог <span class="count" id="vclaimsCount" hidden></span></button>
       <button role="tab" data-tab="stats">Статистика</button>
       <button role="tab" data-tab="income" data-owner>Доход</button>
       <button role="tab" data-tab="admins" data-owner>Администраторы</button>
@@ -131,6 +155,30 @@
       <div id="results" class="stack"></div>
     </section>
 
+    <!-- Каталог исполнителей -->
+    <section data-view="catalog" class="stack" hidden>
+      <div class="card stack" id="catSettings"></div>
+      <div class="kpis" id="catKpis"></div>
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">
+        <div class="seg" role="group" aria-label="Раздел каталога">
+          <button type="button" data-catview="claims" aria-pressed="true">Заявки <span id="vcl"></span></button>
+          <button type="button" data-catview="vendors" aria-pressed="false">Карточки</button>
+        </div>
+        <button class="b primary" type="button" id="newVendor">+ Новая карточка</button>
+      </div>
+      <div id="vendorEditor"></div>
+      <div id="catClaims" class="grid"></div>
+      <div id="catVendors" class="stack" hidden>
+        <div class="inline">
+          <input class="input" id="vq" placeholder="Название, телефон или номер" autocomplete="off">
+          <select class="input" id="vstatus" style="flex:0 1 220px">
+            <option value="all">Все</option><option value="visible">В каталоге</option><option value="soon">Заканчиваются (7 дней)</option>
+            <option value="draft">Черновики</option><option value="ended">Закончились / скрыты</option></select>
+        </div>
+        <div class="card"><div class="list" id="vendorList"></div></div>
+      </div>
+    </section>
+
     <!-- Статистика -->
     <section data-view="stats" class="stack" hidden>
       <div class="kpis" id="kpis"></div>
@@ -145,16 +193,17 @@
         <h3>По месяцам</h3>
         <div class="chart" id="incomeChart"></div>
         <div class="tbl-wrap"><table>
-          <thead><tr><th>Месяц</th><th class="r">Доход, сом</th><th class="r">Оплат</th><th class="r">Подарков</th><th class="r">Отменено</th></tr></thead>
+          <thead><tr><th>Месяц</th><th class="r">Всего, сом</th><th class="r">Безлимит</th><th class="r">Каталог</th></tr></thead>
           <tbody id="incomeTable"></tbody></table></div>
       </div>
       <div class="card stack">
         <h3>Выгрузка для учёта</h3>
-        <p class="meta">Все выдачи безлимита за период — файл CSV, открывается в Excel.</p>
+        <p class="meta">Все выдачи безлимита и размещения в каталоге за период — файлы CSV, открываются в Excel.</p>
         <div class="inline">
           <div><label class="flabel" for="from">С</label><input class="input" type="date" id="from"></div>
           <div><label class="flabel" for="to">По</label><input class="input" type="date" id="to"></div>
-          <button class="b primary" type="button" id="exportBtn">Скачать CSV</button>
+          <button class="b primary" type="button" id="exportBtn">Безлимит CSV</button>
+          <button class="b primary" type="button" id="exportCatBtn">Каталог CSV</button>
         </div>
       </div>
     </section>
@@ -203,6 +252,13 @@
     if (m.includes('user not found')) return 'Пользователь с такой почтой не найден — пусть сначала войдёт в приложение';
     if (m.includes('toi not found')) return 'Той не найден';
     if (m.includes('yourself')) return 'Себя удалить нельзя';
+    if (m.includes('vendor not found')) return 'Карточка не найдена';
+    if (m.includes('bad price')) return 'Проверьте цену';
+    if (m.includes('bad days')) return 'Проверьте число дней';
+    if (m.includes('vendors_name_check')) return 'Название — от 1 до 80 символов';
+    if (m.includes('map_url_check')) return 'Ссылка на карту должна начинаться с https://';
+    if (m.includes('website_check')) return 'Сайт должен начинаться с http:// или https://';
+    if (m.includes('violates check constraint')) return 'Проверьте поля: что-то слишком длинное или в неверном формате';
     if (m.includes('Failed to fetch') || m.includes('NetworkError')) return 'Нет связи. Проверьте интернет';
     return 'Не получилось: ' + m.slice(0, 120);
   };
@@ -251,7 +307,7 @@
     try { localStorage.setItem('adminTab', name); } catch {}
     document.querySelectorAll('[data-tab]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === name)));
     document.querySelectorAll('[data-view]').forEach((s) => s.hidden = s.dataset.view !== name);
-    ({ claims: loadClaims, search: () => $('q').focus(), stats: loadStats, income: loadIncome, admins: loadAdmins })[name]?.();
+    ({ claims: loadClaims, search: () => $('q').focus(), catalog: loadCatalog, stats: loadStats, income: loadIncome, admins: loadAdmins })[name]?.();
   }
   document.querySelectorAll('[data-tab]').forEach((b) => b.onclick = () => show(b.dataset.tab));
 
@@ -395,6 +451,323 @@
   $('searchBtn').onclick = search;
   $('q').addEventListener('keydown', (e) => { if (e.key === 'Enter') search(); });
 
+  // ---------- каталог исполнителей ----------
+  const PHOTO = (p) => `${SB}/storage/v1/object/public/vendors/${p}`;
+  let cat = null, catView = 'claims', ed = null;   // ed — карточка в редакторе
+  const vstatus = (v) => {
+    if (v.visible) {
+      const left = (Date.parse(v.paid_until) - Date.now()) / 864e5;
+      return left <= 7 ? `<span class="badge warn">В каталоге до ${day(v.paid_until)}</span>` : `<span class="badge ok">В каталоге до ${day(v.paid_until)}</span>`;
+    }
+    if (v.status === 'draft') return '<span class="badge gray">Черновик</span>';
+    if (v.status === 'hidden') return '<span class="badge gray">Скрыта</span>';
+    return v.paid_until ? `<span class="badge gray">Закончилось ${day(v.paid_until)}</span>` : '<span class="badge gray">Не оплачена</span>';
+  };
+  const catTitle = (slug) => cat?.categories.find((c) => c.slug === slug)?.title || slug || '—';
+  const contacts = (s) => ['call', 'whatsapp', 'instagram', 'map', 'website'].reduce((a, k) => a + Number(s?.[k] || 0), 0);
+
+  async function loadCatalog() {
+    try { cat = await rpc('admin_catalog'); } catch (e) { toast(errRu(e), true); return; }
+    const st = cat.settings, owner = isOwner();
+    const pending = cat.claims.filter((c) => c.pending);
+    $('vclaimsCount').textContent = pending.length; $('vclaimsCount').hidden = !pending.length;
+    $('vcl').textContent = pending.length ? `· ${pending.length}` : '';
+    $('catSettings').innerHTML = `
+      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center">
+        <div><h3>Каталог в приложении: ${st.enabled ? '<span class="badge ok">включён</span>' : '<span class="badge gray">выключен — показываем «Скоро»</span>'}</h3>
+          <div class="meta" style="margin-top:4px">${st.enabled ? 'Пользователи видят карточки, у которых оплачено размещение.'
+            : 'Пользователи видят серые примеры. Вы как администратор уже видите в приложении настоящие карточки — для проверки.'}</div></div>
+      </div>
+      ${owner ? `<div class="inline">
+        <label class="switch" style="flex:0 0 auto;min-height:46px"><input type="checkbox" id="catEnabled" ${st.enabled ? 'checked' : ''}> Включить каталог</label>
+        <div><label class="flabel" for="priceWeek">Цена за неделю, сом</label><input class="input" id="priceWeek" inputmode="numeric" value="${st.price_week ?? ''}" placeholder="например, 500"></div>
+        <div><label class="flabel" for="priceMonth">Цена за месяц, сом</label><input class="input" id="priceMonth" inputmode="numeric" value="${st.price_month ?? ''}" placeholder="например, 1500"></div>
+        <button class="b primary" type="button" id="catSave">Сохранить</button></div>
+        <p class="meta">Цены показываются на странице для исполнителей (toimanager.app/vendors). Пока цены пустые, там написано «сообщим при запуске».</p>`
+      : `<div class="meta">Цены: неделя — ${st.price_week != null ? money(st.price_week) + ' сом' : 'не заданы'}, месяц — ${st.price_month != null ? money(st.price_month) + ' сом' : 'не заданы'}. Менять может владелец.</div>`}`;
+    if (owner) $('catSave').onclick = async () => {
+      const num = (id) => { const v = $(id).value.replace(/\s/g, ''); return v === '' ? null : Number(v); };
+      const w = num('priceWeek'), m = num('priceMonth');
+      if ([w, m].some((x) => x != null && (!Number.isInteger(x) || x < 0))) { toast('Цена — целое число сом', true); return; }
+      const on = $('catEnabled').checked;
+      if (on && !st.enabled && !confirm('Включить каталог? Пользователи увидят карточки с оплаченным размещением вместо примеров «Скоро».')) return;
+      try { await rpc('admin_catalog_settings', { p_enabled: on, p_price_week: w, p_price_month: m }); toast('Сохранено'); loadCatalog(); }
+      catch (e) { toast(errRu(e), true); }
+    };
+    const vis = cat.vendors.filter((v) => v.visible);
+    const soon = vis.filter((v) => Date.parse(v.paid_until) - Date.now() < 7 * 864e5);
+    const kpi = (n, l, sub) => `<div class="kpi"><div class="n">${n}</div><div class="l">${l}</div>${sub ? `<div class="s">${sub}</div>` : ''}</div>`;
+    $('catKpis').innerHTML = [
+      kpi(vis.length, 'В каталоге сейчас', (() => { const n = cat.vendors.filter((v) => v.status === 'draft').length; return n ? `черновиков: ${n}` : ''; })()),
+      kpi(soon.length, 'Заканчиваются за 7 дней', soon.length ? 'предложите продление' : ''),
+      kpi(pending.length, 'Новых заявок'),
+      kpi(money(vis.reduce((a, v) => a + Number(v.stats30?.view || 0), 0)), 'Просмотров за 30 дней',
+        `${money(vis.reduce((a, v) => a + contacts(v.stats30), 0))} нажатий на контакты`),
+      ...(cat.income_30d != null ? [kpi(money(cat.income_30d), 'сом за 30 дней', 'размещения в каталоге')] : []),
+    ].join('');
+    renderClaims(); renderVendors();
+  }
+  document.querySelectorAll('[data-catview]').forEach((b) => b.onclick = () => {
+    catView = b.dataset.catview;
+    document.querySelectorAll('[data-catview]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    $('catClaims').hidden = catView !== 'claims'; $('catVendors').hidden = catView !== 'vendors';
+  });
+
+  function renderClaims() {
+    const list = cat.claims.slice(0, 120);
+    $('catClaims').innerHTML = list.length ? list.map((c) => `
+      <div class="card"${c.pending ? '' : ' style="opacity:.7"'}>
+        <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><h3>${esc(c.name)}</h3><span class="meta">${when(c.created_at)}</span></div>
+        <div class="meta" style="margin-top:4px">${esc(catTitle(c.category))}${c.city ? ' · ' + esc(c.city) : ''}</div>
+        <div style="margin-top:6px"><a href="tel:${esc(c.phone.replace(/[^\d+]/g, ''))}">${esc(c.phone)}</a>${c.instagram ? ` · <a href="https://instagram.com/${esc(c.instagram.replace(/^@|https?:\/\/(www\.)?instagram\.com\//g, ''))}" target="_blank" rel="noopener">${esc(c.instagram)}</a>` : ''}</div>
+        ${c.comment ? `<p class="meta" style="margin-top:6px;white-space:pre-wrap">${esc(c.comment)}</p>` : ''}
+        <div class="actions">${c.pending ? `
+          <button class="b primary" data-vclaim-new="${c.id}">Создать карточку</button>
+          <button class="b sec" data-vclaim-set="${c.id}" data-st="done">Уже обработана</button>
+          <button class="b sec" data-vclaim-set="${c.id}" data-st="rejected">Отклонить</button>`
+          : `${c.status === 'done' ? '<span class="badge ok">Обработана</span>' : '<span class="badge gray">Отклонена</span>'}
+             ${c.vendor_id ? `<button class="b sec" data-vedit="${c.vendor_id}">Карточка</button>` : ''}
+             <button class="b sec" data-vclaim-set="${c.id}" data-st="pending">Вернуть в работу</button>`}</div>
+      </div>`).join('') : '<p class="empty">Заявок пока нет. Они приходят со страницы toimanager.app/vendors.</p>';
+  }
+
+  function renderVendors() {
+    const q = $('vq').value.trim().toLowerCase(), f = $('vstatus').value;
+    const list = cat.vendors.filter((v) => {
+      if (q && !(`${v.name} ${v.phone || ''} ${v.whatsapp || ''} ${v.num} ${v.contact_name || ''}`.toLowerCase().includes(q))) return false;
+      const soon = v.visible && Date.parse(v.paid_until) - Date.now() < 7 * 864e5;
+      return f === 'all' || (f === 'visible' && v.visible) || (f === 'soon' && soon) || (f === 'draft' && v.status === 'draft')
+        || (f === 'ended' && !v.visible && v.status !== 'draft');
+    });
+    $('vendorList').innerHTML = list.length ? list.map((v) => `
+      <button class="row-link vrow" data-vedit="${v.id}">
+        ${v.photos[0] ? `<img class="thumb" src="${PHOTO(v.photos[0])}" alt="" loading="lazy">` : `<span class="thumb">${esc(v.name.slice(0, 1))}</span>`}
+        <span style="min-width:0"><b>${esc(v.name)}</b> <span class="meta">№ ${v.num}</span>
+          <div class="meta">${esc(catTitle(v.category))} · ${esc(v.city)}${v.phone ? ' · ' + esc(v.phone) : ''}</div>
+          <div style="margin-top:4px">${vstatus(v)}</div></span>
+        <span class="meta r nowrap">${money(v.stats30?.view || 0)} просм.<br>${money(contacts(v.stats30))} контакт.</span>
+      </button>`).join('') : '<p class="empty">Карточек нет</p>';
+  }
+  $('vq').addEventListener('input', () => cat && renderVendors());
+  $('vstatus').addEventListener('change', () => cat && renderVendors());
+  $('newVendor').onclick = () => openEditor(null);
+
+  const field = (id, label, value, attrs = '') => `<div><label class="flabel" for="${id}">${label}</label><input class="input" id="${id}" value="${esc(value ?? '')}" ${attrs}></div>`;
+  function openEditor(v, claim) {
+    const isNew = !v;
+    const owner = isOwner();
+    v = v ? { ...v, photos: [...v.photos] } : { id: crypto.randomUUID(), name: claim?.name || '', category: claim?.category || cat.categories[0].slug,
+      city: claim?.city || 'Бишкек', phone: claim?.phone || '', whatsapp: claim?.phone || '', instagram: claim?.instagram || '',
+      description: '', photos: [], status: 'draft', boost: 0, claim_id: claim?.id || null, admin_note: claim?.comment || '' };
+    ed = { ...v, isNew, original: [...v.photos], dirty: false };
+    const st = cat.settings;
+    $('vendorEditor').innerHTML = `
+      <div class="card detail stack">
+        <div style="display:flex;justify-content:space-between;gap:12px;align-items:start">
+          <div><h3 style="font-size:20px">${isNew ? 'Новая карточка' : esc(v.name)}</h3>
+            <div class="meta">${isNew ? (claim ? 'из заявки · ' + esc(claim.phone) : 'заполните и сохраните') : `№ ${v.num} · ${vstatus(v)}`}</div></div>
+          <button class="b sec" type="button" id="edClose" style="min-height:36px">Закрыть</button>
+        </div>
+        <div class="fgrid">
+          ${field('edName', 'Название *', v.name, 'maxlength="80" placeholder="Тамада Нурлан / Ресторан «Ала-Тоо»"')}
+          <div><label class="flabel" for="edCat">Категория *</label><select class="input" id="edCat">${cat.categories.map((c) =>
+            `<option value="${c.slug}" ${c.slug === v.category ? 'selected' : ''}>${esc(c.title)}</option>`).join('')}</select></div>
+          ${field('edCity', 'Город', v.city, 'maxlength="40" list="cities"')}
+          ${field('edPrice', 'Цена от, сом', v.price_from, 'inputmode="numeric" placeholder="30000"')}
+          ${field('edPriceNote', 'К цене', v.price_note, 'maxlength="80" placeholder="за вечер / за человека"')}
+          ${field('edPhone', 'Телефон', v.phone, 'maxlength="30" placeholder="0700 123 456"')}
+          ${field('edWa', 'WhatsApp', v.whatsapp, 'maxlength="30" placeholder="0700 123 456"')}
+          ${field('edInsta', 'Instagram', v.instagram, 'maxlength="60" placeholder="@nurlan_tamada"')}
+          ${field('edSite', 'Сайт', v.website, 'maxlength="200" placeholder="https://…"')}
+          <div class="wide2">${field('edAddr', 'Адрес', v.address, 'maxlength="200" placeholder="ул. Токтогула, 100"')}</div>
+          <div class="wide2">${field('edMap', 'Ссылка 2ГИС (необязательно — без неё поиск по адресу)', v.map_url, 'maxlength="500" placeholder="https://2gis.kg/…"')}</div>
+          <div class="wide2"><label class="flabel" for="edDesc">Описание</label><textarea class="input" id="edDesc" maxlength="1500" placeholder="Чем занимается, опыт, что входит в цену, на каких языках">${esc(v.description || '')}</textarea></div>
+          <div><label class="flabel" for="edStatus" title="Активная карточка видна, пока оплачено размещение">Статус</label><select class="input" id="edStatus">
+            <option value="draft" ${v.status === 'draft' ? 'selected' : ''}>Черновик</option>
+            <option value="active" ${v.status === 'active' ? 'selected' : ''}>Активна</option>
+            <option value="hidden" ${v.status === 'hidden' ? 'selected' : ''}>Скрыта</option></select></div>
+          <div><label class="flabel" for="edBoost">Место в списке</label><select class="input" id="edBoost">
+            ${[[0, 'Обычное'], [10, 'Выше обычных'], [50, 'В самом верху']].map(([n, l]) => `<option value="${n}" ${Number(v.boost) === n ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
+          ${field('edContact', 'Контактное лицо (видно только админам)', v.contact_name, 'maxlength="80"')}
+          ${field('edNote', 'Заметка (видна только админам)', v.admin_note, 'maxlength="500"')}
+        </div>
+        <datalist id="cities">${['Бишкек', 'Ош', 'Джалал-Абад', 'Каракол', 'Токмок', 'Кара-Балта', 'Нарын', 'Талас', 'Баткен', 'Чолпон-Ата', 'Узген', 'Кант']
+          .map((c) => `<option value="${c}">`).join('')}</datalist>
+        <div><div class="flabel">Фото (до 8, первое — обложка). Большие фото уменьшаются автоматически.</div>
+          <div class="photos" id="edPhotos"></div>
+          <input type="file" id="edFile" accept="image/jpeg,image/png,image/webp" multiple hidden></div>
+        <div class="grid" style="align-items:start">
+          <div><div class="flabel">Как увидят в приложении</div><div id="edPreview"></div></div>
+          <div class="stack" style="gap:10px">
+            <button class="b primary" type="button" id="edSave">Сохранить карточку</button>
+            ${isNew ? '<p class="meta">После сохранения можно открыть размещение.</p>' : `
+            <div class="flabel" style="margin:6px 0 0">Размещение (продлевает от текущего конца)</div>
+            <div class="actions" style="margin-top:0">
+              <button class="b sec" type="button" data-place="week">Неделя${st.price_week != null ? ' — ' + money(st.price_week) + ' сом' : ''}</button>
+              <button class="b sec" type="button" data-place="month">Месяц${st.price_month != null ? ' — ' + money(st.price_month) + ' сом' : ''}</button>
+            </div>
+            <div class="inline">
+              <div><label class="flabel" for="plDays">Свой срок, дней</label><input class="input" id="plDays" inputmode="numeric" placeholder="14"></div>
+              <div><label class="flabel" for="plAmount">Сумма, сом</label><input class="input" id="plAmount" inputmode="numeric" placeholder="${owner ? '0 = бесплатно' : ''}"></div>
+            </div>
+            <input class="input" id="plNote" maxlength="200" placeholder="Примечание: кто оплатил, скидка, бесплатный запуск…">
+            <button class="b sec" type="button" data-place="custom">Открыть на свой срок</button>
+            ${owner ? `<div class="actions" style="margin-top:4px">
+              ${v.visible ? '<button class="b danger" type="button" id="edRevoke">Снять с размещения</button>' : ''}
+              <button class="b danger" type="button" id="edDelete">Удалить</button></div>` : ''}`}
+          </div>
+        </div>
+        ${isNew ? '' : '<div><div class="flabel">Статистика за 30 дней</div><div class="grid" id="edStats"></div><div class="flabel" style="margin-top:12px">Размещения</div><div class="list" id="edPlacements"></div></div>'}
+      </div>`;
+    const sync = () => { ed.dirty = true; renderPreview(); };
+    $('vendorEditor').querySelectorAll('input:not([type=file]):not(#plDays):not(#plAmount):not(#plNote), select, textarea').forEach((el) => el.addEventListener('input', sync));
+    $('edClose').onclick = () => { if (ed.dirty && !confirm('Закрыть без сохранения?')) return; ed = null; $('vendorEditor').innerHTML = ''; };
+    $('edFile').onchange = (e) => uploadPhotos([...e.target.files]).finally(() => { e.target.value = ''; });
+    $('edSave').onclick = saveVendor;
+    $('vendorEditor').querySelectorAll('[data-place]').forEach((b) => b.onclick = () => place(b.dataset.place));
+    if ($('edRevoke')) $('edRevoke').onclick = async () => {
+      if (!confirm('Снять карточку с размещения прямо сейчас? Оставшиеся оплаченные дни не вернутся, оплата перестанет считаться доходом.')) return;
+      try { await rpc('admin_vendor_revoke', { p_vendor: ed.id }); toast('Снята с размещения'); ed.dirty = false; loadCatalog(); } catch (e) { toast(errRu(e), true); }
+    };
+    if ($('edDelete')) $('edDelete').onclick = async () => {
+      if (!confirm(`Удалить «${ed.name}»? Если были оплаты — карточка только скроется (для учёта).`)) return;
+      try {
+        const id = ed.id, photos = [...ed.photos];
+        await rpc('admin_vendor_delete', { p_vendor: id });
+        cat = await rpc('admin_catalog');
+        if (!cat.vendors.some((x) => x.id === id) && photos.length) await sb.storage.from('vendors').remove(photos);
+        toast('Готово'); ed = null; $('vendorEditor').innerHTML = ''; loadCatalog();
+      } catch (e) { toast(errRu(e), true); }
+    };
+    renderPhotos(); renderPreview();
+    if (!isNew) loadVendorDetail(v.id);
+    $('vendorEditor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function readForm() {
+    const val = (id) => $(id).value.trim();
+    const price = val('edPrice').replace(/\s/g, '');
+    return { id: ed.id, claim_id: ed.claim_id || null, name: val('edName'), category: $('edCat').value, city: val('edCity'), price_from: price,
+      price_note: val('edPriceNote'), phone: val('edPhone'), whatsapp: val('edWa'), instagram: val('edInsta'), website: val('edSite'),
+      address: val('edAddr'), map_url: val('edMap'), description: $('edDesc').value.trim(), status: $('edStatus').value,
+      boost: $('edBoost').value, contact_name: val('edContact'), admin_note: val('edNote'), photos: ed.photos };
+  }
+  function renderPhotos() {
+    $('edPhotos').innerHTML = ed.photos.map((p, i) => `
+      <div class="ph"><img src="${PHOTO(p)}" alt="">${i === 0 ? '<span class="cover">Обложка</span>' : ''}
+        <div class="tools">${i > 0 ? `<button type="button" data-ph-left="${i}" title="Левее" aria-label="Сдвинуть левее">←</button>` : '<span></span>'}
+          <button type="button" data-ph-del="${i}" title="Убрать" aria-label="Убрать фото">✕</button></div></div>`).join('')
+      + (ed.photos.length < 8 ? '<label class="ph add" for="edFile">+ Добавить фото</label>' : '');
+    $('edPhotos').querySelectorAll('[data-ph-left]').forEach((b) => b.onclick = () => {
+      const i = +b.dataset.phLeft; [ed.photos[i - 1], ed.photos[i]] = [ed.photos[i], ed.photos[i - 1]]; ed.dirty = true; renderPhotos(); renderPreview(); });
+    $('edPhotos').querySelectorAll('[data-ph-del]').forEach((b) => b.onclick = () => {
+      ed.photos.splice(+b.dataset.phDel, 1); ed.dirty = true; renderPhotos(); renderPreview(); });
+  }
+  function renderPreview() {
+    const f = readForm();
+    $('edPreview').innerHTML = `<div class="pv"><div class="img">${f.photos[0] ? `<img src="${PHOTO(f.photos[0])}" alt="">` : ''}</div>
+      <div class="body"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>${esc(f.name || 'Название')}</b><span class="ad">Реклама</span></div>
+        <div class="meta">${esc(catTitle(f.category))} · ${esc(f.city || 'Бишкек')}</div>
+        ${f.price_from ? `<div style="margin-top:6px;font-weight:800">от ${money(f.price_from)} сом <span class="meta" style="font-weight:600">${esc(f.price_note)}</span></div>` : ''}</div></div>`;
+  }
+  // Уменьшаем фото до 1600 px по длинной стороне и сохраняем в WebP (или JPEG, если браузер не умеет WebP)
+  async function shrink(file) {
+    const bmp = await createImageBitmap(file);
+    const k = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
+    const c = document.createElement('canvas'); c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+    c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+    let blob = await new Promise((r) => c.toBlob(r, 'image/webp', 0.84));
+    if (!blob || blob.type !== 'image/webp') blob = await new Promise((r) => c.toBlob(r, 'image/jpeg', 0.86));
+    return blob;
+  }
+  async function uploadPhotos(files) {
+    const room = 8 - ed.photos.length;
+    if (files.length > room) toast(`Можно добавить ещё ${room} фото`, true);
+    for (const file of files.slice(0, room)) {
+      try {
+        toast('Загружаем фото…');
+        const blob = await shrink(file);
+        const ext = blob.type === 'image/webp' ? 'webp' : 'jpg';
+        const path = `v/${ed.id}/${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}.${ext}`;
+        const { error } = await sb.storage.from('vendors').upload(path, blob, { contentType: blob.type, cacheControl: '31536000' });
+        if (error) throw error;
+        ed.photos.push(path); ed.dirty = true; renderPhotos(); renderPreview();
+      } catch (e) { toast('Фото не загрузилось: ' + errRu(e), true); return; }
+    }
+    toast('Фото добавлены — не забудьте сохранить карточку');
+  }
+  async function saveVendor() {
+    const f = readForm();
+    if (!f.name) { toast('Укажите название', true); $('edName').focus(); return; }
+    if (f.price_from && !/^\d+$/.test(f.price_from)) { toast('Цена — целое число сом', true); $('edPrice').focus(); return; }
+    if (f.map_url && !/^https:\/\//i.test(f.map_url)) { toast('Ссылка на карту должна начинаться с https://', true); return; }
+    if (f.website && !/^https?:\/\//i.test(f.website)) f.website = 'https://' + f.website;
+    $('edSave').disabled = true;
+    try {
+      await rpc('admin_vendor_save', { p: f });
+      const removed = ed.original.filter((p) => !f.photos.includes(p));
+      if (removed.length) await sb.storage.from('vendors').remove(removed);
+      toast('Сохранено'); ed.dirty = false; ed.isNew = false;
+      await loadCatalog();
+      const fresh = cat.vendors.find((x) => x.id === f.id); if (fresh) openEditor(fresh);
+    } catch (e) { toast(errRu(e), true); }
+    finally { if ($('edSave')) $('edSave').disabled = false; }
+  }
+  async function place(kind) {
+    if (ed.dirty) { toast('Сначала сохраните изменения', true); return; }
+    const st = cat.settings, note = $('plNote').value.trim();
+    let days = null, amount = null, text;
+    if (kind === 'custom') {
+      days = Number($('plDays').value); amount = $('plAmount').value.replace(/\s/g, '');
+      if (!Number.isInteger(days) || days < 1 || days > 400) { toast('Срок — от 1 до 400 дней', true); $('plDays').focus(); return; }
+      if (amount === '' || !/^\d+$/.test(amount)) { toast('Укажите сумму (0 — бесплатно)', true); $('plAmount').focus(); return; }
+      amount = Number(amount);
+      if (amount === 0 && !note) { toast('Для бесплатного размещения напишите примечание — это попадёт в учёт', true); $('plNote').focus(); return; }
+      text = `${days} дн. за ${money(amount)} сом`;
+    } else {
+      const price = kind === 'week' ? st.price_week : st.price_month;
+      if (price == null) { toast('Сначала владелец задаёт цены вверху раздела', true); return; }
+      text = `${kind === 'week' ? 'неделю' : 'месяц'} за ${money(price)} сом`;
+    }
+    if (!confirm(`Открыть размещение «${ed.name}» на ${text}? Убедитесь, что оплата пришла.`)) return;
+    try {
+      const until = await rpc('admin_vendor_place', { p_vendor: ed.id, p_kind: kind, p_days: days, p_amount: amount, p_note: note || null });
+      toast(`Готово: в каталоге до ${day(until)}`); await loadCatalog(); const fresh = cat.vendors.find((x) => x.id === ed.id); if (fresh) openEditor(fresh);
+    } catch (e) { toast(errRu(e), true); }
+  }
+  async function loadVendorDetail(id) {
+    let d; try { d = await rpc('admin_vendor_detail', { p_vendor: id, p_days: 30 }); } catch (e) { return; }
+    if (ed?.id !== id || !$('edStats')) return;
+    const days = []; const today = bk(new Date().toISOString());
+    for (let i = 29; i >= 0; i--) { const dt = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() - i)); days.push(dt); }
+    const byDay = Object.fromEntries(d.daily.map((x) => [x.day, x]));
+    $('edStats').innerHTML = `<div class="card"><h3 style="margin-bottom:8px">Просмотры · всего ${money(d.total?.view || 0)}</h3><div class="chart" id="edCh1"></div></div>
+      <div class="card"><h3 style="margin-bottom:8px">Нажатия на контакты · всего ${money(contacts(d.total))}</h3><div class="chart" id="edCh2"></div></div>`;
+    [['edCh1', 'views', 'Просмотры'], ['edCh2', 'contacts', 'Нажатия на контакты']].forEach(([el, k, l]) => {
+      const data = days.map((dt) => ({ v: Number(byDay[dt.toISOString().slice(0, 10)]?.[k] || 0), name: `${dt.getUTCDate()} ${months[dt.getUTCMonth()]}`, dt }));
+      bars($(el), data, { label: l, W: 320, H: 140, xLabel: (x, i) => (i % 7 === 2) ? `${x.dt.getUTCDate()}.${String(x.dt.getUTCMonth() + 1).padStart(2, '0')}` : '' });
+    });
+    const kindName = { week: 'Неделя', month: 'Месяц', custom: 'Свой срок', gift: 'Бесплатно' };
+    $('edPlacements').innerHTML = d.placements.length ? d.placements.map((p) => `<div><b>${kindName[p.kind]}${p.amount != null ? ' · ' + money(p.amount) + ' сом' : ''}</b>
+      ${p.revoked ? ' <span class="badge gray">снято</span>' : ''}
+      <div class="meta">${day(p.starts_at)} → ${day(p.ends_at)}${p.note ? ' · ' + esc(p.note) : ''}${p.by ? ' · ' + esc(p.by) : ''}</div></div>`).join('')
+      : '<p class="empty">Размещений ещё не было</p>';
+  }
+  document.addEventListener('click', async (ev) => {
+    const b = ev.target.closest('button'); if (!b) return;
+    if (b.dataset.vedit) {
+      const v = cat?.vendors.find((x) => x.id === b.dataset.vedit);
+      if (!v) { toast('Карточка не найдена', true); return; }
+      if (ed?.dirty && !confirm('Открыть другую карточку без сохранения?')) return;
+      openEditor(v);
+    } else if (b.dataset.vclaimNew) {
+      if (ed?.dirty && !confirm('Закрыть текущую карточку без сохранения?')) return;
+      openEditor(null, cat.claims.find((c) => c.id === b.dataset.vclaimNew));
+    } else if (b.dataset.vclaimSet) {
+      try { await rpc('admin_vendor_claim_set', { p_id: b.dataset.vclaimSet, p_status: b.dataset.st }); loadCatalog(); }
+      catch (e) { toast(errRu(e), true); }
+    }
+  });
+
   // ---------- графики: столбики, один ряд, подсказка при наведении ----------
   function bars(el, data, { label, fmt = (v) => v, color = '#7E5CE6', xLabel, W = 600, H = 170, maxBar = 64 }) {
     const P = { l: 44, r: 6, t: 10, b: 24 };
@@ -454,31 +827,46 @@
   async function loadIncome() {
     let m;
     try { m = await rpc('admin_income', { p_months: 12 }); } catch (e) { toast(errRu(e), true); return; }
-    const cur = m[m.length - 1] || { income: 0, paid: 0, gifts: 0 };
-    const total = m.reduce((a, x) => a + Number(x.income), 0), paid = m.reduce((a, x) => a + Number(x.paid), 0);
+    const sum = (x) => Number(x.income) + Number(x.catalog_income || 0);
+    const cur = m[m.length - 1] || { income: 0, paid: 0, gifts: 0, catalog_income: 0, catalog_paid: 0 };
+    const total = m.reduce((a, x) => a + sum(x), 0), paid = m.reduce((a, x) => a + Number(x.paid) + Number(x.catalog_paid || 0), 0);
     $('incomeKpis').innerHTML = `
-      <div class="kpi"><div class="n">${money(cur.income)}</div><div class="l">сом в этом месяце</div><div class="s">${cur.paid} оплат · ${cur.gifts} подарков</div></div>
+      <div class="kpi"><div class="n">${money(sum(cur))}</div><div class="l">сом в этом месяце</div><div class="s">безлимит ${money(cur.income)} · каталог ${money(cur.catalog_income || 0)}</div></div>
       <div class="kpi"><div class="n">${money(total)}</div><div class="l">сом за 12 месяцев</div><div class="s">${paid} оплат</div></div>`;
     const name = (ym) => { const [y, mo] = ym.split('-'); return `${monthsN[+mo - 1]} ${y}`; };
-    bars($('incomeChart'), m.map((x) => ({ v: Number(x.income), name: name(x.month), ym: x.month })),
+    bars($('incomeChart'), m.map((x) => ({ v: sum(x), name: name(x.month), ym: x.month })),
       { label: 'Доход по месяцам', fmt: (v) => money(v), xLabel: (x) => monthsN[+x.ym.split('-')[1] - 1].slice(0, 3) });
-    $('incomeTable').innerHTML = m.length ? m.slice().reverse().map((x) => `<tr><td>${name(x.month)}</td><td class="r">${money(x.income)}</td>
-      <td class="r">${x.paid}</td><td class="r">${x.gifts}</td><td class="r">${x.revoked}</td></tr>`).join('') : '<tr><td colspan="5" class="empty">Пока оплат нет</td></tr>';
+    $('incomeTable').innerHTML = m.length ? m.slice().reverse().map((x) => `<tr><td>${name(x.month)}</td><td class="r"><b>${money(sum(x))}</b></td>
+      <td class="r">${money(x.income)}<div class="meta">${x.paid} опл. · ${x.gifts} под.${Number(x.revoked) ? ' · ' + x.revoked + ' отм.' : ''}</div></td>
+      <td class="r">${money(x.catalog_income || 0)}<div class="meta">${x.catalog_paid || 0} опл.</div></td></tr>`).join('') : '<tr><td colspan="4" class="empty">Пока оплат нет</td></tr>';
     const now = bk(new Date().toISOString()), iso = (d) => d.toISOString().slice(0, 10);
     if (!$('from').value) $('from').value = iso(new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)));
     if (!$('to').value) $('to').value = iso(now);
+  }
+  const cell = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+  function downloadCsv(name, head, lines) {
+    const blob = new Blob(['\ufeff' + [head.map(cell).join(';'), ...lines.map((l) => l.map(cell).join(';'))].join('\r\n')], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = name; document.body.appendChild(a); a.click(); a.remove();
   }
   $('exportBtn').onclick = async () => {
     let rows;
     try { rows = await rpc('admin_grants_export', { p_from: $('from').value, p_to: $('to').value }); } catch (e) { toast(errRu(e), true); return; }
     if (!rows.length) { toast('За этот период выдач нет'); return; }
-    const head = ['Дата (Бишкек)', 'Номер тоя', 'Тип', 'Сумма, сом', 'Действует до', 'Отменён', 'Отправитель', 'Телефон', 'Примечание', 'Кто открыл'];
-    const cell = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
-    const lines = rows.map((r) => [String(r.created_at).replace('T', ' ').slice(0, 16), r.num, r.kind === 'gift' ? 'Подарок' : 'Оплата', r.amount,
-      String(r.until).slice(0, 10), r.revoked ? 'да' : '', r.payer_name, r.phone, r.note, r.granted_by].map(cell).join(';'));
-    const blob = new Blob(['﻿' + [head.map(cell).join(';'), ...lines].join('\r\n')], { type: 'text/csv;charset=utf-8' });
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-    a.download = `toi-manager-${$('from').value}_${$('to').value}.csv`; document.body.appendChild(a); a.click(); a.remove();
+    downloadCsv(`toi-manager-bezlimit-${$('from').value}_${$('to').value}.csv`,
+      ['Дата (Бишкек)', 'Номер тоя', 'Тип', 'Сумма, сом', 'Действует до', 'Отменён', 'Отправитель', 'Телефон', 'Примечание', 'Кто открыл'],
+      rows.map((r) => [String(r.created_at).replace('T', ' ').slice(0, 16), r.num, r.kind === 'gift' ? 'Подарок' : 'Оплата', r.amount,
+        String(r.until).slice(0, 10), r.revoked ? 'да' : '', r.payer_name, r.phone, r.note, r.granted_by]));
+  };
+  $('exportCatBtn').onclick = async () => {
+    let rows;
+    try { rows = await rpc('admin_catalog_export', { p_from: $('from').value, p_to: $('to').value }); } catch (e) { toast(errRu(e), true); return; }
+    if (!rows.length) { toast('За этот период размещений нет'); return; }
+    const kindName = { week: 'Неделя', month: 'Месяц', custom: 'Свой срок', gift: 'Бесплатно' };
+    downloadCsv(`toi-manager-katalog-${$('from').value}_${$('to').value}.csv`,
+      ['Дата (Бишкек)', 'Номер карточки', 'Исполнитель', 'Тип', 'Дней', 'Сумма, сом', 'С', 'По', 'Снято', 'Примечание', 'Кто открыл'],
+      rows.map((r) => [String(r.created_at).replace('T', ' ').slice(0, 16), r.num, r.name, kindName[r.kind] || r.kind, r.days, r.amount,
+        String(r.starts_at).slice(0, 10), String(r.ends_at).slice(0, 10), r.revoked ? 'да' : '', r.note, r.granted_by]));
   };
 
   // ---------- администраторы ----------

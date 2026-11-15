@@ -176,3 +176,9 @@ section.block { padding: 72px 0; }
 @media (max-width: 760px) { .foot .cols { grid-template-columns: repeat(2, minmax(0, 1fr)); } .foot .about { grid-column: 1 / -1; } }
 .foot a { overflow-wrap: anywhere; }
 .cta .peek > img:first-child, .cta .peek .card { cursor: pointer; }
+
+/* Полоса «Исполнителям» */
+.vendors-strip { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 24px; border-radius: 24px;
+  background: var(--accent-soft); color: var(--ink); text-decoration: none; border: 1px solid #E2DAFF; }
+.vendors-strip:hover { border-color: #C9BBFF; }
+@media (max-width: 640px) { .vendors-strip { flex-direction: column; align-items: flex-start; } }
