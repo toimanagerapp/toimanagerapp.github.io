@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ky">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Чакыруу — Той Менеджер</title>
+<meta name="description" content="Тойго чакыруу: конверт, дата, жер жана жооп берүү.">
+<meta name="robots" content="noindex">
+<meta property="og:title" content="Тойго чакыруу">
+<meta property="og:image" content="https://toimanager.app/og.png">
+<meta name="theme-color" content="#F3EADB">
+<link rel="icon" href="../favicon.png">
+<link rel="preload" href="fonts/bad-script-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/cormorant-garamond-cyrillic-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="inv.css">
+</head>
+<body data-theme="ak-altyn" class="locked">
+<div class="backdrop" aria-hidden="true"></div>
+<div class="dust" id="dust" aria-hidden="true"></div>
+
+<!-- Конверт -->
+<div class="envelope" id="envelope">
+  <div class="flap left"><div><div class="paper-grain"></div></div></div>
+  <div class="flap right"><div><div class="paper-grain"></div></div></div>
+  <div class="flap bottom"><div><div class="paper-grain"></div></div><svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M0 100 L50 47 L100 100"/></svg></div>
+  <div class="env-to"><div class="caps" data-t="envTo"></div><div class="who script" id="envWho"></div></div>
+  <div class="flap top"><div><div class="paper-grain"></div></div><svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M0 2 L50 60 L100 2"/></svg></div>
+  <div class="edge" aria-hidden="true"></div>
+  <div class="env-title"><div class="script gold" data-t="envTitle"></div><div class="caps" id="envKind"></div><svg class="orn" viewBox="0 0 200 60" aria-hidden="true"><use href="#orn" width="200" height="60"/></svg></div>
+  <button class="seal" id="seal" type="button" aria-label=""></button>
+  <div class="env-hint" data-t="envHint"></div>
+</div>
+
+<main id="page" aria-hidden="true">
+  <div class="lang" role="group" aria-label="Тил / Язык">
+    <button type="button" data-lang="ky">Кыр</button><button type="button" data-lang="ru">Рус</button>
+  </div>
+
+  <section class="hero">
+    <svg class="orn reveal" viewBox="0 0 200 60" aria-hidden="true"><use href="#orn" width="200" height="60"/></svg>
+    <div class="caps reveal" id="kindTitle" style="margin-top:18px"></div>
+    <div class="names script gold reveal" id="nameA"></div>
+    <div class="amp script gold reveal">&amp;</div>
+    <div class="names script gold reveal" id="nameB"></div>
+    <div class="date reveal" id="heroDate"></div>
+    <div class="scroll-cue reveal" aria-hidden="true"></div>
+  </section>
+
+  <section>
+    <div class="card reveal">
+      <p class="greet script gold" id="greet"></p>
+      <p class="text" id="invText"></p>
+      <svg class="orn small" viewBox="0 0 200 60" aria-hidden="true" style="margin-top:22px"><use href="#orn" width="200" height="60"/></svg>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="h-script script gold reveal" data-t="dayTitle"></h2>
+    <div class="month reveal" id="month"></div>
+    <div class="week reveal" id="week"></div>
+    <div class="weekday reveal" id="weekday"></div>
+    <div class="time reveal" id="time"></div>
+  </section>
+
+  <section>
+    <div class="caps reveal" data-t="until" style="margin-bottom:8px"></div>
+    <div class="countdown reveal" id="countdown"></div>
+  </section>
+
+  <section>
+    <h2 class="h-script script gold reveal" data-t="placeTitle"></h2>
+    <div class="place-name reveal" id="venue"></div>
+    <div class="text muted reveal" id="address"></div>
+    <div class="btns reveal">
+      <a class="btn" id="map" target="_blank" rel="noopener" data-t="map"></a>
+      <button class="btn ghost" id="ics" type="button" data-t="calendar"></button>
+    </div>
+  </section>
+
+  <section id="programSec">
+    <h2 class="h-script script gold reveal" data-t="programTitle"></h2>
+    <ul class="timeline reveal" id="program"></ul>
+  </section>
+
+  <section id="dressSec">
+    <h2 class="h-script script gold reveal" data-t="dressTitle"></h2>
+    <p class="text reveal" id="dress"></p>
+    <div class="swatches reveal" id="swatches"></div>
+  </section>
+
+  <section id="rsvp">
+    <div class="card reveal">
+      <h2 class="h-script script gold" data-t="rsvpTitle" style="margin-bottom:6px"></h2>
+      <p class="text muted" id="rsvpHint"></p>
+      <div id="rsvpForm">
+        <div class="opts">
+          <button class="opt" type="button" data-answer="yes" aria-pressed="false"><i></i><span data-t="yes"></span></button>
+          <button class="opt" type="button" data-answer="no" aria-pressed="false"><i></i><span data-t="no"></span></button>
+        </div>
+        <div id="countBox" hidden>
+          <div class="caps muted" data-t="howMany" style="margin-top:14px"></div>
+          <div class="count"><button type="button" id="minus" aria-label="−">−</button><output id="count">1</output><button type="button" id="plus" aria-label="+">+</button></div>
+        </div>
+        <button class="btn" id="send" type="button" data-t="send" style="width:100%;margin-top:18px" disabled></button>
+      </div>
+      <div class="thanks" id="thanks" hidden>
+        <svg class="mark" viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="33" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M22 37l10 10 19-21" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="greet script gold" id="thanksTitle"></div>
+        <p class="text" id="thanksText"></p>
+        <button class="btn ghost" id="change" type="button" data-t="change" style="margin-top:14px"></button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="h-script script gold reveal" data-t="wishesTitle"></h2>
+    <p class="text muted reveal" data-t="wishesHint"></p>
+    <form class="wish-form reveal" id="wishForm">
+      <input class="field" id="wishName" maxlength="60" autocomplete="name">
+      <textarea class="field" id="wishText" maxlength="500"></textarea>
+      <button class="btn" type="submit" data-t="wishSend"></button>
+    </form>
+    <div class="wishes" id="wishes"></div>
+  </section>
+
+  <section class="closing">
+    <svg class="orn reveal" viewBox="0 0 200 60" aria-hidden="true"><use href="#orn" width="200" height="60"/></svg>
+    <div class="script gold reveal" data-t="respect" style="font-size:34px;margin-top:18px"></div>
+    <div class="names script gold reveal" id="closingNames"></div>
+    <div class="text muted reveal" id="family"></div>
+    <div class="made reveal"><span data-t="made"></span> <a href="https://toimanager.app/" target="_blank" rel="noopener">Той Менеджер</a></div>
+  </section>
+</main>
+
+<button class="music off" id="music" type="button" hidden><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span></button>
+<nav class="demo-bar" id="demoBar" hidden aria-label="Шаблон"></nav>
+<audio id="audio" loop preload="none"></audio>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Кочкор мүйүз: орнамент-разделитель -->
+    <symbol id="orn" viewBox="0 0 200 60">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <g id="ornHalf">
+          <path d="M107 30 H113 C121 30 122 15 135 15 C148 15 150 31 140 33 C133 34 131 26 137 24"/>
+          <path d="M113 30 C121 30 122 45 135 45 C148 45 150 29 140 27 C133 26 131 34 137 36"/>
+          <path d="M152 30 H192" stroke-width="1"/>
+          <circle cx="160" cy="30" r="1.6" fill="currentColor"/>
+          <circle cx="196" cy="30" r="1.2" fill="currentColor" stroke="none"/>
+        </g>
+        <use href="#ornHalf" transform="translate(200 0) scale(-1 1)"/>
+        <path d="M100 21 L107 30 L100 39 L93 30 Z" fill="currentColor" fill-opacity=".18"/>
+        <circle cx="100" cy="30" r="2" fill="currentColor"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<script src="inv.js"></script>
+</body>
+</html>
