@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Админка — Той Менеджер</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#E24B66">
+<link rel="icon" href="../favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<style>
+  .wrap { max-width: 1000px; }
+  .who { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); min-width: 0; }
+  .who span.mail { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 220px; }
+  .badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 600;
+    background: var(--accent-soft); color: var(--accent-dark); white-space: nowrap; }
+  .badge.ok { background: var(--success-soft); color: var(--success); }
+  .badge.gray { background: #F3EDEE; color: var(--muted); }
+  .badge.warn { background: #FFF0D6; color: var(--warn); }
+  nav.tabs { display: flex; gap: 6px; overflow-x: auto; padding: 2px 0 6px; margin-bottom: 14px; scrollbar-width: none; }
+  nav.tabs button { flex: none; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 9px 16px; min-height: 40px;
+    font: inherit; font-size: 15px; font-weight: 600; color: var(--ink); cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
+  nav.tabs button[aria-selected="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+  nav.tabs .count { background: var(--accent); color: #fff; border-radius: 999px; font-size: 12px; padding: 0 7px; line-height: 20px; }
+  .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .kpis { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  .kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px; }
+  .kpi .n { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; font-variant-numeric: tabular-nums; }
+  .kpi .l { font-size: 13px; color: var(--muted); }
+  .kpi .s { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .card h3 { margin: 0; font-size: 17px; }
+  .meta { font-size: 14px; color: var(--muted); }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .b { border: 0; border-radius: 12px; min-height: 42px; padding: 0 16px; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; }
+  .b.primary { background: linear-gradient(135deg, #D9425D, #EC6A6A); color: #fff; }
+  .b.sec { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
+  .b.danger { background: var(--surface); color: var(--accent-dark); border: 1px solid #F3C9D1; }
+  .b:disabled { opacity: .5; cursor: default; }
+  .b:focus-visible, nav.tabs button:focus-visible, .row-link:focus-visible { outline: 3px solid rgba(210,63,89,.4); outline-offset: 2px; }
+  .input, select.input { min-height: 46px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); padding: 0 14px;
+    font: inherit; font-size: 16px; color: var(--ink); width: 100%; }
+  .input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(210,63,89,.15); }
+  .inline { display: flex; gap: 8px; flex-wrap: wrap; align-items: end; }
+  .inline > * { flex: 1 1 160px; }
+  .inline > .b { flex: 0 0 auto; }
+  .flabel { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 6px; display: block; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+  th { text-align: left; color: var(--muted); font-weight: 600; font-size: 13px; padding: 8px 6px; border-bottom: 1px solid var(--line); }
+  td { padding: 9px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  td.r, th.r { text-align: right; }
+  .tbl-wrap { overflow-x: auto; }
+  .row-link { display: block; width: 100%; text-align: left; background: none; border: 0; font: inherit; color: inherit; cursor: pointer; padding: 0; }
+  .empty { color: var(--muted); padding: 8px 2px; }
+  .section-title { font-size: 18px; font-weight: 700; margin: 18px 0 10px; }
+  .section-title:first-child { margin-top: 0; }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 12px 18px;
+    border-radius: 14px; font-size: 15px; box-shadow: 0 10px 30px rgba(0,0,0,.2); max-width: calc(100% - 32px); z-index: 10; }
+  .toast.err { background: var(--accent-dark); }
+  .chart { position: relative; }
+  .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .chart .tip { position: absolute; pointer-events: none; background: var(--ink); color: #fff; font-size: 13px; padding: 6px 9px; border-radius: 8px;
+    white-space: nowrap; transform: translate(-50%, -100%); margin-top: -8px; }
+  .detail { border: 2px solid var(--accent-soft); }
+  .list > * + * { border-top: 1px solid var(--line); padding-top: 10px; margin-top: 10px; }
+  .login { max-width: 420px; margin: 40px auto; text-align: center; }
+  .g-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 52px; border-radius: 14px;
+    border: 1px solid var(--line); background: #fff; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; color: var(--ink); }
+  .top { gap: 12px; }
+  .nowrap { white-space: nowrap; }
+  table.wide { min-width: 560px; }
+  @media (max-width: 560px) { .who span.mail { display: none; } }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="top">
+    <a class="brand" href="../"><img src="../icon-192.png" alt=""><span>Админка</span></a>
+    <div class="who" id="who" hidden><span class="mail" id="whoMail"></span><span class="badge" id="whoRole"></span>
+      <button class="b sec" type="button" id="logout" style="min-height:36px;padding:0 12px;font-size:14px">Выйти</button></div>
+  </div>
+
+  <section class="card login stack" id="loginView" hidden>
+    <h1 style="font-size:24px">Вход в админку</h1>
+    <p class="muted">Войдите тем же Google-аккаунтом, что и в приложении. Доступ только у администраторов.</p>
+    <button class="g-btn" type="button" id="login">
+      <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.9 6.1C12.5 13.6 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.4 5.7c4.3-4 6.9-9.9 6.9-17.1z"/><path fill="#FBBC05" d="M10.6 28.6A14.6 14.6 0 0 1 9.5 24c0-1.6.3-3.2.8-4.6l-7.9-6.1A24 24 0 0 0 0 24c0 3.9.9 7.5 2.7 10.7l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.4-5.7c-2.1 1.4-4.8 2.3-8.5 2.3-6.2 0-11.5-4.1-13.4-9.9l-7.9 6.1C6.6 42.6 14.6 48 24 48z"/></svg>
+      Войти через Google
+    </button>
+    <p class="err" id="loginErr" role="alert" hidden></p>
+  </section>
+
+  <section class="card login stack" id="denyView" hidden>
+    <h1 style="font-size:24px">Нет доступа</h1>
+    <p class="muted" id="denyText">Этот аккаунт не администратор.</p>
+    <button class="b sec" type="button" id="denyLogout">Войти другим аккаунтом</button>
+  </section>
+
+  <p class="muted" id="loading" style="text-align:center;margin-top:40px">Загружаем…</p>
+
+  <div id="app" hidden>
+    <nav class="tabs" role="tablist" aria-label="Разделы">
+      <button role="tab" data-tab="claims" aria-selected="true">Заявки <span class="count" id="claimsCount" hidden></span></button>
+      <button role="tab" data-tab="search">Поиск</button>
+      <button role="tab" data-tab="stats">Статистика</button>
+      <button role="tab" data-tab="income" data-owner>Доход</button>
+      <button role="tab" data-tab="admins" data-owner>Администраторы</button>
+    </nav>
+
+    <!-- Заявки -->
+    <section data-view="claims" class="stack">
+      <div class="section-title">Ждут проверки</div>
+      <p class="muted" style="margin-top:-6px;font-size:14px">Сверьте поступление в банке по имени отправителя и сумме, затем «Открыть безлимит».</p>
+      <div class="grid" id="pendingList"></div>
+      <div class="section-title">Обработанные за 30 дней</div>
+      <div class="card"><div class="tbl-wrap"><table class="wide">
+        <thead><tr><th>Когда</th><th>Отправитель</th><th>Той</th><th>Статус</th><th>Кто</th></tr></thead>
+        <tbody id="handledList"></tbody></table></div></div>
+    </section>
+
+    <!-- Поиск -->
+    <section data-view="search" class="stack" hidden>
+      <div class="card stack">
+        <label class="flabel" for="q" style="margin:0">Номер тоя, почта или название</label>
+        <div class="inline"><input class="input" id="q" placeholder="482 193, aibek@gmail.com или «Азамат»" autocomplete="off">
+          <button class="b primary" type="button" id="searchBtn">Найти</button></div>
+      </div>
+      <div id="detail"></div>
+      <div id="results" class="stack"></div>
+    </section>
+
+    <!-- Статистика -->
+    <section data-view="stats" class="stack" hidden>
+      <div class="kpis" id="kpis"></div>
+      <div class="section-title">По дням, последние 30 дней</div>
+      <div class="grid" id="daily"></div>
+    </section>
+
+    <!-- Доход -->
+    <section data-view="income" class="stack" hidden>
+      <div class="kpis" id="incomeKpis"></div>
+      <div class="card stack">
+        <h3>По месяцам</h3>
+        <div class="chart" id="incomeChart"></div>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>Месяц</th><th class="r">Доход, сом</th><th class="r">Оплат</th><th class="r">Подарков</th><th class="r">Отменено</th></tr></thead>
+          <tbody id="incomeTable"></tbody></table></div>
+      </div>
+      <div class="card stack">
+        <h3>Выгрузка для учёта</h3>
+        <p class="meta">Все выдачи безлимита за период — файл CSV, открывается в Excel.</p>
+        <div class="inline">
+          <div><label class="flabel" for="from">С</label><input class="input" type="date" id="from"></div>
+          <div><label class="flabel" for="to">По</label><input class="input" type="date" id="to"></div>
+          <button class="b primary" type="button" id="exportBtn">Скачать CSV</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Администраторы -->
+    <section data-view="admins" class="stack" hidden>
+      <div class="card"><div class="list" id="adminList"></div></div>
+      <div class="card stack">
+        <h3>Добавить</h3>
+        <p class="meta">Человек должен хотя бы раз войти в приложение «Той Менеджер» через Google.</p>
+        <div class="inline">
+          <div><label class="flabel" for="newEmail">Почта</label><input class="input" id="newEmail" type="email" autocomplete="off" placeholder="name@gmail.com"></div>
+          <div><label class="flabel" for="newRole">Роль</label>
+            <select class="input" id="newRole"><option value="helper">Помощник — заявки и поиск</option><option value="owner">Владелец — всё, включая доход</option></select></div>
+          <button class="b primary" type="button" id="addAdmin">Добавить</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/dist/umd/supabase.js"></script>
+<script>
+(() => {
+  const SB = 'https://ybygcijdpswvqrkxyimi.supabase.co';
+  const KEY = 'sb_publishable_AMNeSGIK-aTmllo1Q13bNw_aTCbRkPn'; // публичный ключ; права проверяет сервер
+  const sb = supabase.createClient(SB, KEY, { auth: { flowType: 'pkce', detectSessionInUrl: true, persistSession: true } });
+  const $ = (id) => document.getElementById(id);
+  let me = null, tab = 'claims';
+
+  // ---------- helpers ----------
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const fmtNum = (n) => String(n).replace(/(\d{3})(\d{3})/, '$1 $2');
+  const money = (n) => Number(n || 0).toLocaleString('ru-RU');
+  const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+  const monthsN = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+  const bk = (iso) => new Date(Date.parse(iso) + 6 * 3600e3); // по Бишкеку
+  const day = (iso) => { if (!iso) return ''; const d = bk(iso); return `${d.getUTCDate()} ${months[d.getUTCMonth()]} ${d.getUTCFullYear()}`; };
+  const when = (iso) => { const d = bk(iso); const p = (n) => String(n).padStart(2, '0');
+    return `${d.getUTCDate()} ${months[d.getUTCMonth()].slice(0, 3)}, ${p(d.getUTCHours())}:${p(d.getUTCMinutes())}`; };
+  const roleRu = { owner: 'Владелец', organizer: 'Организатор', side: 'Сторона', treasurer: 'Казначей', door: 'Помощник у входа', host: 'Тамада' };
+  const kindRu = { wedding: 'Свадьба', kyz_uzatuu: 'Кыз узатуу', sunnot: 'Сүннөт той', beshik: 'Бешик той', tushoo: 'Тушоо кесүү', jubilee: 'Юбилей', memorial: 'Аш / эскерүү', other: 'Другое' };
+  const errRu = (e) => {
+    const m = String(e?.message || e || '');
+    if (m.includes('not allowed')) return 'Нет прав на это действие';
+    if (m.includes('user not found')) return 'Пользователь с такой почтой не найден — пусть сначала войдёт в приложение';
+    if (m.includes('toi not found')) return 'Той не найден';
+    if (m.includes('yourself')) return 'Себя удалить нельзя';
+    if (m.includes('Failed to fetch') || m.includes('NetworkError')) return 'Нет связи. Проверьте интернет';
+    return 'Не получилось: ' + m.slice(0, 120);
+  };
+  let toastT;
+  function toast(text, err) {
+    document.querySelector('.toast')?.remove(); clearTimeout(toastT);
+    const t = document.createElement('div'); t.className = 'toast' + (err ? ' err' : ''); t.setAttribute('role', 'status'); t.textContent = text;
+    document.body.appendChild(t); toastT = setTimeout(() => t.remove(), 3500);
+  }
+  async function rpc(name, args) {
+    const { data, error } = await sb.rpc(name, args || {});
+    if (error) throw error;
+    return data;
+  }
+  const isOwner = () => me?.role === 'owner';
+
+  // ---------- вход ----------
+  $('login').onclick = async () => {
+    $('loginErr').hidden = true;
+    const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.origin + location.pathname } });
+    if (error) { $('loginErr').textContent = errRu(error); $('loginErr').hidden = false; }
+  };
+  const logout = async () => { await sb.auth.signOut(); location.replace(location.pathname); };
+  $('logout').onclick = logout; $('denyLogout').onclick = logout;
+
+  async function start() {
+    const { data: { session } } = await sb.auth.getSession();
+    $('loading').hidden = true;
+    if (!session) { $('loginView').hidden = false; return; }
+    try { me = await rpc('admin_me'); } catch (e) { me = null; }
+    if (!me) {
+      $('denyText').textContent = `${session.user.email} — не администратор. Попросите владельца добавить вас.`;
+      $('denyView').hidden = false; return;
+    }
+    $('whoMail').textContent = me.email; $('whoRole').textContent = isOwner() ? 'Владелец' : 'Помощник';
+    $('who').hidden = false; $('app').hidden = false;
+    document.querySelectorAll('[data-owner]').forEach((b) => b.hidden = !isOwner());
+    const saved = (() => { try { return localStorage.getItem('adminTab'); } catch { return null; } })();
+    show(saved && document.querySelector(`[data-tab="${saved}"]:not([hidden])`) ? saved : 'claims');
+    setInterval(() => { if (tab === 'claims' && document.visibilityState === 'visible') loadClaims(); }, 60000);
+  }
+
+  // ---------- вкладки ----------
+  function show(name) {
+    tab = name;
+    try { localStorage.setItem('adminTab', name); } catch {}
+    document.querySelectorAll('[data-tab]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === name)));
+    document.querySelectorAll('[data-view]').forEach((s) => s.hidden = s.dataset.view !== name);
+    ({ claims: loadClaims, search: () => $('q').focus(), stats: loadStats, income: loadIncome, admins: loadAdmins })[name]?.();
+  }
+  document.querySelectorAll('[data-tab]').forEach((b) => b.onclick = () => show(b.dataset.tab));
+
+  // ---------- заявки ----------
+  async function loadClaims() {
+    let d;
+    try { d = await rpc('admin_pay_list'); } catch (e) { toast(errRu(e), true); return; }
+    const pending = d.claims.filter((c) => c.status === 'pending');
+    const handled = d.claims.filter((c) => c.status !== 'pending');
+    $('claimsCount').textContent = pending.length; $('claimsCount').hidden = !pending.length;
+    $('pendingList').innerHTML = pending.length ? pending.map((c) => `
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline">
+          <h3>${esc(c.payer_name)}</h3><span class="meta">${when(c.created_at)}</span></div>
+        ${c.phone ? `<div style="margin-top:4px">${esc(c.phone)}</div>` : ''}
+        <div class="meta" style="margin-top:6px">№ ${fmtNum(c.num)} · ${esc(c.title)}</div>
+        <div class="meta">${c.people} чел.${c.starts_at ? ' · той ' + day(c.starts_at) : ''}</div>
+        <div class="actions">
+          <button class="b primary" data-grant="${c.num}" data-claim="${c.id}">Открыть безлимит</button>
+          <button class="b sec" data-reject="${c.id}" data-name="${esc(c.payer_name)}">Отклонить</button>
+          <button class="b sec" data-open="${c.num}">Подробнее</button>
+        </div>
+      </div>`).join('') : '<p class="empty">Новых заявок нет.</p>';
+    $('handledList').innerHTML = handled.length ? handled.map((c) => `
+      <tr><td>${when(c.created_at)}</td><td>${esc(c.payer_name)}${c.phone ? `<div class="meta">${esc(c.phone)}</div>` : ''}</td>
+      <td><button class="row-link" data-open="${c.num}">№ ${fmtNum(c.num)}<div class="meta">${esc(c.title)}</div></button></td>
+      <td>${c.status === 'approved' ? '<span class="badge ok">Открыт</span>' : '<span class="badge gray">Отклонён</span>'}</td>
+      <td class="meta">${esc(c.handled_by_email || '')}</td></tr>`).join('') : '<tr><td colspan="5" class="empty">Пока пусто</td></tr>';
+  }
+
+  // Делегированные кнопки (заявки, поиск, карточка)
+  document.addEventListener('click', async (ev) => {
+    const b = ev.target.closest('button'); if (!b) return;
+    if (b.dataset.grant) {
+      const num = Number(b.dataset.grant);
+      if (!confirm(`Открыть оплаченный безлимит для тоя № ${fmtNum(num)} на год?`)) return;
+      b.disabled = true;
+      try { const until = await rpc('admin_grant_pro', { p_num: num, p_claim: b.dataset.claim || null });
+        toast(until ? `Готово: № ${fmtNum(num)} — безлимит до ${day(until)}` : 'Готово'); refresh(num); }
+      catch (e) { toast(errRu(e), true); b.disabled = false; }
+    } else if (b.dataset.reject) {
+      if (!confirm(`Отклонить заявку «${b.dataset.name}»? Делайте так, только если оплаты точно нет.`)) return;
+      try { await rpc('admin_reject_claim', { p_claim: b.dataset.reject }); toast('Заявка отклонена'); loadClaims(); }
+      catch (e) { toast(errRu(e), true); }
+    } else if (b.dataset.open) {
+      show('search'); openToi(Number(b.dataset.open));
+    } else if (b.dataset.gift) {
+      const num = Number(b.dataset.gift);
+      const days = Number($('giftDays').value), note = $('giftNote').value.trim();
+      if (!note) { toast('Напишите, кому и за что подарок — это попадёт в учёт', true); $('giftNote').focus(); return; }
+      if (!confirm(`Подарить безлимит тою № ${fmtNum(num)} на ${days} дн.?`)) return;
+      try { const until = await rpc('admin_gift_pro', { p_num: num, p_days: days, p_note: note });
+        toast(`Подарено: до ${day(until)}`); refresh(num); }
+      catch (e) { toast(errRu(e), true); }
+    } else if (b.dataset.revoke) {
+      const num = Number(b.dataset.revoke);
+      if (!confirm(`Отменить безлимит тоя № ${fmtNum(num)}? Добавлять гостей сверх 35 станет нельзя. Оплата за него перестанет считаться доходом.`)) return;
+      try { await rpc('admin_revoke_pro', { p_num: num }); toast('Безлимит отменён'); refresh(num); }
+      catch (e) { toast(errRu(e), true); }
+    } else if (b.dataset.removeAdmin) {
+      if (!confirm(`Убрать ${b.dataset.email} из администраторов?`)) return;
+      try { await rpc('admin_remove', { p_user: b.dataset.removeAdmin }); toast('Убран'); loadAdmins(); }
+      catch (e) { toast(errRu(e), true); }
+    } else if (b.dataset.closeDetail !== undefined) {
+      $('detail').innerHTML = '';
+    }
+  });
+  function refresh(num) { loadClaims(); if (tab === 'search' && $('detail').innerHTML) openToi(num); }
+
+  // ---------- поиск ----------
+  async function search() {
+    const q = $('q').value.trim();
+    if (q.length < 2) { $('results').innerHTML = '<p class="empty">Введите хотя бы 2 символа</p>'; return; }
+    $('results').innerHTML = '<p class="empty">Ищем…</p>';
+    let r;
+    try { r = await rpc('admin_search', { p_q: q }); } catch (e) { $('results').innerHTML = ''; toast(errRu(e), true); return; }
+    if (r.tois.length === 1 && !r.users.length && /^\d[\d\s]{4,}\d$/.test(q)) { $('results').innerHTML = ''; openToi(r.tois[0].num); return; }
+    const tois = r.tois.map(toiCard).join('');
+    const users = r.users.map((u) => `
+      <div class="card">
+        <h3>${esc(u.name || u.email)}</h3>
+        <div class="meta">${esc(u.email)} · с ${day(u.created_at)}${u.last_sign_in_at ? ' · входил ' + day(u.last_sign_in_at) : ''}</div>
+        <div class="list" style="margin-top:10px">${u.tois.length ? u.tois.map((t) => `
+          <button class="row-link" data-open="${t.num}"><b>${esc(t.title)}</b>
+            <div class="meta">№ ${fmtNum(t.num)} · ${roleRu[t.role] || t.role}${t.is_pro ? ' · <span class="badge ok">Безлимит</span>' : ''}</div></button>`).join('')
+          : '<p class="empty">Тоев нет</p>'}</div>
+      </div>`).join('');
+    $('results').innerHTML = (users ? `<div class="section-title">Люди</div><div class="grid">${users}</div>` : '')
+      + (tois ? `<div class="section-title">Тои</div><div class="grid">${tois}</div>` : '')
+      || '<p class="empty">Ничего не найдено</p>';
+  }
+  const peopleTxt = (t) => t.is_pro ? `${t.people} чел.` : `${t.people} из ${t.limit} чел.`;
+  function proBadge(t) {
+    return t.is_pro ? `<span class="badge ok">Безлимит до ${day(t.pro_until)}</span>`
+      : t.people >= t.limit ? '<span class="badge warn">Лимит исчерпан</span>' : '<span class="badge gray">Бесплатно</span>';
+  }
+  function toiCard(t) {
+    return `<div class="card"><button class="row-link" data-open="${t.num}">
+      <div style="display:flex;justify-content:space-between;gap:8px"><h3>${esc(t.title)}</h3><b class="nowrap">№ ${fmtNum(t.num)}</b></div>
+      <div class="meta">${kindRu[t.kind] || ''}${t.starts_at ? ' · ' + day(t.starts_at) : ''} · ${esc(t.owner_email || '')}</div>
+      <div class="meta" style="margin:4px 0 8px">${peopleTxt(t)} · гостей ${t.guests} · команда ${t.members}${t.deleted ? ' · удалён' : ''}</div>
+      ${proBadge(t)}</button></div>`;
+  }
+  async function openToi(num) {
+    let t;
+    try { t = await rpc('admin_toi_detail', { p_num: num }); } catch (e) { toast(errRu(e), true); return; }
+    if (!t) { toast('Той не найден', true); return; }
+    const owner = isOwner();
+    $('detail').innerHTML = `
+      <div class="card detail stack">
+        <div style="display:flex;justify-content:space-between;gap:12px;align-items:start">
+          <div><h3 style="font-size:20px">${esc(t.title)}</h3>
+            <div class="meta">№ ${fmtNum(t.num)} · ${kindRu[t.kind] || ''}${t.starts_at ? ' · той ' + day(t.starts_at) : ''} · создан ${day(t.created_at)}${t.deleted ? ' · удалён' : ''}</div></div>
+          <button class="b sec" data-close-detail style="min-height:36px">Закрыть</button>
+        </div>
+        <div>${proBadge(t)} <span class="meta" style="margin-left:6px">${peopleTxt(t)} · гостей ${t.guests}</span></div>
+        <div class="actions" style="margin-top:0">
+          <button class="b primary" data-grant="${t.num}">Открыть оплаченный (год)</button>
+          ${owner && t.is_pro ? `<button class="b danger" data-revoke="${t.num}">Отменить безлимит</button>` : ''}
+        </div>
+        ${owner ? `<div class="inline">
+          <div><label class="flabel" for="giftDays">Подарить безлимит</label>
+            <select class="input" id="giftDays"><option value="30">30 дней</option><option value="90">90 дней</option><option value="365" selected>Год</option></select></div>
+          <div style="flex:2 1 220px"><label class="flabel" for="giftNote">Кому и за что</label>
+            <input class="input" id="giftNote" maxlength="200" placeholder="например, тестировщик / ресторан Ала-Тоо"></div>
+          <button class="b sec" data-gift="${t.num}">Подарить</button></div>` : ''}
+        <div class="grid">
+          <div><div class="flabel">Команда · ${t.team.length}</div><div class="list">${t.team.map((m) => `
+            <div><b>${esc(m.name || m.email)}</b><div class="meta">${esc(m.email)} · ${roleRu[m.role] || m.role}</div></div>`).join('')}</div></div>
+          <div><div class="flabel">Безлимит и заявки</div><div class="list">${[
+            ...t.grants.map((g) => ({ at: g.created_at, html: `<div><b>${g.kind === 'gift' ? 'Подарок' : 'Оплата'}${g.amount != null && g.kind === 'paid' ? ' · ' + money(g.amount) + ' сом' : ''}</b>
+              ${g.revoked ? ' <span class="badge gray">отменён</span>' : ''}
+              <div class="meta">${day(g.created_at)} → до ${day(g.until)}${g.note ? ' · ' + esc(g.note) : ''}${g.by ? ' · ' + esc(g.by) : ''}</div></div>` })),
+            ...t.claims.map((c) => ({ at: c.created_at, html: `<div>Заявка: <b>${esc(c.payer_name)}</b>${c.phone ? ' · ' + esc(c.phone) : ''}
+              <div class="meta">${when(c.created_at)} · ${c.status === 'pending' ? 'ждёт проверки' : c.status === 'approved' ? 'открыт' : 'отклонена'}</div></div>` })),
+          ].sort((a, b) => b.at.localeCompare(a.at)).map((x) => x.html).join('') || '<p class="empty">Пока ничего</p>'}</div></div>
+        </div>
+      </div>`;
+    $('detail').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  $('searchBtn').onclick = search;
+  $('q').addEventListener('keydown', (e) => { if (e.key === 'Enter') search(); });
+
+  // ---------- графики: столбики, один ряд, подсказка при наведении ----------
+  function bars(el, data, { label, fmt = (v) => v, color = '#D23F59', xLabel, W = 600, H = 170, maxBar = 64 }) {
+    const P = { l: 44, r: 6, t: 10, b: 24 };
+    const max = Math.max(1, ...data.map((d) => d.v));
+    const nice = max <= 4 ? Math.max(2, Math.ceil(max / 2) * 2) : Math.ceil(max / 4) * 4;
+    const bw = (W - P.l - P.r) / data.length, gap = Math.max(Math.min(2, bw * 0.2), bw - maxBar);
+    const y = (v) => P.t + (H - P.t - P.b) * (1 - v / nice);
+    let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(label)}">`;
+    [0, nice / 2, nice].forEach((g) => { s += `<line x1="${P.l}" x2="${W - P.r}" y1="${y(g)}" y2="${y(g)}" stroke="#F1E6E4"/>
+      <text x="${P.l - 6}" y="${y(g) + 4}" text-anchor="end" font-size="11" fill="#6F6063">${fmt(Math.round(g))}</text>`; });
+    data.forEach((d, i) => {
+      const x = P.l + i * bw + gap / 2, w = Math.max(1, bw - gap), top = y(d.v), h = Math.max(0, y(0) - top);
+      if (h > 0) s += `<path d="M${x},${y(0)} V${top + Math.min(3, h)} q0,-${Math.min(3, h)} ${Math.min(3, w / 2)},-${Math.min(3, h)} H${x + w - Math.min(3, w / 2)} q${Math.min(3, w / 2)},0 ${Math.min(3, w / 2)},${Math.min(3, h)} V${y(0)} Z" fill="${color}"/>`;
+      s += `<rect x="${P.l + i * bw}" y="${P.t}" width="${bw}" height="${H - P.t - P.b}" fill="transparent" data-i="${i}"/>`;
+      if (xLabel && xLabel(d, i)) s += `<text x="${x + w / 2}" y="${H - 6}" text-anchor="middle" font-size="11" fill="#6F6063">${esc(xLabel(d, i))}</text>`;
+    });
+    s += '</svg><div class="tip" hidden></div>';
+    el.innerHTML = s;
+    const tip = el.querySelector('.tip'), svg = el.querySelector('svg');
+    svg.addEventListener('pointermove', (e) => {
+      const r = e.target.closest('rect[data-i]'); if (!r) { tip.hidden = true; return; }
+      const d = data[+r.dataset.i], box = svg.getBoundingClientRect(), sc = box.width / W;
+      tip.textContent = `${d.name}: ${fmt(d.v)}`; tip.hidden = false;
+      tip.style.left = `${(+r.getAttribute('x') + bw / 2) * sc}px`; tip.style.top = `${y(d.v) * sc}px`;
+    });
+    svg.addEventListener('pointerleave', () => tip.hidden = true);
+  }
+
+  // ---------- статистика ----------
+  async function loadStats() {
+    let s, d;
+    try { [s, d] = await Promise.all([rpc('admin_stats'), rpc('admin_stats_daily', { p_days: 30 })]); }
+    catch (e) { toast(errRu(e), true); return; }
+    const kpi = (n, l, sub) => `<div class="kpi"><div class="n">${money(n)}</div><div class="l">${l}</div>${sub ? `<div class="s">${sub}</div>` : ''}</div>`;
+    $('kpis').innerHTML = [
+      kpi(s.users_total, 'Пользователей', `+${s.users_7d} за 7 дней`),
+      kpi(s.tois_total, 'Тоев', `+${s.tois_7d} за 7 дней`),
+      kpi(s.tois_upcoming, 'Тоев в ближайшие 60 дней'),
+      kpi(s.guests_total, 'Гостей в списках', `${money(s.people_total)} человек`),
+      kpi(s.invites_sent, 'Приглашений отправлено', `${money(s.rsvp_via_link)} ответили по ссылке`),
+      kpi(s.avg_team_size || 0, 'Человек в команде (сред.)'),
+      kpi(s.tois_near_limit, 'Близко к лимиту', '25–34 человека'),
+      kpi(s.tois_at_limit, 'Упёрлись в лимит', 'без безлимита'),
+      kpi(s.tois_pro, 'С безлимитом', `${s.tois_pro_paid} оплачено`),
+      kpi(s.claims_pending, 'Заявок ждут'),
+    ].join('');
+    const series = [['users', 'Новые пользователи'], ['tois', 'Новые тои'], ['guests', 'Добавлено гостей'], ['invites', 'Отправлено приглашений']];
+    $('daily').innerHTML = series.map(([k, l]) => `<div class="card"><h3 style="margin-bottom:8px">${l}</h3><div class="chart" data-k="${k}"></div></div>`).join('');
+    series.forEach(([k, l]) => {
+      const data = d.map((x) => { const dt = new Date(x.day + 'T00:00:00Z'); return { v: x[k], name: `${dt.getUTCDate()} ${months[dt.getUTCMonth()]}`, dt }; });
+      bars(document.querySelector(`#daily [data-k="${k}"]`), data, { label: l, W: 320, H: 150,
+        xLabel: (x, i) => (i % 7 === (data.length - 1) % 7) ? `${x.dt.getUTCDate()}.${String(x.dt.getUTCMonth() + 1).padStart(2, '0')}` : '' });
+    });
+  }
+
+  // ---------- доход ----------
+  async function loadIncome() {
+    let m;
+    try { m = await rpc('admin_income', { p_months: 12 }); } catch (e) { toast(errRu(e), true); return; }
+    const cur = m[m.length - 1] || { income: 0, paid: 0, gifts: 0 };
+    const total = m.reduce((a, x) => a + Number(x.income), 0), paid = m.reduce((a, x) => a + Number(x.paid), 0);
+    $('incomeKpis').innerHTML = `
+      <div class="kpi"><div class="n">${money(cur.income)}</div><div class="l">сом в этом месяце</div><div class="s">${cur.paid} оплат · ${cur.gifts} подарков</div></div>
+      <div class="kpi"><div class="n">${money(total)}</div><div class="l">сом за 12 месяцев</div><div class="s">${paid} оплат</div></div>`;
+    const name = (ym) => { const [y, mo] = ym.split('-'); return `${monthsN[+mo - 1]} ${y}`; };
+    bars($('incomeChart'), m.map((x) => ({ v: Number(x.income), name: name(x.month), ym: x.month })),
+      { label: 'Доход по месяцам', fmt: (v) => money(v), xLabel: (x) => monthsN[+x.ym.split('-')[1] - 1].slice(0, 3) });
+    $('incomeTable').innerHTML = m.length ? m.slice().reverse().map((x) => `<tr><td>${name(x.month)}</td><td class="r">${money(x.income)}</td>
+      <td class="r">${x.paid}</td><td class="r">${x.gifts}</td><td class="r">${x.revoked}</td></tr>`).join('') : '<tr><td colspan="5" class="empty">Пока оплат нет</td></tr>';
+    const now = bk(new Date().toISOString()), iso = (d) => d.toISOString().slice(0, 10);
+    if (!$('from').value) $('from').value = iso(new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)));
+    if (!$('to').value) $('to').value = iso(now);
+  }
+  $('exportBtn').onclick = async () => {
+    let rows;
+    try { rows = await rpc('admin_grants_export', { p_from: $('from').value, p_to: $('to').value }); } catch (e) { toast(errRu(e), true); return; }
+    if (!rows.length) { toast('За этот период выдач нет'); return; }
+    const head = ['Дата (Бишкек)', 'Номер тоя', 'Тип', 'Сумма, сом', 'Действует до', 'Отменён', 'Отправитель', 'Телефон', 'Примечание', 'Кто открыл'];
+    const cell = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+    const lines = rows.map((r) => [String(r.created_at).replace('T', ' ').slice(0, 16), r.num, r.kind === 'gift' ? 'Подарок' : 'Оплата', r.amount,
+      String(r.until).slice(0, 10), r.revoked ? 'да' : '', r.payer_name, r.phone, r.note, r.granted_by].map(cell).join(';'));
+    const blob = new Blob(['﻿' + [head.map(cell).join(';'), ...lines].join('\r\n')], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = `toi-manager-${$('from').value}_${$('to').value}.csv`; document.body.appendChild(a); a.click(); a.remove();
+  };
+
+  // ---------- администраторы ----------
+  async function loadAdmins() {
+    let list;
+    try { list = await rpc('admin_list_admins'); } catch (e) { toast(errRu(e), true); return; }
+    $('adminList').innerHTML = list.map((a) => `
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+        <div style="min-width:0"><b style="word-break:break-all">${esc(a.email)}</b>${a.me ? ' <span class="meta">(вы)</span>' : ''}
+          <div class="meta">${a.role === 'owner' ? 'Владелец' : 'Помощник'} · с ${day(a.created_at)}</div></div>
+        ${a.me ? '' : `<button class="b danger" data-remove-admin="${a.user_id}" data-email="${esc(a.email)}">Убрать</button>`}
+      </div>`).join('');
+  }
+  $('addAdmin').onclick = async () => {
+    const email = $('newEmail').value.trim();
+    if (!email.includes('@')) { toast('Введите почту', true); return; }
+    try { await rpc('admin_add', { p_email: email, p_role: $('newRole').value }); toast('Добавлен'); $('newEmail').value = ''; loadAdmins(); }
+    catch (e) { toast(errRu(e), true); }
+  };
+
+  start();
+})();
+</script>
+</body>
+</html>
