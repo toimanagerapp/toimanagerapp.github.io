@@ -6,7 +6,7 @@
 <title>Безлимит для тоя</title>
 <meta name="description" content="«Безлимит» для тоя в приложении «Той Менеджер»: сколько угодно гостей, действует год.">
 <meta property="og:title" content="Безлимит для тоя — Той Менеджер">
-<meta property="og:description" content="Сколько угодно гостей в вашем тое. Оплата через MBank.">
+<meta property="og:description" content="Сколько угодно гостей в вашем тое. Оплата по QR через MBank или любой банк.">
 <meta property="og:image" content="https://toimanagerapp.github.io/og.png">
 <meta name="theme-color" content="#E24B66">
 <link rel="icon" href="../favicon.png">
@@ -88,12 +88,14 @@
         <div class="price"><span id="price">990</span> <small data-t="som">сом</small></div>
         <p class="muted" style="margin-top:6px" data-t="once">Один раз за этот той, действует год</p>
       </div>
+      <a class="btn btn-primary" id="payLink" target="_blank" rel="noopener" hidden data-t="payBtn">Оплатить в приложении банка</a>
+      <p class="muted" id="payTo" hidden style="font-size:14px;text-align:center;margin-top:-4px"></p>
       <h2 style="margin:4px 0 0" id="howTitle" data-t="howTitle">Как оплатить</h2>
       <ol class="steps" id="steps">
-        <li id="stepQr" data-t="stepQr">Отсканируйте QR в приложении MBank. Если открыли эту страницу на телефоне — сохраните QR и выберите его из галереи в сканере MBank.</li>
-        <li id="stepPhone" hidden><span data-t="stepPhone">Или переводом по номеру телефона</span>: <b id="payPhone" style="user-select:all"></b> <span id="payBank" class="muted"></span></li>
+        <li data-t="stepPay">Нажмите «Оплатить» — откроется приложение банка: MBank или любое другое банковское приложение Кыргызстана. С компьютера — отсканируйте QR ниже телефоном.</li>
+        <li id="stepAmount"></li>
         <li data-t="stepComment">Если в банке есть поле «Комментарий» — укажите номер тоя.</li>
-        <li data-t="stepClaim">Нажмите «Я оплатил» ниже.</li>
+        <li data-t="stepClaim">Вернитесь сюда и нажмите «Я оплатил» внизу.</li>
       </ol>
       <img class="qr" id="qr" alt="QR для оплаты" hidden>
       <a class="chip" id="qrSave" download="toi-manager-qr.png" style="align-self:center" hidden data-t="qrSave">Сохранить QR в галерею</a>
@@ -132,7 +134,11 @@
   const SB = 'https://ybygcijdpswvqrkxyimi.supabase.co';
   const KEY = 'sb_publishable_AMNeSGIK-aTmllo1Q13bNw_aTCbRkPn'; // публичный ключ
   // Реквизиты для оплаты. qr — файл картинки QR в этой папке (например 'qr.png'); phone — номер для перевода.
-  const PAY = { qr: '', phone: '', bank: '' };
+  const PAY = {
+    qr: 'qr.png',                 // QR для приёма оплаты (MBank Бизнес, счёт ИП)
+    link: 'https://pay.payqr.kg/qr/#00020101021132840012c2b.mbank.kg010202101610301200052444961132%D0%98%D0%9F%20%D0%9E%D1%80%D0%BE%D0%B7%D0%B0%D0%BB%D0%B8%D0%B5%D0%B2%20%D0%9C%D0%B0%D1%80%D0%B0%D1%82%20%D0%9A%D0%BE%D0%B6%D0%BE%D0%B3%D0%B5%D0%BB%D0%B4%D0%B8%D0%B5%D0%B2%D0%B8%D1%871302123422mbiz%3A48222517%3A124412495204999953034175925IP%20Orozaliev%20Marat%20Kozhog63047ebe',
+    to: 'ИП Орозалиев М. К.',
+  };
 
   // Кыргызские тексты — черновик, нужна вычитка носителем языка
   const T = {
@@ -146,9 +152,10 @@
       proActiveText: 'Добавляйте гостей без ограничений. Если нужно продлить — оплатите ещё раз, срок продлится на год.',
       pendingTitle: 'Заявку получили', pendingText: 'Проверим оплату и откроем безлимит в течение дня. В приложении потяните экран вниз, чтобы обновить.',
       som: 'сом', once: 'Один раз за этот той, действует год', howTitle: 'Как оплатить',
-      stepQr: 'Отсканируйте QR в приложении MBank. Если открыли эту страницу на телефоне — сохраните QR и выберите его из галереи в сканере MBank.',
-      stepPhone: 'Или переводом в MBank по номеру телефона', stepComment: 'Если в банке есть поле «Комментарий» — укажите номер тоя.',
-      stepClaim: 'Нажмите «Я оплатил» ниже.', qrSave: 'Сохранить QR в галерею',
+      payBtn: 'Оплатить в приложении банка', payTo: (n) => `Получатель: ${n} · MBank`,
+      stepPay: 'Нажмите «Оплатить» — откроется приложение банка: MBank или любое другое банковское приложение Кыргызстана. С компьютера — отсканируйте QR ниже телефоном.',
+      stepAmount: (p) => `Введите сумму ${p} сом — в QR её нет.`, stepComment: 'Если в банке есть поле «Комментарий» — укажите номер тоя.',
+      stepClaim: 'Вернитесь сюда и нажмите «Я оплатил» внизу.', qrSave: 'Сохранить QR в галерею',
       noPay: 'Реквизиты для оплаты появятся здесь совсем скоро. Если нужно срочно — напишите на toimanager.app@gmail.com с номером тоя.',
       claimTitle: 'После оплаты', payerLabel: 'Имя отправителя — как в банке', payerHint: 'Например, «Айбек Т.» — так мы найдём ваш платёж.',
       phoneLabel: 'Телефон для связи (необязательно)', claim: 'Я оплатил', sending: 'Отправляем…',
@@ -173,9 +180,10 @@
       proActiveText: 'Конокторду чектөөсүз кошуңуз. Узартуу керек болсо — кайра төлөңүз, мөөнөт бир жылга узарат.',
       pendingTitle: 'Өтүнмө кабыл алынды', pendingText: 'Төлөмдү текшерип, бир күндүн ичинде ачабыз. Тиркемеде жаңыртуу үчүн экранды ылдый тартыңыз.',
       som: 'сом', once: 'Ушул той үчүн бир жолу, бир жылга', howTitle: 'Кантип төлөө керек',
-      stepQr: 'MBank тиркемесинде QRди сканерлеңиз. Бул баракты телефондон ачсаңыз — QRди сактап, MBank сканеринде галереядан тандаңыз.',
-      stepPhone: 'Же MBank аркылуу телефон номерине которуу', stepComment: 'Банкта «Комментарий» талаасы болсо — тойдун номерин жазыңыз.',
-      stepClaim: 'Төмөндөгү «Төлөдүм» баскычын басыңыз.', qrSave: 'QRди галереяга сактоо',
+      payBtn: 'Банк тиркемесинде төлөө', payTo: (n) => `Алуучу: ${n} · MBank`,
+      stepPay: '«Төлөө» баскычын басыңыз — банк тиркемеси ачылат: MBank же Кыргызстандагы башка банк тиркемеси. Компьютерден болсо — төмөндөгү QRди телефон менен сканерлеңиз.',
+      stepAmount: (p) => `${p} сом сумманы жазыңыз — QRде сумма жок.`, stepComment: 'Банкта «Комментарий» талаасы болсо — тойдун номерин жазыңыз.',
+      stepClaim: 'Бул жакка кайтып, ылдыйдагы «Төлөдүм» баскычын басыңыз.', qrSave: 'QRди галереяга сактоо',
       noPay: 'Төлөм реквизиттери жакында ушул жерде пайда болот. Шашылыш болсо — toimanager.app@gmail.com дарегине тойдун номери менен жазыңыз.',
       claimTitle: 'Төлөгөндөн кийин', payerLabel: 'Жөнөтүүчүнүн аты — банктагыдай', payerHint: 'Мисалы, «Айбек Т.» — ушундай төлөмүңүздү табабыз.',
       phoneLabel: 'Байланыш үчүн телефон (милдеттүү эмес)', claim: 'Төлөдүм', sending: 'Жөнөтүлүүдө…',
@@ -220,10 +228,10 @@
     // реквизиты
     $('qr').hidden = $('qrSave').hidden = !PAY.qr;
     if (PAY.qr) { $('qr').src = PAY.qr; $('qrSave').href = PAY.qr; }
-    $('stepQr').hidden = !PAY.qr;
-    $('stepPhone').hidden = !PAY.phone;
-    $('payPhone').textContent = PAY.phone; $('payBank').textContent = PAY.bank ? `(${PAY.bank})` : '';
-    const hasPay = Boolean(PAY.qr || PAY.phone);
+    $('payLink').hidden = !PAY.link; if (PAY.link) $('payLink').href = PAY.link;
+    $('payTo').hidden = !PAY.to; if (PAY.to) $('payTo').textContent = L.payTo(PAY.to);
+    $('stepAmount').textContent = L.stepAmount(info ? Number(info.price).toLocaleString('ru-RU') : '990');
+    const hasPay = Boolean(PAY.qr || PAY.link);
     $('noPay').hidden = hasPay;
     $('steps').hidden = $('howTitle').hidden = !hasPay;
     if (!info) return;
@@ -240,7 +248,7 @@
     const pending = info.pending_claim || claimed;
     $('pending').hidden = !pending;
     $('payCard').hidden = pending;
-    $('claimCard').hidden = pending || !(PAY.qr || PAY.phone);
+    $('claimCard').hidden = pending || !(PAY.qr || PAY.link);
     $('claim').disabled = !$('payer').value.trim();
   }
 
