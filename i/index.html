@@ -43,6 +43,7 @@
     <div class="peek">
       <img src="../cub.webp" width="720" height="500" alt="Барсёнок в калпаке">
     <img class="blink" src="../cub-blink.webp" width="720" height="500" alt="">
+    <img class="happy" src="../cub-happy.webp" width="720" height="500" alt="">
       <div class="card">
         <div class="label" data-t="invite">Приглашение</div>
         <h1 id="title" style="margin-top:4px"></h1>
@@ -207,6 +208,8 @@
     $('noBtn').setAttribute('aria-pressed', String(answer === 'no'));
     $('countRow').hidden = answer !== 'yes';
     $('send').disabled = !answer;
+    // гость ответил «Приду» — барсёнок улыбается
+    document.querySelector('.peek').classList.toggle('smile', inv.rsvp === 'yes');
     if (inv.rsvp === 'yes' || inv.rsvp === 'no') {
       $('doneTitle').textContent = inv.rsvp === 'yes' ? L.yesTitle : L.noTitle;
       $('doneText').textContent = inv.rsvp === 'yes' ? L.yesText(inv.rsvp_count || 1) : L.noText;

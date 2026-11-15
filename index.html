@@ -22,6 +22,7 @@
   <section class="peek">
     <img src="cub.webp" width="720" height="500" alt="Барсёнок в калпаке">
     <img class="blink" src="cub-blink.webp" width="720" height="500" alt="">
+    <img class="happy" src="cub-happy.webp" width="720" height="500" alt="">
     <div class="card stack">
       <h1>Весь той —<br>в одном приложении</h1>
       <p class="muted">Гости, приглашения, конверты и бюджет. Вместе с семьёй, без тетрадок и таблиц.</p>
@@ -52,5 +53,11 @@
     <a href="privacy/">Политика конфиденциальности</a> · <a href="delete-account/">Удаление аккаунта</a>
   </footer>
 </main>
+<script>
+  // нажмите на барсёнка — он улыбнётся
+  document.querySelectorAll('.peek').forEach((p) => {
+    let t; p.firstElementChild.addEventListener('click', () => { p.classList.add('smile'); clearTimeout(t); t = setTimeout(() => p.classList.remove('smile'), 1800); });
+  });
+</script>
 </body>
 </html>

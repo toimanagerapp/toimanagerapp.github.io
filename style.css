@@ -93,8 +93,12 @@ footer a { color: var(--muted); }
 /* Барсёнок выглядывает из-за карточки: картинка дважды — снизу целиком, сверху только лапы поверх карточки */
 .peek { position: relative; }
 .peek > img { display: block; width: 100%; height: auto; }
-.peek > img.paws { position: absolute; top: 0; left: 0; pointer-events: none; }
+.peek > img.paws { position: absolute; top: 0; left: 0; pointer-events: none; clip-path: inset(85.98% 0 0 0); }   /* только лапы ниже края карточки */
 .peek > .card { margin: -9.74% 3% 0; padding-top: calc(9.74% + 14px); border-radius: 26px; }
 .peek > img.blink { position: absolute; top: 0; left: 0; opacity: 0; animation: cubBlink 5.6s infinite; pointer-events: none; }
 @keyframes cubBlink { 0%, 90%, 100% { opacity: 0; } 91.2%, 93.4% { opacity: 1; } 94.6% { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .peek > img.blink { animation: none; } }
+.peek > img.happy { position: absolute; top: 0; left: 0; opacity: 0; transition: opacity .25s ease; pointer-events: none; }
+.peek.smile > img.happy { opacity: 1; }
+.peek.smile > img.blink { visibility: hidden; }
+section.peek > img:first-child { cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { .peek > img.blink { animation: none; } .peek > img.happy { transition: none; } }
