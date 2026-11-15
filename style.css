@@ -95,3 +95,6 @@ footer a { color: var(--muted); }
 .peek > img { display: block; width: 100%; height: auto; }
 .peek > img.paws { position: absolute; top: 0; left: 0; pointer-events: none; }
 .peek > .card { margin: -9.74% 3% 0; padding-top: calc(9.74% + 14px); border-radius: 26px; }
+.peek > img.blink { position: absolute; top: 0; left: 0; opacity: 0; animation: cubBlink 5.6s infinite; pointer-events: none; }
+@keyframes cubBlink { 0%, 90%, 100% { opacity: 0; } 91.2%, 93.4% { opacity: 1; } 94.6% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .peek > img.blink { animation: none; } }
