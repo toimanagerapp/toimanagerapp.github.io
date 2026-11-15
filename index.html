@@ -3,61 +3,320 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Той Менеджер</title>
-<meta name="description" content="Приложение для организации тоя: гости и приглашения в WhatsApp, отметки у входа, конверты, бюджет и авансы — вместе с роднёй.">
+<title>Той Менеджер — гости, конверты и бюджет тоя в одном приложении</title>
+<meta name="description" content="Приложение для организации тоя: список гостей, приглашения в WhatsApp с ответом «приду», отметки у входа даже без интернета, учёт конвертов и бюджет с авансами. Бесплатно до 35 человек.">
+<link rel="canonical" href="https://toimanager.app/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://toimanager.app/">
 <meta property="og:title" content="Той Менеджер — весь той в одном приложении">
-<meta property="og:description" content="Гости, приглашения, конверты и бюджет — вместе с семьёй.">
+<meta property="og:description" content="Гости, приглашения в WhatsApp, конверты и бюджет — вместе с роднёй.">
 <meta property="og:image" content="https://toimanager.app/og.png">
-<meta name="theme-color" content="#B9A2FF">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F6F4FB">
 <link rel="icon" href="favicon.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="home.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"MobileApplication","name":"Той Менеджер","operatingSystem":"Android","applicationCategory":"LifestyleApplication",
+ "description":"Организация тоя: гости, приглашения, конверты и бюджет.","url":"https://toimanager.app/","inLanguage":["ru","ky"],
+ "offers":[{"@type":"Offer","name":"Бесплатно","price":"0","priceCurrency":"KGS"},{"@type":"Offer","name":"Безлимит","price":"990","priceCurrency":"KGS"}]}
+</script>
 </head>
 <body>
-<main class="wrap stack">
-  <div class="top"><span class="brand"><img src="icon-192.png" alt=""><span>Той Менеджер</span></span></div>
 
-  <section class="peek">
-    <img src="cub.webp" width="720" height="500" alt="Барсёнок в калпаке">
-    <img class="blink" src="cub-blink.webp" width="720" height="500" alt="">
-    <img class="happy" src="cub-happy.webp" width="720" height="500" alt="">
-    <div class="card stack">
-      <h1>Весь той —<br>в одном приложении</h1>
-      <p class="muted">Гости, приглашения, конверты и бюджет. Вместе с семьёй, без тетрадок и таблиц.</p>
+<header class="nav" id="nav">
+  <div class="container">
+    <a class="brand" href="#top" aria-label="Той Менеджер — наверх"><img src="icon-192.png" alt=""><span>Той Менеджер</span></a>
+    <nav aria-label="Разделы">
+      <ul>
+        <li><a href="#features">Возможности</a></li>
+        <li><a href="#how">Как начать</a></li>
+        <li><a href="#price">Цены</a></li>
+        <li><a href="#faq">Вопросы</a></li>
+      </ul>
+    </nav>
+    <a class="btn-sm primary" href="#download">Скачать</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- Первый экран -->
+  <section class="hero2">
+    <div class="container">
+      <div>
+        <span class="pill">Для свадьбы, кыз узатуу, бешик тоя и любого другого</span>
+        <h1>Гости, конверты и бюджет тоя — <span class="grad">в одном приложении</span></h1>
+        <p class="lead">Составьте список гостей, разошлите приглашения в WhatsApp и узнайте, кто придёт. В день тоя родня отмечает гостей и конверты у входа, а вы видите, сколько собрано и сколько ещё платить.</p>
+        <div class="stores" aria-label="Скачать приложение">
+          <a class="store" aria-disabled="true" role="link" title="Скоро">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M12 7.5v7m-3-3 3 3 3-3"/></svg>
+            <span><small>Скоро в</small><strong>Google Play</strong></span><em class="soon">Скоро</em>
+          </a>
+          <a class="store" aria-disabled="true" role="link" title="Скоро">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M12 7.5v7m-3-3 3 3 3-3"/></svg>
+            <span><small>Скоро в</small><strong>App Store</strong></span><em class="soon">Скоро</em>
+          </a>
+        </div>
+        <div class="ticks"><span>Бесплатно до 35 человек</span><span>Без рекламы</span><span>Гостям ничего не нужно устанавливать</span></div>
+      </div>
+      <div class="phones" aria-hidden="true">
+        <div class="phone back"><img src="img/guests.webp" alt="" width="600" height="1298" loading="lazy"></div>
+        <div class="phone front"><img src="img/home.webp" alt="" width="600" height="1298" fetchpriority="high"></div>
+        <div class="float f1"><span class="dot">✓</span><span>Таалай Асанов — придёт<small>всего 3 человека</small></span></div>
+        <div class="float f2"><span class="dot">№2</span><span>Конверт от Бакыта<small>100 USD · вскрыт</small></span></div>
+      </div>
     </div>
-    <img class="paws" src="cub.webp" width="720" height="500" alt="">
+    <div class="container">
+      <div class="occasions" aria-label="Для каких тоев">
+        <span>Үйлөнүү той</span><span>Кыз узатуу</span><span>Сүннөт той</span><span>Бешик той</span><span>Тушоо кесүү</span><span>Юбилей</span>
+      </div>
+    </div>
   </section>
 
-  <section class="card feat">
-    <div class="row"><div class="ico">1</div><div><div class="value">Гости и приглашения</div><p class="muted">Список по сторонам и категориям, импорт из контактов, приглашение в WhatsApp со ссылкой — гость отвечает в один клик.</p></div></div>
-    <div class="row"><div class="ico">2</div><div><div class="value">У входа — даже без интернета</div><p class="muted">Родня отмечает, кто пришёл и кто передал конверт. Всё синхронизируется, когда появится связь.</p></div></div>
-    <div class="row"><div class="ico">3</div><div><div class="value">Конверты: кто сколько дал</div><p class="muted">Номер на конверте сейчас, сумма — потом, при вскрытии. Валюты пересчитываются в сомы.</p></div></div>
-    <div class="row"><div class="ico">4</div><div><div class="value">Бюджет и авансы</div><p class="muted">Ресторан, мясо, тамада, артисты — что оплачено, сколько осталось и когда платить.</p></div></div>
-    <div class="row"><div class="ico">5</div><div><div class="value">Команда с ролями</div><p class="muted">Помощник у входа не видит сумм, сторона видит только своих гостей, казначей — деньги.</p></div></div>
+  <!-- Знакомо? -->
+  <section class="block">
+    <div class="container center">
+      <span class="kicker">Знакомо?</span>
+      <h2 class="h2">Той — это сотни мелочей</h2>
+      <div class="pains" style="text-align:left">
+        <div class="pain"><div class="emoji" aria-hidden="true">📒</div><h3>Список в трёх тетрадках</h3><p>Часть гостей у мамы в блокноте, часть у брата в заметках. Кого пригласили, а кого забыли — непонятно.</p></div>
+        <div class="pain"><div class="emoji" aria-hidden="true">✉️</div><h3>Гора конвертов</h3><p>После тоя никто не помнит, какой конверт от кого и сколько в нём было. А это важно — потом идти к ним в ответ.</p></div>
+        <div class="pain"><div class="emoji" aria-hidden="true">💸</div><h3>Авансы и долги</h3><p>Ресторану дали аванс, за мясо заплатили половину, тамаде — ещё нет. Сколько осталось и до какого числа?</p></div>
+      </div>
+      <p class="answer">Той Менеджер собирает всё это в одном месте — и родня работает в нём вместе с вами, каждый со своего телефона.</p>
+    </div>
   </section>
 
-  <section class="card stack">
-    <h2 style="margin:0">Сколько стоит</h2>
-    <div class="row"><div class="ico">0</div><div><div class="value">Бесплатно — до 35 человек в тое</div><p class="muted">Все возможности, команда без ограничений. Гости без приглашения в лимит не входят.</p></div></div>
-    <div class="row"><div class="ico">∞</div><div><div class="value">Безлимит — 990 сом за той</div><p class="muted">Сколько угодно гостей, действует год. Оплата по QR — MBank или любой банк Кыргызстана. <a href="pro/">Оформить</a></p></div></div>
+  <!-- Возможности -->
+  <section class="block" id="features" style="padding-top:24px">
+    <div class="container">
+      <div class="center"><span class="kicker">Возможности</span><h2 class="h2">Всё, что нужно до, во время и после тоя</h2></div>
+
+      <div class="feature">
+        <div class="shot"><div class="bg"><div class="phone"><img src="img/guests.webp" alt="Экран «Гости»: список по сторонам с ответами гостей" width="600" height="1298" loading="lazy"></div></div></div>
+        <div>
+          <span class="tag">Гости и приглашения</span>
+          <h3>Список гостей, который не потеряется</h3>
+          <p class="lead">Один общий список для всей семьи — с ответами гостей и числом людей.</p>
+          <ul class="list">
+            <li>Гости по сторонам и категориям: сторона отца, сторона матери, коллеги, соседи</li>
+            <li>Добавляйте вручную или сразу из контактов телефона</li>
+            <li>Приглашение в WhatsApp со ссылкой — отметка «отправлено» ставится сама</li>
+            <li>Видно, сколько человек придёт, кто ещё не ответил и кому не отправили</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="feature flip">
+        <div class="shot"><div class="bg"><div class="phone"><img src="img/invite.webp" alt="Страница приглашения для гостя: дата, место и кнопки ответа" width="600" height="1298" loading="lazy"></div></div></div>
+        <div>
+          <span class="tag">Для гостей</span>
+          <h3>Гостю не нужно ничего устанавливать</h3>
+          <p class="lead">Гость открывает ссылку из WhatsApp и отвечает за пару секунд.</p>
+          <ul class="list">
+            <li>Красивое приглашение с датой, временем и местом</li>
+            <li>Кнопки «Открыть в 2ГИС» и «В календарь»</li>
+            <li>Ответ «Приду» или «Не смогу» и сколько человек будет — сразу попадает в ваш список</li>
+            <li>На кыргызском и русском языке</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="shot"><div class="bg"><div class="phone"><img src="img/day.webp" alt="Экран «У входа»: поиск гостя и кнопка «Пришли»" width="600" height="1298" loading="lazy"></div></div></div>
+        <div>
+          <span class="tag">День тоя</span>
+          <h3>У входа — даже без интернета</h3>
+          <p class="lead">Помощники встречают гостей с телефоном вместо тетради.</p>
+          <ul class="list">
+            <li>Нашёл гостя по имени — нажал «Пришли»</li>
+            <li>Гостей без приглашения тоже записывают — в лимит они не входят</li>
+            <li>Конверт получает номер прямо у входа: понятно, от кого он</li>
+            <li>Нет связи в зале? Отметки сохранятся в телефоне и отправятся сами</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="feature flip">
+        <div class="shot"><div class="bg"><div class="phone"><img src="img/envelopes.webp" alt="Экран «Конверты»: номера, гости и суммы" width="600" height="1298" loading="lazy"></div></div></div>
+        <div>
+          <span class="tag">Конверты</span>
+          <h3>Кто сколько подарил — без споров</h3>
+          <p class="lead">Номер на конверте ставите сейчас, сумму вписываете потом, когда вскрываете.</p>
+          <ul class="list">
+            <li>Каждый конверт привязан к гостю или семье</li>
+            <li>Доллары и другая валюта пересчитываются в сомы</li>
+            <li>Отдельно — карыз и подарки вещами</li>
+            <li>Итог: сколько собрано и сколько конвертов ещё не вскрыто</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="shot"><div class="bg"><div class="phone"><img src="img/budget.webp" alt="Экран «Бюджет»: оплачено, остаток и ближайшие платежи" width="600" height="1298" loading="lazy"></div></div></div>
+        <div>
+          <span class="tag">Бюджет</span>
+          <h3>Авансы и платежи под контролем</h3>
+          <p class="lead">Сколько стоит той, сколько уже заплатили и кому ещё платить.</p>
+          <ul class="list">
+            <li>Ресторан, мясо, тамада, артисты — план и оплаты по каждой статье</li>
+            <li>Ближайшие платежи со сроками, просрочки видны сразу</li>
+            <li>Сколько осталось заплатить — одной цифрой</li>
+            <li>Контакты подрядчиков под рукой</li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <section class="card stack" style="text-align:center">
-    <h2>Скоро в Google Play</h2>
-    <p class="muted">Приложение проходит тестирование. Хотите попробовать раньше — напишите нам: <a href="mailto:toimanager.app@gmail.com">toimanager.app@gmail.com</a></p>
+  <!-- Как начать -->
+  <section class="block" id="how">
+    <div class="container center">
+      <span class="kicker">Как начать</span>
+      <h2 class="h2">Четыре шага до спокойного тоя</h2>
+      <div class="steps" style="text-align:left">
+        <div class="stepc"><h3>Создайте той</h3><p>Название, дата и место — меньше минуты. Вход через Google-аккаунт.</p></div>
+        <div class="stepc"><h3>Добавьте гостей</h3><p>Из контактов телефона или вручную, по сторонам и категориям.</p></div>
+        <div class="stepc"><h3>Позовите родню</h3><p>Отправьте ссылку в команду и выберите каждому роль: кто что видит и делает.</p></div>
+        <div class="stepc"><h3>Пригласите и проведите той</h3><p>Ответы гостей приходят сами, а у входа помощники отмечают гостей и конверты.</p></div>
+      </div>
+    </div>
   </section>
 
-  <footer>
-    <a href="privacy/">Политика конфиденциальности</a> · <a href="delete-account/">Удаление аккаунта</a>
-  </footer>
+  <!-- Роли -->
+  <section class="block" id="team" style="padding-top:24px">
+    <div class="container">
+      <div class="center"><span class="kicker">Команда</span><h2 class="h2">Родня помогает — каждый видит только своё</h2>
+        <p class="lead">Сколько угодно помощников в каждом тое. Суммы видят только те, кому вы разрешили.</p></div>
+      <div class="roles">
+        <div class="role"><b>Владелец</b><p>Создал той, может всё: гости, бюджет, конверты, команда</p><span class="money yes">видит суммы</span></div>
+        <div class="role"><b>Организатор</b><p>Гости, бюджет, конверты и настройки тоя</p><span class="money yes">видит суммы</span></div>
+        <div class="role"><b>Казначей</b><p>Конверты и бюджет, вскрывает конверты</p><span class="money yes">видит суммы</span></div>
+        <div class="role"><b>Сторона</b><p>Добавляет и видит гостей только своей стороны</p><span class="money no">без сумм</span></div>
+        <div class="role"><b>Помощник у входа</b><p>Отмечает пришедших и принимает конверты</p><span class="money no">без сумм</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Цены -->
+  <section class="block" id="price">
+    <div class="container center">
+      <span class="kicker">Цены</span>
+      <h2 class="h2">Небольшой той — бесплатно</h2>
+      <p class="lead">Платите, только если гостей много. Один раз за той, без подписки.</p>
+      <div class="plans" style="text-align:left">
+        <div class="plan">
+          <div class="name">Бесплатно</div>
+          <div class="price">0 <small>сом</small></div>
+          <div class="sub">до 35 человек в тое</div>
+          <ul class="list">
+            <li>Все возможности приложения</li>
+            <li>Команда без ограничений</li>
+            <li>Гости без приглашения не считаются</li>
+            <li>Без рекламы</li>
+          </ul>
+          <a class="btn btn-secondary" href="#download">Начать бесплатно</a>
+        </div>
+        <div class="plan pro">
+          <div class="name">Безлимит <span class="badge">для большого тоя</span></div>
+          <div class="price">990 <small>сом за той</small></div>
+          <div class="sub">сколько угодно гостей</div>
+          <ul class="list">
+            <li>Всё, что в бесплатном</li>
+            <li>Без ограничения по числу гостей</li>
+            <li>Действует год — и не меньше 3 месяцев после тоя</li>
+            <li>Оплата по QR: MBank или любой банк Кыргызстана</li>
+          </ul>
+          <a class="btn btn-primary" href="pro/">Как оплатить</a>
+        </div>
+      </div>
+      <p class="note">Считаются люди, а не приглашения: приглашение на семью из 4 человек — это 4. Лимит и номер тоя видны в приложении: Ещё → Тариф.</p>
+    </div>
+  </section>
+
+  <!-- Вопросы -->
+  <section class="block" id="faq">
+    <div class="container">
+      <div class="center"><span class="kicker">Вопросы</span><h2 class="h2">Частые вопросы</h2></div>
+      <div class="faq">
+        <details><summary>Нужно ли гостям скачивать приложение?</summary><p>Нет. Гость получает в WhatsApp ссылку, открывает её в браузере и отвечает «Приду» или «Не смогу». Приложение нужно только вам и вашей команде.</p></details>
+        <details><summary>Работает ли приложение без интернета?</summary><p>Да, у входа — работает. Отметки о пришедших гостях и конвертах сохраняются в телефоне и отправляются, как только появится связь. Для остальных разделов интернет нужен.</p></details>
+        <details><summary>Кто увидит суммы конвертов и бюджета?</summary><p>Только владелец тоя и те, кому вы дали право видеть деньги: организатор и казначей. Помощник у входа и сторона сумм не видят.</p></details>
+        <details><summary>Как считается лимит в 35 человек?</summary><p>Считаются люди во всех приглашениях: если пригласили семью из 4 человек, это 4. Гости, которые пришли без приглашения и записаны у входа, в лимит не входят.</p></details>
+        <details><summary>Как оплатить Безлимит?</summary><p>Откройте страницу <a href="pro/">оплаты</a>, отсканируйте QR в приложении банка и переведите 990 сом. В комментарии укажите номер тоя (в приложении: Ещё → Тариф), затем нажмите «Я оплатил». Мы проверим платёж и откроем Безлимит.</p></details>
+        <details><summary>Можно ли вести несколько тоев?</summary><p>Да. Все ваши тои — в разделе «Мои тои», переключаться можно в любой момент. Лимит и Безлимит считаются отдельно для каждого тоя.</p></details>
+        <details><summary>Есть ли версия для iPhone?</summary><p>Сначала приложение выходит в Google Play для Android. Версия для iPhone — следующим шагом.</p></details>
+        <details><summary>На каком языке приложение?</summary><p>Приложение — на русском, кыргызский язык добавляем. Страница приглашения для гостей уже работает на кыргызском и русском.</p></details>
+        <details><summary>Где хранятся данные и можно ли их удалить?</summary><p>Данные хранятся на защищённом сервере и передаются в зашифрованном виде. Мы не показываем рекламу и не продаём данные. Удалить аккаунт можно в приложении (Ещё → Удалить аккаунт) или <a href="delete-account/">по запросу</a>. Подробнее — в <a href="privacy/">политике конфиденциальности</a>.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Скачать -->
+  <section class="block" id="download" style="padding-top:24px">
+    <div class="container">
+      <div class="cta">
+        <div class="peek">
+          <img src="cub.webp" width="720" height="500" alt="Барсёнок в калпаке">
+          <img class="blink" src="cub-blink.webp" width="720" height="500" alt="">
+          <img class="happy" src="cub-happy.webp" width="720" height="500" alt="">
+          <div class="card">Нажмите на меня 🙂</div>
+          <img class="paws" src="cub.webp" width="720" height="500" alt="">
+        </div>
+        <div>
+          <span class="kicker">Скачать</span>
+          <h2 class="h2">Скоро в Google Play</h2>
+          <p class="lead">Сейчас идёт закрытое тестирование. Хотите попробовать первыми — напишите нам, и мы добавим вас в тестировщики. Нужен Gmail-адрес, с которым вы заходите в Google Play.</p>
+          <a class="btn-sm primary tester" href="mailto:toimanager.app@gmail.com?subject=%D0%A5%D0%BE%D1%87%D1%83%20%D1%82%D0%B5%D1%81%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D1%82%D1%8C%20%D0%A2%D0%BE%D0%B9%20%D0%9C%D0%B5%D0%BD%D0%B5%D0%B4%D0%B6%D0%B5%D1%80&body=%D0%9C%D0%BE%D0%B9%20Gmail%3A%20">Стать тестировщиком</a>
+          <div class="stores">
+            <a class="store" aria-disabled="true" role="link" title="Скоро">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M12 7.5v7m-3-3 3 3 3-3"/></svg>
+              <span><small>Скоро в</small><strong>Google Play</strong></span><em class="soon">Скоро</em>
+            </a>
+            <a class="store" aria-disabled="true" role="link" title="Скоро">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M12 7.5v7m-3-3 3 3 3-3"/></svg>
+              <span><small>Скоро в</small><strong>App Store</strong></span><em class="soon">Скоро</em>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
+
+<footer class="foot">
+  <div class="container">
+    <div class="cols">
+      <div class="about">
+        <a class="brand" href="#top"><img src="icon-192.png" alt=""><span style="font-weight:800">Той Менеджер</span></a>
+        <p class="muted" style="margin-top:10px;max-width:300px">Приложение для организации тоя: гости, приглашения, конверты и бюджет — вместе с роднёй.</p>
+      </div>
+      <div><h4>Приложение</h4><ul><li><a href="#features">Возможности</a></li><li><a href="#price">Цены</a></li><li><a href="#faq">Вопросы</a></li></ul></div>
+      <div><h4>Документы</h4><ul><li><a href="pro/">Оплата Безлимита</a></li><li><a href="privacy/">Конфиденциальность</a></li><li><a href="delete-account/">Удаление аккаунта</a></li></ul></div>
+      <div><h4>Связь</h4><ul><li><a href="mailto:toimanager.app@gmail.com">toimanager.app@gmail.com</a></li></ul></div>
+    </div>
+    <p class="legal">© 2026 ИП Орозалиев М. К., Бишкек, Кыргызстан</p>
+  </div>
+</footer>
+
 <script>
+  // тень под шапкой при прокрутке
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
   // нажмите на барсёнка — он улыбнётся
   document.querySelectorAll('.peek').forEach((p) => {
-    let t; p.firstElementChild.addEventListener('click', () => { p.classList.add('smile'); clearTimeout(t); t = setTimeout(() => p.classList.remove('smile'), 1800); });
+    let t; const go = () => { p.classList.add('smile'); clearTimeout(t); t = setTimeout(() => p.classList.remove('smile'), 1800); };
+    p.firstElementChild.addEventListener('click', go);
+    p.querySelector('.card').addEventListener('click', go);
   });
+  // неактивные кнопки магазинов никуда не ведут
+  document.querySelectorAll('.store[aria-disabled="true"]').forEach((a) => a.addEventListener('click', (e) => e.preventDefault()));
 </script>
 </body>
 </html>
