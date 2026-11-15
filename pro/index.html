@@ -90,6 +90,7 @@
       </div>
       <a class="btn btn-primary" id="payLink" target="_blank" rel="noopener" hidden data-t="payBtn">Оплатить в приложении банка</a>
       <p class="muted" id="payTo" hidden style="font-size:14px;text-align:center;margin-top:-4px"></p>
+      <button class="chip" type="button" id="toClaim" hidden style="align-self:center" data-t="toClaim">Уже оплатили? Нажмите «Я оплатил» ↓</button>
       <h2 style="margin:4px 0 0" id="howTitle" data-t="howTitle">Как оплатить</h2>
       <ol class="steps" id="steps">
         <li data-t="stepPay">Нажмите «Оплатить» — откроется приложение банка: MBank или любое другое банковское приложение Кыргызстана. С компьютера — отсканируйте QR ниже телефоном.</li>
@@ -152,7 +153,7 @@
       proActiveText: 'Добавляйте гостей без ограничений. Если нужно продлить — оплатите ещё раз, срок продлится на год.',
       pendingTitle: 'Заявку получили', pendingText: 'Проверим оплату и откроем безлимит в течение дня. В приложении потяните экран вниз, чтобы обновить.',
       som: 'сом', once: 'Один раз за этот той, действует год', howTitle: 'Как оплатить',
-      payBtn: 'Оплатить в приложении банка', payTo: (n) => `Получатель: ${n} · MBank`,
+      payBtn: 'Оплатить в приложении банка', toClaim: 'Уже оплатили? Нажмите «Я оплатил» ↓', payTo: (n) => `Получатель: ${n} · MBank`,
       stepPay: 'Нажмите «Оплатить» — откроется приложение банка: MBank или любое другое банковское приложение Кыргызстана. С компьютера — отсканируйте QR ниже телефоном.',
       stepAmount: (p) => `Введите сумму ${p} сом — в QR её нет.`, stepComment: 'Если в банке есть поле «Комментарий» — укажите номер тоя.',
       stepClaim: 'Вернитесь сюда и нажмите «Я оплатил» внизу.', qrSave: 'Сохранить QR в галерею',
@@ -180,7 +181,7 @@
       proActiveText: 'Конокторду чектөөсүз кошуңуз. Узартуу керек болсо — кайра төлөңүз, мөөнөт бир жылга узарат.',
       pendingTitle: 'Өтүнмө кабыл алынды', pendingText: 'Төлөмдү текшерип, бир күндүн ичинде ачабыз. Тиркемеде жаңыртуу үчүн экранды ылдый тартыңыз.',
       som: 'сом', once: 'Ушул той үчүн бир жолу, бир жылга', howTitle: 'Кантип төлөө керек',
-      payBtn: 'Банк тиркемесинде төлөө', payTo: (n) => `Алуучу: ${n} · MBank`,
+      payBtn: 'Банк тиркемесинде төлөө', toClaim: 'Төлөдүңүзбү? «Төлөдүм» баскычын басыңыз ↓', payTo: (n) => `Алуучу: ${n} · MBank`,
       stepPay: '«Төлөө» баскычын басыңыз — банк тиркемеси ачылат: MBank же Кыргызстандагы башка банк тиркемеси. Компьютерден болсо — төмөндөгү QRди телефон менен сканерлеңиз.',
       stepAmount: (p) => `${p} сом сумманы жазыңыз — QRде сумма жок.`, stepComment: 'Банкта «Комментарий» талаасы болсо — тойдун номерин жазыңыз.',
       stepClaim: 'Бул жакка кайтып, ылдыйдагы «Төлөдүм» баскычын басыңыз.', qrSave: 'QRди галереяга сактоо',
@@ -229,6 +230,7 @@
     $('qr').hidden = $('qrSave').hidden = !PAY.qr;
     if (PAY.qr) { $('qr').src = PAY.qr; $('qrSave').href = PAY.qr; }
     $('payLink').hidden = !PAY.link; if (PAY.link) $('payLink').href = PAY.link;
+    $('toClaim').hidden = !PAY.link;
     $('payTo').hidden = !PAY.to; if (PAY.to) $('payTo').textContent = L.payTo(PAY.to);
     $('stepAmount').textContent = L.stepAmount(info ? Number(info.price).toLocaleString('ru-RU') : '990');
     const hasPay = Boolean(PAY.qr || PAY.link);
@@ -281,6 +283,7 @@
   $('find').onclick = find;
   $('other').onclick = () => { info = null; $('toiBlock').hidden = true; $('findCard').hidden = false; $('num').focus(); history.replaceState(null, '', location.pathname); };
   $('payer').addEventListener('input', render);
+  $('toClaim').onclick = () => { $('claimCard').scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(() => $('payer').focus(), 400); };
   $('claim').onclick = async () => {
     const L = T[lang];
     $('claim').disabled = true; $('claim').textContent = L.sending; $('claimErr').hidden = true;
