@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Админка — Той Менеджер</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#E24B66">
+<meta name="theme-color" content="#B9A2FF">
 <link rel="icon" href="../favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 <style>
   .wrap { max-width: 1000px; }
@@ -35,14 +35,14 @@
   .meta { font-size: 14px; color: var(--muted); }
   .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
   .b { border: 0; border-radius: 12px; min-height: 42px; padding: 0 16px; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; }
-  .b.primary { background: linear-gradient(135deg, #D9425D, #EC6A6A); color: #fff; }
+  .b.primary { background: linear-gradient(135deg, #5B3FD6, #8A4FD8); color: #fff; }
   .b.sec { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
   .b.danger { background: var(--surface); color: var(--accent-dark); border: 1px solid #F3C9D1; }
   .b:disabled { opacity: .5; cursor: default; }
-  .b:focus-visible, nav.tabs button:focus-visible, .row-link:focus-visible { outline: 3px solid rgba(210,63,89,.4); outline-offset: 2px; }
+  .b:focus-visible, nav.tabs button:focus-visible, .row-link:focus-visible { outline: 3px solid rgba(91,63,214,.4); outline-offset: 2px; }
   .input, select.input { min-height: 46px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); padding: 0 14px;
     font: inherit; font-size: 16px; color: var(--ink); width: 100%; }
-  .input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(210,63,89,.15); }
+  .input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91,63,214,.15); }
   .inline { display: flex; gap: 8px; flex-wrap: wrap; align-items: end; }
   .inline > * { flex: 1 1 160px; }
   .inline > .b { flex: 0 0 auto; }
@@ -396,7 +396,7 @@
   $('q').addEventListener('keydown', (e) => { if (e.key === 'Enter') search(); });
 
   // ---------- графики: столбики, один ряд, подсказка при наведении ----------
-  function bars(el, data, { label, fmt = (v) => v, color = '#D23F59', xLabel, W = 600, H = 170, maxBar = 64 }) {
+  function bars(el, data, { label, fmt = (v) => v, color = '#7E5CE6', xLabel, W = 600, H = 170, maxBar = 64 }) {
     const P = { l: 44, r: 6, t: 10, b: 24 };
     const max = Math.max(1, ...data.map((d) => d.v));
     const nice = max <= 4 ? Math.max(2, Math.ceil(max / 2) * 2) : Math.ceil(max / 4) * 4;
