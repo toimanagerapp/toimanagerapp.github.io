@@ -214,3 +214,13 @@ textarea.field { min-height: 110px; resize: vertical; }
 .env-title .orn { width: 120px; margin-top: 10px; opacity: .9; }
 .h-script.gold { margin-bottom: 12px; }
 .greet.gold { margin-bottom: 10px; }
+
+/* Загрузка и ошибка */
+.seal[disabled] { cursor: default; }
+.seal[disabled] .whole { animation: none; opacity: .55; }
+.oops { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 24px; background: var(--bg); text-align: center; }
+.oops .card { max-width: 420px; }
+.err { color: #A3263A; font-size: 17px; margin: 10px 0 0; }
+body[data-theme="tunku"] .err { color: #F2B8A0; }
+.week .day.plain svg { display: none; }
+.week .day.plain { border: 1.5px solid var(--gold1); border-radius: 50%; width: 76px; height: 76px; margin: 8px; }

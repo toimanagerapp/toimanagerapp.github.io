@@ -31,6 +31,14 @@
   <div class="env-hint" data-t="envHint"></div>
 </div>
 
+<div class="oops" id="oops" hidden>
+  <div class="card">
+    <svg class="orn small" viewBox="0 0 200 60" aria-hidden="true"><use href="#orn" width="200" height="60"/></svg>
+    <h1 class="h-script script gold" id="oopsTitle" style="margin-top:12px"></h1>
+    <p class="text" id="oopsText"></p>
+  </div>
+</div>
+
 <main id="page" aria-hidden="true">
   <div class="lang" role="group" aria-label="Тил / Язык">
     <button type="button" data-lang="ky">Кыр</button><button type="button" data-lang="ru">Рус</button>
@@ -50,24 +58,25 @@
     <div class="card reveal">
       <p class="greet script gold" id="greet"></p>
       <p class="text" id="invText"></p>
+      <p class="text muted" id="partyLine" style="margin-top:14px" hidden></p>
       <svg class="orn small" viewBox="0 0 200 60" aria-hidden="true" style="margin-top:22px"><use href="#orn" width="200" height="60"/></svg>
     </div>
   </section>
 
-  <section>
-    <h2 class="h-script script gold reveal" data-t="dayTitle"></h2>
+  <section id="dateSec">
+    <h2 class="h-script script gold reveal" id="dayTitle"></h2>
     <div class="month reveal" id="month"></div>
     <div class="week reveal" id="week"></div>
     <div class="weekday reveal" id="weekday"></div>
     <div class="time reveal" id="time"></div>
   </section>
 
-  <section>
+  <section id="countSec">
     <div class="caps reveal" data-t="until" style="margin-bottom:8px"></div>
     <div class="countdown reveal" id="countdown"></div>
   </section>
 
-  <section>
+  <section id="placeSec">
     <h2 class="h-script script gold reveal" data-t="placeTitle"></h2>
     <div class="place-name reveal" id="venue"></div>
     <div class="text muted reveal" id="address"></div>
@@ -93,6 +102,7 @@
       <h2 class="h-script script gold" data-t="rsvpTitle" style="margin-bottom:6px"></h2>
       <p class="text muted" id="rsvpHint"></p>
       <div id="rsvpForm">
+        <input class="field" id="rsvpName" maxlength="80" autocomplete="name" style="margin-top:18px" hidden>
         <div class="opts">
           <button class="opt" type="button" data-answer="yes" aria-pressed="false"><i></i><span data-t="yes"></span></button>
           <button class="opt" type="button" data-answer="no" aria-pressed="false"><i></i><span data-t="no"></span></button>
@@ -101,8 +111,10 @@
           <div class="caps muted" data-t="howMany" style="margin-top:14px"></div>
           <div class="count"><button type="button" id="minus" aria-label="−">−</button><output id="count">1</output><button type="button" id="plus" aria-label="+">+</button></div>
         </div>
+        <p class="err" id="rsvpErr" role="alert" hidden></p>
         <button class="btn" id="send" type="button" data-t="send" style="width:100%;margin-top:18px" disabled></button>
       </div>
+      <p class="text" id="pastNote" hidden></p>
       <div class="thanks" id="thanks" hidden>
         <svg class="mark" viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="33" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M22 37l10 10 19-21" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <div class="greet script gold" id="thanksTitle"></div>
@@ -112,7 +124,7 @@
     </div>
   </section>
 
-  <section>
+  <section id="wishSec">
     <h2 class="h-script script gold reveal" data-t="wishesTitle"></h2>
     <p class="text muted reveal" data-t="wishesHint"></p>
     <form class="wish-form reveal" id="wishForm">
@@ -120,6 +132,7 @@
       <textarea class="field" id="wishText" maxlength="500"></textarea>
       <button class="btn" type="submit" data-t="wishSend"></button>
     </form>
+    <p class="text muted" id="wishNote" style="margin-top:14px" hidden></p>
     <div class="wishes" id="wishes"></div>
   </section>
 
