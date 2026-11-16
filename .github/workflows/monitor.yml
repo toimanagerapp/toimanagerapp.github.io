@@ -1,0 +1,35 @@
+# Мониторинг: каждые 30 минут проверяет сайт, страницу приглашения, базу Supabase и SSL-сертификат.
+# Если что-то не работает — запуск «падает», и GitHub присылает письмо владельцу репозитория.
+name: monitor
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Сайт и страницы
+        run: |
+          set -e
+          check() { code=$(curl -sS -o /tmp/p -w '%{http_code}' --max-time 20 "$1"); echo "$1 → $code"; [ "$code" = 200 ] || { echo "::error::$1 ответил $code"; exit 1; }; grep -q "$2" /tmp/p || { echo "::error::$1 — нет текста «$2»"; exit 1; }; }
+          check https://toimanager.app/ 'Той Менеджер'
+          check https://toimanager.app/ky/ 'Той Менеджер'
+          check https://toimanager.app/pro/ 'Безлимит'
+          check 'https://toimanager.app/inv/?t=ak-altyn' 'inv.js'
+          check https://toimanager.app/sitemap.xml 'urlset'
+      - name: База Supabase
+        run: |
+          set -e
+          URL=https://ybygcijdpswvqrkxyimi.supabase.co
+          KEY=sb_publishable_AMNeSGIK-aTmllo1Q13bNw_aTCbRkPn
+          a=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$URL/auth/v1/health" -H "apikey: $KEY"); echo "auth → $a"
+          r=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 -X POST "$URL/rest/v1/rpc/catalog_info" -H "apikey: $KEY" -H 'Content-Type: application/json' -d '{}'); echo "rest → $r"
+          [ "$a" = 200 ] && [ "$r" = 200 ] || { echo "::error::Supabase не отвечает (auth $a, rest $r)"; exit 1; }
+      - name: SSL-сертификат
+        run: |
+          end=$(echo | openssl s_client -servername toimanager.app -connect toimanager.app:443 2>/dev/null | openssl x509 -noout -enddate | cut -d= -f2)
+          left=$(( ( $(date -d "$end" +%s) - $(date +%s) ) / 86400 ))
+          echo "Сертификат до $end (осталось $left дн.)"
+          [ "$left" -gt 10 ] || { echo "::error::SSL-сертификат истекает через $left дн."; exit 1; }

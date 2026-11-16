@@ -3,11 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Безлимит для тоя</title>
+<title>Оплата «Безлимита» для тоя — Той Менеджер</title>
 <meta name="description" content="«Безлимит» для тоя в приложении «Той Менеджер»: сколько угодно гостей, действует год.">
 <meta property="og:title" content="Безлимит для тоя — Той Менеджер">
 <meta property="og:description" content="Сколько угодно гостей в вашем тое. Оплата по QR через MBank или любой банк.">
-<meta property="og:image" content="https://toimanager.app/og.png">
+<meta property="og:image" content="https://toimanager.app/og.jpg">
+<link rel="canonical" href="https://toimanager.app/pro/">
 <meta name="theme-color" content="#B9A2FF">
 <link rel="icon" href="../favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,6 +43,7 @@
   .pending-n #toiSkeleton { display: block; }
   #toiSkeleton { display: none; height: 120px; }
 </style>
+<script src="../analytics.js" defer></script>
 </head>
 <body>
 <main class="wrap stack">
@@ -63,7 +65,7 @@
     <div>
       <label class="flabel" for="num" data-t="numLabel">Номер тоя</label>
       <input class="num-input" id="num" inputmode="numeric" autocomplete="off" maxlength="7" placeholder="000 000">
-      <p class="muted" style="font-size:14px;margin-top:8px" data-t="numHint">В приложении: Ещё → Тариф. Номер есть и на карточке «Бесплатно — до 35 человек».</p>
+      <p class="muted" style="font-size:14px;margin-top:8px" data-t="numHint">В приложении: Ещё → Тариф. Когда гостей становится много, номер показывается и в карточке лимита.</p>
     </div>
     <button class="btn btn-primary" type="button" id="find" data-t="find">Продолжить</button>
     <p class="err" id="findErr" role="alert" hidden></p>
@@ -154,7 +156,7 @@
   const T = {
     ru: {
       title: 'Безлимит для тоя', lead: 'Сколько угодно гостей в вашем тое. Действует год — на подготовку, сам той и подсчёт конвертов.',
-      numLabel: 'Номер тоя', numHint: 'В приложении: Ещё → Тариф. Номер есть и на карточке «Бесплатно — до 35 человек».',
+      numLabel: 'Номер тоя', numHint: 'В приложении: Ещё → Тариф. Когда гостей становится много, номер показывается и в карточке лимита.',
       find: 'Продолжить', finding: 'Ищем…', other: 'Другой номер', toiLabel: 'Той',
       notFound: 'Той с таким номером не найден. Проверьте 6 цифр.', numBad: 'Номер тоя — 6 цифр', loadError: 'Не удалось загрузить. Проверьте интернет.',
       people: (p, l) => p >= l ? `В списке ${p} из ${l} бесплатных — лимит исчерпан` : `В списке ${p} из ${l} бесплатных`,
@@ -182,7 +184,7 @@
     },
     ky: {
       title: 'Той үчүн чексиз', lead: 'Тойго каалагандай конок кошуңуз. Бир жылга жарактуу — даярдыкка, тойдун өзүнө жана конверттерди эсептөөгө.',
-      numLabel: 'Тойдун номери', numHint: 'Тиркемеде: Дагы → Тариф. Номер «Акысыз — 35 кишиге чейин» карточкасында да бар.',
+      numLabel: 'Тойдун номери', numHint: 'Тиркемеде: Ещё → Тариф. Коноктор көбөйгөндө номер лимит карточкасында да көрүнөт.',
       find: 'Улантуу', finding: 'Изделүүдө…', other: 'Башка номер', toiLabel: 'Той',
       notFound: 'Мындай номердеги той табылган жок. 6 санды текшериңиз.', numBad: 'Тойдун номери — 6 сан', loadError: 'Жүктөлгөн жок. Интернетти текшериңиз.',
       people: (p, l) => p >= l ? `Тизмеде ${p} / ${l} акысыз — лимит бүттү` : `Тизмеде ${p} / ${l} акысыз`,
@@ -301,6 +303,7 @@
     try {
       await rpc('public_pay_claim', { p_num: num, p_payer_name: $('payer').value.trim(), p_phone: $('phone').value.trim() || null });
       claimed = true;
+      window.tmTrack && window.tmTrack('pay_claim', { value: Number(info?.price || 990), currency: 'KGS' });
       render();
       $('pending').scrollIntoView({ behavior: 'smooth', block: 'center' });
     } catch {

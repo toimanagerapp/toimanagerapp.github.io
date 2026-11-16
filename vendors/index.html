@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Разместить услуги — Той Менеджер</title>
+<title>Каталог исполнителей для тоя и свадьбы — Той Менеджер</title>
 <meta name="description" content="Рестораны, тамада, певцы, фотографы, видеографы и организаторы: разместите свои услуги в каталоге приложения «Той Менеджер» — вас найдут те, кто готовит той.">
 <link rel="canonical" href="https://toimanager.app/vendors/">
 <meta property="og:title" content="Разместите свои услуги в «Той Менеджере»">
 <meta property="og:description" content="Каталог исполнителей для тоя: фото, цены и контакты — прямо там, где семья планирует той и бюджет.">
-<meta property="og:image" content="https://toimanager.app/og.png">
+<meta property="og:image" content="https://toimanager.app/og.jpg">
 <meta name="theme-color" content="#F6F4FB">
 <link rel="icon" href="../favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,12 +46,13 @@
   .ok-box { text-align: center; padding: 32px 20px; }
   .ok-box .mark { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; margin: 0 auto 12px; background: var(--success-soft); color: var(--success); font-size: 30px; font-weight: 700; }
 </style>
+<script src="../analytics.js" defer></script>
 </head>
 <body>
 <header class="nav" id="nav">
   <div class="container">
     <a class="brand" href="../"><img src="../icon-192.png" alt=""><span>Той Менеджер</span></a>
-    <a class="btn-sm primary" href="#form">Оставить заявку</a>
+    <a class="btn-sm primary" href="#form" data-ev="vendor_cta_click">Оставить заявку</a>
   </div>
 </header>
 
@@ -191,6 +192,7 @@
     try {
       await rpc('public_vendor_claim', { p_name: name, p_category: $('fCat').value || null, p_city: $('fCity').value.trim() || null,
         p_phone: phone, p_instagram: $('fInsta').value.trim() || null, p_comment: $('fComment').value.trim() || null });
+      window.tmTrack && window.tmTrack('vendor_claim', { category: $('fCat').value || '' });
       $('claimForm').hidden = true; $('claimOk').hidden = false; $('claimOk').scrollIntoView({ behavior: 'smooth', block: 'center' });
     } catch (ex) {
       err(String(ex.message).includes('too many') ? 'Заявка с этого номера уже есть — мы скоро свяжемся.' : 'Не получилось отправить. Проверьте интернет и попробуйте ещё раз.');
