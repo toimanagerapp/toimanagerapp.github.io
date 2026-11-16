@@ -1,4 +1,4 @@
-/* Той Менеджер — общий стиль сайта: светлый фон, шрифт Onest, один фиолетовый акцент */
+/* Той Менеджер — общий стиль сайта: светлый фон, шрифт Inter, один фиолетовый акцент */
 :root {
   --bg: #FCFBFE;
   --surface: #FFFFFF;
@@ -22,7 +22,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: 'Onest', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-size: 16px;
   line-height: 1.5;
 }
