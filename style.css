@@ -1,10 +1,10 @@
-/* Той Менеджер — общий стиль сайта (палитра «Праздник», как в приложении) */
+/* Той Менеджер — общий стиль сайта: светлый фон, шрифт Onest, один фиолетовый акцент */
 :root {
-  --bg: #F6F4FB;
+  --bg: #FCFBFE;
   --surface: #FFFFFF;
-  --line: #ECE8F4;
+  --line: #ECE9F2;
   --ink: #2A2440;
-  --muted: #6E6787;
+  --muted: #5E5873;
   --accent: #5B3FD6;
   --accent-dark: #4B32B8;
   --accent-soft: #F1EDFF;
@@ -12,20 +12,17 @@
   --success-soft: #E3F6EE;
   --warn: #7A4A00;
   --hero: linear-gradient(140deg, #C2AEFF 0%, #E3B2F2 55%, #FFB8D8 100%);
+  --hero-soft: linear-gradient(150deg, #F1ECFF 0%, #F7EEFB 55%, #FDEFF5 100%);
   --radius: 24px;
-  --shadow: 0 8px 22px rgba(90, 70, 160, 0.08);
+  --shadow: 0 1px 2px rgba(40, 30, 80, 0.04), 0 6px 18px rgba(60, 40, 130, 0.05);
 }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   background: var(--bg);
-  background-image:
-    radial-gradient(60vmax 60vmax at -10% -15%, rgba(230, 220, 255, 0.8), transparent 60%),
-    radial-gradient(50vmax 50vmax at 110% 105%, rgba(255, 221, 238, 0.6), transparent 60%);
-  background-attachment: fixed;
   color: var(--ink);
-  font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Onest', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-size: 16px;
   line-height: 1.5;
 }
@@ -38,20 +35,21 @@ a { color: var(--accent); }
 .lang button { border: 0; background: transparent; font: inherit; font-size: 14px; font-weight: 600; color: var(--muted);
   padding: 6px 12px; border-radius: 999px; cursor: pointer; min-height: 32px; }
 .lang button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent-dark); }
-h1 { font-size: 28px; line-height: 1.15; letter-spacing: -0.02em; margin: 0; }
+h1 { font-size: 28px; line-height: 1.15; letter-spacing: -0.02em; font-weight: 700; margin: 0; }
+h2, h3 { font-weight: 600; }
 h2 { font-size: 20px; line-height: 1.25; margin: 0 0 8px; }
 p { margin: 0; }
 .muted { color: var(--muted); }
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); }
 .stack { display: flex; flex-direction: column; gap: 14px; }
-.hero { background: var(--hero); color: var(--ink); border-radius: 28px; padding: 24px 22px; box-shadow: 0 14px 30px rgba(140, 100, 220, 0.22); }
+.hero { background: var(--hero-soft); color: var(--ink); border-radius: 28px; padding: 24px 22px; border: 1px solid #ECE4FB; }
 .hero .eyebrow { font-size: 14px; opacity: 0.92; margin-bottom: 6px; }
 .hero h1 { color: var(--ink); }
 .hero .greet { margin-top: 14px; font-size: 17px; }
 .row { display: flex; gap: 12px; align-items: flex-start; }
 .row + .row { border-top: 1px solid var(--line); padding-top: 12px; margin-top: 12px; }
 .ico { width: 36px; height: 36px; border-radius: 11px; background: var(--accent-soft); color: var(--accent-dark);
-  display: grid; place-items: center; flex: none; font-weight: 700; }
+  display: grid; place-items: center; flex: none; font-weight: 600; }
 .ico svg { width: 20px; height: 20px; }
 .label { font-size: 13px; color: var(--muted); }
 .value { font-weight: 600; }
@@ -60,7 +58,8 @@ p { margin: 0; }
   background: var(--surface); color: var(--ink); text-decoration: none; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; }
 .btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 54px; border-radius: 16px;
   border: 0; font: inherit; font-size: 17px; font-weight: 600; cursor: pointer; text-decoration: none; }
-.btn-primary { background: linear-gradient(135deg, #5B3FD6, #8A4FD8); color: #fff; box-shadow: 0 6px 14px rgba(91, 63, 214, 0.28); }
+.btn-primary { background: var(--accent); color: #fff; box-shadow: 0 4px 12px rgba(91, 63, 214, 0.22); }
+.btn-primary:hover { background: var(--accent-dark); }
 .btn-secondary { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
 .btn:disabled { opacity: 0.55; cursor: default; }
 .btn:focus-visible, .chip:focus-visible, .lang button:focus-visible, .step button:focus-visible { outline: 3px solid rgba(91, 63, 214, 0.4); outline-offset: 2px; }
@@ -71,7 +70,7 @@ p { margin: 0; }
 .step .ctrl { display: flex; align-items: center; gap: 14px; }
 .step button { width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface);
   font: inherit; font-size: 22px; font-weight: 600; color: var(--ink); cursor: pointer; }
-.step output { font-size: 22px; font-weight: 700; min-width: 28px; text-align: center; }
+.step output { font-size: 22px; font-weight: 600; min-width: 28px; text-align: center; }
 .done { text-align: center; padding: 26px 18px; }
 .done .mark { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; margin: 0 auto 12px;
   background: var(--success-soft); color: var(--success); }
