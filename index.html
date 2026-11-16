@@ -6,13 +6,16 @@
 <title>Той Менеджер — гости, конверты и бюджет тоя в одном приложении</title>
 <meta name="description" content="Приложение для организации тоя: список гостей, приглашения в WhatsApp с ответом «приду», рассадка по столам, отметки у входа, учёт конвертов и бюджет с авансами. Бесплатно до 35 человек.">
 <link rel="canonical" href="https://toimanager.app/">
+<link rel="alternate" hreflang="ru" href="https://toimanager.app/">
+<link rel="alternate" hreflang="ky" href="https://toimanager.app/ky/">
+<link rel="alternate" hreflang="x-default" href="https://toimanager.app/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://toimanager.app/">
 <meta property="og:title" content="Той Менеджер — весь той в одном приложении">
 <meta property="og:description" content="Гости, приглашения в WhatsApp, конверты и бюджет — вместе с роднёй.">
 <meta property="og:image" content="https://toimanager.app/og.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#F6F4FB">
+<meta name="theme-color" content="#FCFBFE">
 <link rel="icon" href="favicon.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,7 +34,7 @@
 <header class="nav" id="nav">
   <div class="container">
     <a class="brand" href="#top" aria-label="Той Менеджер — наверх"><img src="icon-192.png" alt=""><span>Той Менеджер</span></a>
-    <nav aria-label="Разделы">
+    <nav aria-label="Разделы" id="menu">
       <ul>
         <li><a href="#features">Возможности</a></li>
         <li><a href="#how">Как начать</a></li>
@@ -39,7 +42,13 @@
         <li><a href="#faq">Вопросы</a></li>
       </ul>
     </nav>
-    <a class="btn-sm primary" href="#download">Скачать</a>
+    <div class="right">
+      <div class="lang-sw" aria-label="Язык сайта"><a href="ky/" hreflang="ky" lang="ky">Кыр</a><a href="./" aria-current="true">Рус</a></div>
+      <a class="btn-sm primary" href="#download">Скачать</a>
+      <button class="menu-btn" type="button" aria-label="Меню" aria-expanded="false" aria-controls="menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
   </div>
 </header>
 
@@ -49,7 +58,7 @@
   <section class="hero2">
     <div class="container">
       <div>
-        <span class="pill">Для свадьбы, кыз узатуу, бешик тоя и любого другого</span>
+        <p class="eyebrow">Үйлөнүү той · кыз узатуу · сүннөт той · бешик той · юбилей</p>
         <h1>Гости, конверты и бюджет тоя — <span class="grad">в одном приложении</span></h1>
         <p class="lead">Составьте список гостей, разошлите приглашения в WhatsApp и узнайте, кто придёт. В день тоя родня отмечает гостей и конверты у входа, а вы видите, сколько собрано и сколько ещё платить.</p>
         <div class="stores" aria-label="Скачать приложение">
@@ -65,15 +74,8 @@
         <div class="ticks"><span>Бесплатно до 35 человек</span><span>Без рекламных баннеров</span><span>Гостям ничего не нужно устанавливать</span></div>
       </div>
       <div class="phones" aria-hidden="true">
-        <div class="phone back"><img src="img/guests.webp" alt="" width="600" height="1298" loading="lazy"></div>
         <div class="phone front"><img src="img/home.webp" alt="" width="600" height="1298" fetchpriority="high"></div>
         <div class="float f1"><span class="dot">✓</span><span>Таалай Асанов — придёт<small>всего 3 человека</small></span></div>
-        <div class="float f2"><span class="dot">№2</span><span>Конверт от Бакыта<small>100 USD · вскрыт</small></span></div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="occasions" aria-label="Для каких тоев">
-        <span>Үйлөнүү той</span><span>Кыз узатуу</span><span>Сүннөт той</span><span>Бешик той</span><span>Тушоо кесүү</span><span>Юбилей</span>
       </div>
     </div>
   </section>
@@ -84,9 +86,9 @@
       <span class="kicker">Знакомо?</span>
       <h2 class="h2">Той — это сотни мелочей</h2>
       <div class="pains" style="text-align:left">
-        <div class="pain"><div class="emoji" aria-hidden="true">📒</div><h3>Список в трёх тетрадках</h3><p>Часть гостей у мамы в блокноте, часть у брата в заметках. Кого пригласили, а кого забыли — непонятно.</p></div>
-        <div class="pain"><div class="emoji" aria-hidden="true">✉️</div><h3>Гора конвертов</h3><p>После тоя никто не помнит, какой конверт от кого и сколько в нём было. А это важно — потом идти к ним в ответ.</p></div>
-        <div class="pain"><div class="emoji" aria-hidden="true">💸</div><h3>Авансы и долги</h3><p>Ресторану дали аванс, за мясо заплатили половину, тамаде — ещё нет. Сколько осталось и до какого числа?</p></div>
+        <div class="pain"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h11a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M8 3v18M11 8h4M11 12h4"/></svg></div><h3>Список в трёх тетрадках</h3><p>Часть гостей у мамы в блокноте, часть у брата в заметках. Кого пригласили, а кого забыли — непонятно.</p></div>
+        <div class="pain"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6 8.5-6"/></svg></div><h3>Гора конвертов</h3><p>После тоя никто не помнит, какой конверт от кого и сколько в нём было. А это важно — потом идти к ним в ответ.</p></div>
+        <div class="pain"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V5a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v3"/><path d="M3 6v12a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-3"/><path d="M21 12h-4a2 2 0 0 0 0 4h4z"/></svg></div><h3>Авансы и долги</h3><p>Ресторану дали аванс, за мясо заплатили половину, тамаде — ещё нет. Сколько осталось и до какого числа?</p></div>
       </div>
       <p class="answer">Той Менеджер собирает всё это в одном месте — и родня работает в нём вместе с вами, каждый со своего телефона.</p>
     </div>
@@ -319,9 +321,9 @@
         <a class="brand" href="#top"><img src="icon-192.png" alt=""><span style="font-weight: 600">Той Менеджер</span></a>
         <p class="muted" style="margin-top:10px;max-width:300px">Приложение для организации тоя: гости, приглашения, конверты и бюджет — вместе с роднёй.</p>
       </div>
-      <div><h4>Приложение</h4><ul><li><a href="#features">Возможности</a></li><li><a href="#price">Цены</a></li><li><a href="#faq">Вопросы</a></li><li><a href="vendors/">Исполнителям</a></li></ul></div>
-      <div><h4>Документы</h4><ul><li><a href="pro/">Оплата Безлимита</a></li><li><a href="privacy/">Конфиденциальность</a></li><li><a href="delete-account/">Удаление аккаунта</a></li></ul></div>
-      <div><h4>Связь</h4><ul><li><a href="mailto:toimanager.app@gmail.com">toimanager.app@gmail.com</a></li></ul></div>
+      <div><h3>Приложение</h3><ul><li><a href="#features">Возможности</a></li><li><a href="#price">Цены</a></li><li><a href="#faq">Вопросы</a></li><li><a href="vendors/">Исполнителям</a></li></ul></div>
+      <div><h3>Документы</h3><ul><li><a href="pro/">Оплата Безлимита</a></li><li><a href="privacy/">Конфиденциальность</a></li><li><a href="delete-account/">Удаление аккаунта</a></li></ul></div>
+      <div><h3>Связь</h3><ul><li><a class="mail" href="mailto:toimanager.app@gmail.com">toimanager.app@gmail.com</a></li></ul></div>
     </div>
     <p class="legal">© 2026 ИП Орозалиев М. К., Бишкек, Кыргызстан</p>
   </div>
@@ -338,6 +340,12 @@
     p.firstElementChild.addEventListener('click', go);
     p.querySelector('.card').addEventListener('click', go);
   });
+  // меню на телефоне
+  const menu = document.getElementById('menu'), mb = document.querySelector('.menu-btn');
+  const setMenu = (open) => { menu.classList.toggle('open', open); mb.setAttribute('aria-expanded', String(open)); };
+  mb.addEventListener('click', () => setMenu(!menu.classList.contains('open')));
+  menu.addEventListener('click', (e) => { if (e.target.closest('a')) setMenu(false); });
+  addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
   // неактивные кнопки магазинов никуда не ведут
   document.querySelectorAll('.store[aria-disabled="true"]').forEach((a) => a.addEventListener('click', (e) => e.preventDefault()));
 </script>

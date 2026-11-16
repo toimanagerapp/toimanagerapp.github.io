@@ -248,12 +248,13 @@
     // ответ
     $('rsvp').hidden = !C.rsvp_enabled;
     if (C.rsvp_deadline) { const dl = new Date(C.rsvp_deadline + 'T00:00:00Z'); $('rsvpHint').textContent = L.rsvpBy(dl); } else $('rsvpHint').textContent = L.rsvpHint;
-    $('rsvpName').placeholder = L.yourName;
+    $('rsvpName').placeholder = L.yourName; $('rsvpName').setAttribute('aria-label', L.yourName);
     $('pastNote').textContent = L.past;
     renderRsvp();
     // пожелания
     $('wishSec').hidden = C.wishes_mode === 'off' || !!R.legacy;
     $('wishName').placeholder = L.wishName; $('wishText').placeholder = L.wishText;
+    $('wishName').setAttribute('aria-label', L.wishName); $('wishText').setAttribute('aria-label', L.wishText);
     renderWishes();
     // подпись
     $('closingNames').textContent = [C.a, C.b].filter(Boolean).join(' & ');

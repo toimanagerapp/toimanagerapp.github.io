@@ -14,26 +14,33 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
+<script>
+  // пришли по ссылке из приложения (?n=номер) — пока грузим той, не показываем форму номера и нижние блоки, чтобы страница не прыгала
+  if (/[?&]n=\d{3}\s?\d{3}/.test(location.search)) document.documentElement.classList.add('pending-n');
+</script>
 <style>
-  .num-input { width: 100%; min-height: 56px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface);
+  .num-input { width: 100%; min-height: 56px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface);
     font: inherit; font-size: 24px; font-weight: 600; letter-spacing: 0.08em; text-align: center; color: var(--ink); padding: 0 12px; }
   .num-input::placeholder { color: #CDBFC1; font-weight: 500; }
   .num-input:focus, .field:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91, 63, 214, 0.15); }
-  .field { width: 100%; min-height: 50px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface);
+  .field { width: 100%; min-height: 50px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface);
     font: inherit; font-size: 16px; color: var(--ink); padding: 0 14px; }
-  .flabel { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 6px; display: block; }
+  .flabel { font-size: 14px; font-weight: 500; color: var(--muted); margin-bottom: 6px; display: block; }
   .price { font-size: 40px; font-weight: 600; letter-spacing: -0.02em; line-height: 1; }
-  .price small { font-size: 18px; font-weight: 600; color: var(--muted); }
+  .price small { font-size: 18px; font-weight: 500; color: var(--muted); }
   .meter { height: 6px; border-radius: 3px; background: #F3EDEE; overflow: hidden; margin-top: 8px; }
   .meter i { display: block; height: 100%; background: #E2A93B; border-radius: 3px; }
-  .qr { display: block; width: 100%; max-width: 260px; margin: 4px auto 0; border-radius: 16px; border: 1px solid var(--line); background: #fff; }
+  .qr { display: block; width: 100%; height: auto; aspect-ratio: 600 / 729; max-width: 260px; margin: 4px auto 0; border-radius: 16px; border: 1px solid var(--line); background: #fff; }
   .pay-row { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
   .pay-row b { font-size: 18px; user-select: all; }
   ol.steps { margin: 0; padding-left: 22px; } ol.steps li { margin: 6px 0; }
-  .note { background: #FEF3DC; border-radius: 14px; padding: 12px 14px; font-size: 14px; }
+  .note { background: #FEF3DC; border-radius: var(--r-md); padding: 12px 14px; font-size: 14px; }
   details summary { cursor: pointer; font-weight: 600; min-height: 32px; }
   details p { margin-top: 6px; }
   .ok-card { background: var(--success-soft); border: 1px solid #BFE8D6; }
+  .pending-n #findCard, .pending-n .doc, .pending-n main > footer { display: none; }
+  .pending-n #toiSkeleton { display: block; }
+  #toiSkeleton { display: none; height: 120px; }
 </style>
 </head>
 <body>
@@ -61,6 +68,8 @@
     <button class="btn btn-primary" type="button" id="find" data-t="find">Продолжить</button>
     <p class="err" id="findErr" role="alert" hidden></p>
   </section>
+
+  <div class="card" id="toiSkeleton" aria-hidden="true"><div class="skeleton" style="width:60%"></div><div class="skeleton" style="width:40%;margin-top:12px"></div><div class="skeleton" style="margin-top:12px"></div></div>
 
   <!-- 2. той найден -->
   <section class="stack" id="toiBlock" hidden>
@@ -98,7 +107,7 @@
         <li data-t="stepComment">Если в банке есть поле «Комментарий» — укажите номер тоя.</li>
         <li data-t="stepClaim">Вернитесь сюда и нажмите «Я оплатил» внизу.</li>
       </ol>
-      <img class="qr" id="qr" alt="QR для оплаты" hidden>
+      <img class="qr" id="qr" alt="QR для оплаты" width="600" height="729" hidden>
       <a class="chip" id="qrSave" download="toi-manager-qr.png" style="align-self:center" hidden data-t="qrSave">Сохранить QR в галерею</a>
       <p class="note" id="noPay" hidden data-t="noPay">Реквизиты для оплаты появятся здесь совсем скоро. Если нужно срочно — напишите на toimanager.app@gmail.com с номером тоя.</p>
     </div>
@@ -202,7 +211,8 @@
   };
   const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } },
                   set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
-  let lang = store.get('lang') || ((navigator.language || '').startsWith('ky') ? 'ky' : 'ru');
+  const qLang = new URLSearchParams(location.search).get('lang');
+  let lang = (qLang === 'ky' || qLang === 'ru') ? qLang : (store.get('lang') || ((navigator.language || '').startsWith('ky') ? 'ky' : 'ru'));
   const $ = (id) => document.getElementById(id);
   let info = null, num = null, claimed = false;
 
@@ -272,6 +282,7 @@
       $('findErr').textContent = L.loadError; $('findErr').hidden = false;
     }
     $('find').disabled = false; $('find').textContent = L.find;
+    document.documentElement.classList.remove('pending-n');
     render();
   }
 
@@ -303,6 +314,7 @@
   const pre = (new URLSearchParams(location.search).get('n') || '').replace(/\D/g, '');
   render();
   if (pre.length === 6) { $('num').value = `${pre.slice(0, 3)} ${pre.slice(3)}`; find(); }
+  else document.documentElement.classList.remove('pending-n');
 })();
 </script>
 </body>
