@@ -30,7 +30,7 @@
   .price small { font-size: 18px; font-weight: 500; color: var(--muted); }
   .meter { height: 6px; border-radius: 3px; background: #F3EDEE; overflow: hidden; margin-top: 8px; }
   .meter i { display: block; height: 100%; background: #E2A93B; border-radius: 3px; }
-  .qr { display: block; width: 100%; height: auto; aspect-ratio: 600 / 729; max-width: 260px; margin: 4px auto 0; border-radius: 16px; border: 1px solid var(--line); background: #fff; }
+  .qr { display: block; width: 100%; height: auto; aspect-ratio: 600 / 613; max-width: 260px; margin: 4px auto 0; border-radius: 16px; border: 1px solid var(--line); background: #fff; }
   .pay-row { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
   .pay-row b { font-size: 18px; user-select: all; }
   ol.steps { margin: 0; padding-left: 22px; } ol.steps li { margin: 6px 0; }
@@ -107,7 +107,7 @@
         <li data-t="stepComment">Если в банке есть поле «Комментарий» — укажите номер тоя.</li>
         <li data-t="stepClaim">Вернитесь сюда и нажмите «Я оплатил» внизу.</li>
       </ol>
-      <img class="qr" id="qr" alt="QR для оплаты" width="600" height="729" hidden>
+      <img class="qr" id="qr" alt="QR для оплаты" width="600" height="613" hidden>
       <a class="chip" id="qrSave" download="toi-manager-qr.png" style="align-self:center" hidden data-t="qrSave">Сохранить QR в галерею</a>
       <p class="note" id="noPay" hidden data-t="noPay">Реквизиты для оплаты появятся здесь совсем скоро. Если нужно срочно — напишите на toimanager.app@gmail.com с номером тоя.</p>
     </div>
@@ -147,7 +147,7 @@
   const PAY = {
     qr: 'qr.png',                 // QR для приёма оплаты (MBank Бизнес, счёт ИП)
     link: 'https://pay.payqr.kg/qr/#00020101021132840012c2b.mbank.kg010202101610301200052444961132%D0%98%D0%9F%20%D0%9E%D1%80%D0%BE%D0%B7%D0%B0%D0%BB%D0%B8%D0%B5%D0%B2%20%D0%9C%D0%B0%D1%80%D0%B0%D1%82%20%D0%9A%D0%BE%D0%B6%D0%BE%D0%B3%D0%B5%D0%BB%D0%B4%D0%B8%D0%B5%D0%B2%D0%B8%D1%871302123422mbiz%3A48222517%3A124412495204999953034175925IP%20Orozaliev%20Marat%20Kozhog63047ebe',
-    to: 'ИП Орозалиев М. К.',
+    to: '',
   };
 
   // Кыргызские тексты — черновик, нужна вычитка носителем языка
