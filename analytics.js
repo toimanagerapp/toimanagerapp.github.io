@@ -42,8 +42,8 @@
   }
 
   // Единая отправка события во все включённые системы
-  // Стандартные события пикселей: download_click → Lead, tester_click → Lead, pay_claim → Purchase, vendor_claim → Lead
-  const STD = { download_click: 'Lead', tester_click: 'Lead', vendor_claim: 'Lead', pay_claim: 'Purchase' };
+  // Стандартные события пикселей: download_click → Lead, tester_click → Lead, pay_claim → Purchase, vendor_claim → Lead, whatsapp_click → Contact
+  const STD = { download_click: 'Lead', tester_click: 'Lead', vendor_claim: 'Lead', pay_claim: 'Purchase', whatsapp_click: 'Contact' };
   window.tmTrack = (name, params = {}) => {
     try {
       if (ID.ga4 && window.gtag) window.gtag('event', name, params);
