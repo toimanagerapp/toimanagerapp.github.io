@@ -30,6 +30,10 @@
   .kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px; }
   .kpi .n { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.15; font-variant-numeric: tabular-nums; }
   .kpi .l { font-size: 13px; color: var(--muted); }
+  #ufilter { display: flex; flex-wrap: wrap; border-radius: 18px; max-width: 100%; }
+  button.kpi-btn { font: inherit; color: inherit; text-align: left; cursor: pointer; width: 100%; }
+  button.kpi-btn:hover { border-color: var(--accent); }
+  button.kpi-btn:focus-visible { outline: 3px solid rgba(91,63,214,.4); outline-offset: 2px; }
   .kpi .s { font-size: 12px; color: var(--muted); margin-top: 2px; }
   .card h3 { margin: 0; font-size: 17px; }
   .meta { font-size: 14px; color: var(--muted); }
@@ -129,6 +133,7 @@
       <button role="tab" data-tab="search">Поиск</button>
       <button role="tab" data-tab="catalog">Каталог <span class="count" id="vclaimsCount" hidden></span></button>
       <button role="tab" data-tab="stats">Статистика</button>
+      <button role="tab" data-tab="users" data-owner>Пользователи</button>
       <button role="tab" data-tab="income" data-owner>Доход</button>
       <button role="tab" data-tab="admins" data-owner>Администраторы</button>
     </nav>
@@ -184,6 +189,21 @@
       <div class="kpis" id="kpis"></div>
       <div class="section-title">По дням, последние 30 дней</div>
       <div class="grid" id="daily"></div>
+    </section>
+
+    <!-- Пользователи (только владелец) -->
+    <section data-view="users" class="stack" hidden>
+      <div class="kpis" id="userKpis"></div>
+      <p class="meta" style="margin:0">«Активен» — открывал приложение за последние 7 дней, «Затих» — 8–30 дней назад, «Пропал» — больше 30 дней:
+        скорее всего, удалил приложение (точно Google этого не сообщает). «Удалили аккаунт» — сами удалили аккаунт в приложении;
+        кто именно, не храним. Сколько раз скачали из Google Play — в Play Console → Статистика.</p>
+      <div class="inline">
+        <div style="flex:2 1 220px"><label class="flabel" for="uq">Поиск</label><input class="input" type="search" id="uq" placeholder="Имя или почта" autocomplete="off"></div>
+        <div style="flex:0 1 auto;max-width:100%"><span class="flabel">Показать</span><div class="seg" id="ufilter" role="group" aria-label="Показать">
+          <button type="button" data-f="all" aria-pressed="true">Все</button><button type="button" data-f="active" aria-pressed="false">Активные</button><button type="button" data-f="quiet" aria-pressed="false">Затихли</button><button type="button" data-f="gone" aria-pressed="false">Пропали</button><button type="button" data-f="deleted" aria-pressed="false">Удалили аккаунт</button>
+        </div></div>
+      </div>
+      <div class="card"><div class="tbl-wrap" id="userTable"></div></div>
     </section>
 
     <!-- Доход -->
@@ -309,7 +329,7 @@
     try { localStorage.setItem('adminTab', name); } catch {}
     document.querySelectorAll('[data-tab]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === name)));
     document.querySelectorAll('[data-view]').forEach((s) => s.hidden = s.dataset.view !== name);
-    ({ claims: loadClaims, search: () => $('q').focus(), catalog: loadCatalog, stats: loadStats, income: loadIncome, admins: loadAdmins })[name]?.();
+    ({ claims: loadClaims, search: () => $('q').focus(), catalog: loadCatalog, stats: loadStats, users: loadUsers, income: loadIncome, admins: loadAdmins })[name]?.();
   }
   document.querySelectorAll('[data-tab]').forEach((b) => b.onclick = () => show(b.dataset.tab));
 
@@ -823,6 +843,71 @@
       bars(document.querySelector(`#daily [data-k="${k}"]`), data, { label: l, W: 320, H: 150,
         xLabel: (x, i) => (i % 7 === (data.length - 1) % 7) ? `${x.dt.getUTCDate()}.${String(x.dt.getUTCMonth() + 1).padStart(2, '0')}` : '' });
     });
+  }
+
+  // ---------- пользователи (владелец) ----------
+  let users = null, uf = 'all';
+  const ago = (iso) => {
+    if (!iso) return '—';
+    const ms = Date.now() - Date.parse(iso), min = Math.round(ms / 60000);
+    if (min < 2) return 'только что';
+    if (min < 60) return `${min} мин назад`;
+    const d = bk(iso), n = bk(new Date().toISOString()), p = (x) => String(x).padStart(2, '0');
+    const dd = Math.round((Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate()) - Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())) / 864e5);
+    if (dd === 0) return `сегодня, ${p(d.getUTCHours())}:${p(d.getUTCMinutes())}`;
+    if (dd === 1) return `вчера, ${p(d.getUTCHours())}:${p(d.getUTCMinutes())}`;
+    if (dd < 31) return `${dd} ${dd % 10 === 1 && dd % 100 !== 11 ? 'день' : [2, 3, 4].includes(dd % 10) && ![12, 13, 14].includes(dd % 100) ? 'дня' : 'дней'} назад`;
+    return day(iso);
+  };
+  const stRu = { active: ['ok', 'Активен'], quiet: ['warn', 'Затих'], gone: ['gray', 'Пропал'], never: ['gray', 'Не открывал'] };
+  const platRu = (p) => ({ android: 'Android', ios: 'iPhone', web: 'Браузер' }[p] || '');
+  async function loadUsers() {
+    try { users = await rpc('admin_users'); } catch (e) { toast(errRu(e), true); return; }
+    const s = users.summary;
+    const kpi = (n, l, sub, f) => `<button type="button" class="kpi kpi-btn" data-uf="${f}"><div class="n">${money(n)}</div><div class="l">${l}</div>${sub ? `<div class="s">${sub}</div>` : ''}</button>`;
+    $('userKpis').innerHTML = [
+      kpi(s.total, 'Пользователей', `+${s.new_7d} за 7 дней`, 'all'),
+      kpi(s.today, 'Заходили сегодня', 'за последние 24 часа', 'active'),
+      kpi(s.active, 'Активны', 'за 7 дней', 'active'),
+      kpi(s.quiet, 'Затихли', '8–30 дней назад', 'quiet'),
+      kpi(s.gone, 'Пропали', 'больше 30 дней', 'gone'),
+      kpi(s.deleted, 'Удалили аккаунт', `${s.deleted_30d} за 30 дней`, 'deleted'),
+    ].join('');
+    document.querySelectorAll('#userKpis [data-uf]').forEach((b) => b.onclick = () => setUf(b.dataset.uf));
+    renderUsers();
+  }
+  function setUf(f) {
+    uf = f;
+    document.querySelectorAll('#ufilter [data-f]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.f === f)));
+    renderUsers();
+  }
+  document.querySelectorAll('#ufilter [data-f]').forEach((b) => b.onclick = () => setUf(b.dataset.f));
+  $('uq').oninput = () => renderUsers();
+  function renderUsers() {
+    if (!users) return;
+    const box = $('userTable');
+    if (uf === 'deleted') {
+      const rows = users.deleted;
+      box.innerHTML = rows.length ? `<table class="wide"><thead><tr><th>Удалил аккаунт</th><th>Пришёл</th><th>Последний раз был</th><th>Телефон</th></tr></thead><tbody>${
+        rows.map((d) => `<tr><td class="nowrap">${when(d.deleted_at)}</td><td class="nowrap">${day(d.signed_up_at)}</td><td class="nowrap">${ago(d.last_seen_at)}</td><td>${platRu(d.platform) || '—'}</td></tr>`).join('')
+      }</tbody></table>` : '<div class="empty">Никто не удалял аккаунт</div>';
+      return;
+    }
+    const q = $('uq').value.trim().toLowerCase();
+    const list = users.users.filter((u) => (uf === 'all' || u.status === uf || (uf === 'gone' && u.status === 'never'))
+      && (!q || `${u.name || ''} ${u.email || ''}`.toLowerCase().includes(q)));
+    if (!list.length) { box.innerHTML = '<div class="empty">Никого не нашлось</div>'; return; }
+    box.innerHTML = `<table class="wide"><thead><tr><th>Пользователь</th><th>Статус</th><th>Последний раз</th><th>Пришёл</th><th class="r">Тоев</th><th class="r">Гостей</th><th>Версия</th></tr></thead><tbody>${
+      list.map((u) => {
+        const [cls, label] = stRu[u.status] || stRu.never;
+        const tags = (u.is_admin ? ' <span class="badge">админ</span>' : '') + (u.is_review ? ' <span class="badge gray">проверка Google</span>' : '');
+        const tois = u.tois_owned + (u.tois_helping ? ` <span class="meta">+${u.tois_helping} помогает</span>` : '');
+        return `<tr><td><div style="font-weight:600">${esc(u.name || '—')}${tags}</div><div class="meta">${esc(u.email || '')}</div></td>`
+          + `<td><span class="badge ${cls}">${label}</span></td><td class="nowrap">${ago(u.last_seen_at)}${u.sessions ? `<div class="meta">${u.sessions} ${u.sessions % 10 === 1 && u.sessions % 100 !== 11 ? 'сеанс' : [2, 3, 4].includes(u.sessions % 10) && ![12, 13, 14].includes(u.sessions % 100) ? 'сеанса' : 'сеансов'}</div>` : ''}</td>`
+          + `<td class="nowrap">${day(u.created_at)}</td><td class="r nowrap">${tois}</td><td class="r">${money(u.guests)}</td>`
+          + `<td class="nowrap">${esc(u.app_version || '—')}${u.platform ? `<div class="meta">${platRu(u.platform)}</div>` : ''}</td></tr>`;
+      }).join('')
+    }</tbody></table>`;
   }
 
   // ---------- доход ----------
