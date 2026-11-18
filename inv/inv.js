@@ -11,7 +11,7 @@
   const THEMES = {
     'ak-altyn': { title: 'Ак алтын', music: '/inv/music/ak-altyn.mp3', swatches: ['#FFFFFF', '#F1E6D2', '#D9BE8C', '#B48A3E'], color: '#F3EADB' },
     'tunku': { title: 'Түнкү', music: '/inv/music/tunku.mp3', swatches: ['#173E35', '#0F2A25', '#E9D7AE', '#C49A4A'], color: '#17433A' },
-    'tun': { title: 'Түн', music: '/inv/music/tunku.mp3', swatches: ['#16213F', '#0D1530', '#EFE6D2', '#C49A4A'], color: '#0D1530' },
+    'tun': { title: 'Түн', music: '/inv/music/bakyt-kushu.mp3', swatches: ['#16213F', '#0D1530', '#EFE6D2', '#C49A4A'], color: '#0D1530' },
     'ak': { title: 'Ак', music: '/inv/music/ak-altyn.mp3', swatches: ['#FFFFFF', '#F1E6D2', '#A87F38', '#7A1E2C'], color: '#F8F3E9' },
     'anar': { title: 'Анар', music: '/inv/music/tunku.mp3', swatches: ['#5A1424', '#3A0D18', '#F5E8D8', '#C9A04F'], color: '#3A0D18' },
     'jashyl': { title: 'Жашыл', music: '/inv/music/tunku.mp3', swatches: ['#0F3A31', '#0D2B25', '#F1E8D6', '#C49A4A'], color: '#0D2B25' },
