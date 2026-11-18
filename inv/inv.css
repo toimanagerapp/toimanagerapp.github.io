@@ -184,6 +184,17 @@ textarea.field { min-height: 110px; resize: vertical; }
 .closing .names { font-size: clamp(42px, 12vw, 58px); line-height: 1.15; margin-top: 8px; }
 .made { margin-top: 40px; font-size: 15px; color: var(--muted); letter-spacing: .04em; }
 .made a { text-decoration: none; border-bottom: 1px solid var(--line); }
+/* Ненавязчивая карточка приложения в самом конце приглашения и строка после ответа */
+.made-cta { display: grid; gap: 6px; max-width: 340px; margin: 18px auto 0; padding: 16px 18px; border-radius: 16px; text-align: center;
+  border: 1px solid var(--line); background: var(--card); color: var(--ink); text-decoration: none; box-shadow: var(--shadow);
+  transition: transform .2s ease, border-color .2s ease; }
+.made-cta:hover { transform: translateY(-2px); border-color: var(--gold1); }
+.made-cta:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.made-q { font-size: 16px; font-weight: 600; }
+.made-s { font-size: 14px; line-height: 1.45; color: var(--muted); }
+.made-go { font-size: 14px; font-weight: 600; color: var(--gold1); margin-top: 2px; }
+.thanks-cta { margin: 16px 0 0; font-size: 13px; line-height: 1.45; }
+.thanks-cta a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--line); }
 
 /* Плавающие кнопки */
 .music { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 40; width: 52px; height: 52px; border-radius: 50%;
