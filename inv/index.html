@@ -32,6 +32,13 @@
   <div class="env-hint" data-t="envHint"></div>
 </div>
 
+<!-- Видео-конверт (если выбран в приложении): кадр-заставка, по касанию — ролик раскрытия -->
+<div class="venv" id="venv" hidden role="button" tabindex="0">
+  <video id="venvVideo" playsinline muted preload="auto" disablepictureinpicture></video>
+  <div class="venv-to"><div class="caps" id="venvToLabel"></div><div class="who script" id="venvWho"></div></div>
+  <div class="venv-hint" id="venvHint"></div>
+</div>
+
 <div class="oops" id="oops" hidden>
   <div class="card">
     <svg class="orn small" viewBox="0 0 200 60" aria-hidden="true"><use href="#orn" width="200" height="60"/></svg>
@@ -46,6 +53,7 @@
   </div>
 
   <section class="hero">
+    <figure class="hero-photo" id="heroPhoto" hidden><img alt="" decoding="async" fetchpriority="high"></figure>
     <svg class="orn reveal" viewBox="0 0 200 60" aria-hidden="true"><use href="#orn" width="200" height="60"/></svg>
     <div class="caps reveal" id="kindTitle" style="margin-top:18px"></div>
     <div class="names script gold reveal" id="nameA"></div>
@@ -90,6 +98,11 @@
   <section id="programSec">
     <h2 class="h-script script gold reveal" data-t="programTitle"></h2>
     <ul class="timeline reveal" id="program"></ul>
+  </section>
+
+  <section id="gallerySec" hidden>
+    <h2 class="h-script script gold reveal" data-t="galleryTitle"></h2>
+    <div class="gallery reveal" id="gallery"></div>
   </section>
 
   <section id="dressSec">
@@ -151,6 +164,14 @@
     </a>
   </section>
 </main>
+
+<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true">
+  <img id="lbImg" alt="">
+  <button type="button" class="lb-x" id="lbClose" aria-label="×">×</button>
+  <button type="button" class="lb-nav prev" id="lbPrev" aria-label="‹">‹</button>
+  <button type="button" class="lb-nav next" id="lbNext" aria-label="›">›</button>
+  <div class="lb-count" id="lbCount"></div>
+</div>
 
 <button class="music off" id="music" type="button" hidden><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span></button>
 <nav class="demo-bar" id="demoBar" hidden aria-label="Шаблон"></nav>

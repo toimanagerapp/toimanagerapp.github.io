@@ -11,7 +11,15 @@
   const THEMES = {
     'ak-altyn': { title: 'Ак алтын', music: '/inv/music/ak-altyn.mp3', swatches: ['#FFFFFF', '#F1E6D2', '#D9BE8C', '#B48A3E'], color: '#F3EADB' },
     'tunku': { title: 'Түнкү', music: '/inv/music/tunku.mp3', swatches: ['#173E35', '#0F2A25', '#E9D7AE', '#C49A4A'], color: '#17433A' },
+    'tun': { title: 'Түн', music: '/inv/music/tunku.mp3', swatches: ['#16213F', '#0D1530', '#EFE6D2', '#C49A4A'], color: '#0D1530' },
+    'ak': { title: 'Ак', music: '/inv/music/ak-altyn.mp3', swatches: ['#FFFFFF', '#F1E6D2', '#A87F38', '#7A1E2C'], color: '#F8F3E9' },
+    'anar': { title: 'Анар', music: '/inv/music/tunku.mp3', swatches: ['#5A1424', '#3A0D18', '#F5E8D8', '#C9A04F'], color: '#3A0D18' },
+    'jashyl': { title: 'Жашыл', music: '/inv/music/tunku.mp3', swatches: ['#0F3A31', '#0D2B25', '#F1E8D6', '#C49A4A'], color: '#0D2B25' },
   };
+  // Видео-конверты (4 с, 720×1280): кадр-заставка .jpg и ролик .mp4 в /inv/env/. light — светлый конверт, тёмный текст
+  // Готовые видео-конверты (остальные добавляются по мере готовности роликов; неизвестный — обычный конверт)
+  const ENVS = { navy: {} };   // ivory: { light: true }, garnet: {}, emerald: {}
+  const photo = (path) => `${SB}/storage/v1/object/public/invite-photos/${path}`;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const pad = (n) => String(n).padStart(2, '0');
@@ -96,7 +104,7 @@
       past: 'Той өтүп кетти. Келгениңизге рахмат!', sendError: 'Жөнөтүлгөн жок. Интернетти текшерип, кайра аракет кылыңыз.',
       wishesTitle: 'Тилектер', wishesHint: 'Жылуу сөзүңүздү калтырыңыз', wishName: 'Атыңыз', wishText: 'Тилегиңиз', wishSend: 'Тилек калтыруу',
       wishPrivate: 'Тилегиңизди үй-ээлери гана көрөт.', wishThanks: 'Рахмат! Тилегиңиз жөнөтүлдү.',
-      respect: 'Урматтоо менен,', made: 'Чакыруу жасалган:', music: 'Музыка',
+      respect: 'Урматтоо менен,', made: 'Чакыруу жасалган:', music: 'Музыка', galleryTitle: 'Сүрөттөр', tapOpen: 'Ачуу үчүн басыңыз',
       madeQ: 'Сиз да той камдап жатасызбы?', madeS: 'Коноктор, чакыруулар, столдор жана конверттер — бир тиркемеде, акысыз.', madeGo: 'Той Менеджерди көрүү →',
       thanksCta: 'Сиз да той камдап жатасызбы? Бул чакыруу Той Менеджерде жасалган →',
       oopsTitle: 'Чакыруу табылган жок', oopsText: 'Шилтеме толук көчүрүлбөй калгандыр же уюштуруучулар чакырууну өчүрүшкөн. Шилтемени кайра жөнөтүүсүн сураныңыз.',
@@ -118,7 +126,7 @@
       past: 'Той уже прошёл. Спасибо, что были с нами!', sendError: 'Не отправилось. Проверьте интернет и попробуйте ещё раз.',
       wishesTitle: 'Пожелания', wishesHint: 'Оставьте тёплые слова', wishName: 'Ваше имя', wishText: 'Ваше пожелание', wishSend: 'Оставить пожелание',
       wishPrivate: 'Ваше пожелание увидят только хозяева тоя.', wishThanks: 'Спасибо! Пожелание отправлено.',
-      respect: 'С уважением,', made: 'Приглашение сделано в', music: 'Музыка',
+      respect: 'С уважением,', made: 'Приглашение сделано в', music: 'Музыка', galleryTitle: 'Фото', tapOpen: 'Нажмите, чтобы открыть',
       madeQ: 'Тоже готовите той?', madeS: 'Гости, приглашения, рассадка и конверты — в одном приложении, бесплатно.', madeGo: 'Посмотреть Той Менеджер →',
       thanksCta: 'Тоже готовите той? Это приглашение сделано в Той Менеджер →',
       oopsTitle: 'Приглашение не найдено', oopsText: 'Возможно, ссылка скопирована не полностью или организаторы удалили приглашение. Попросите прислать ссылку ещё раз.',
@@ -135,7 +143,7 @@
     card: { theme: q.get('theme') || q.get('t') || 'ak-altyn', music: 'theme', lang: 'ky', name_a: 'Азамат', name_b: 'Айпери', signature: 'жана Асановдордун үй-бүлөсү',
       from_whom: 'groom_parents', show_countdown: true, show_program: true, rsvp_enabled: true, rsvp_ask_count: true, wishes_mode: 'public', show_dress: true,
       program: [{ time: '16:30', text: 'Конокторду тосуп алуу' }, { time: '17:00', text: 'Тойдун башталышы' }, { time: '19:30', text: 'Жаштардын биринчи бийи' }, { time: '22:00', text: 'Той торту' }],
-      rsvp_deadline: '2026-12-01' },
+      rsvp_deadline: '2026-12-01', envelope: q.get('env') || 'classic' },
     wishes: [{ author: 'Гүлнара эже', body: 'Бактылуу болгула! Ак жолтой, түбөлүк бирге болгула.' }, { author: 'Бакыт', body: 'Ынтымактуу, ырыскылуу үй-бүлө болгула!' }],
   };
 
@@ -153,8 +161,9 @@
       theme: memorial ? 'tunku' : 'ak-altyn', music: memorial ? 'none' : 'theme', lang: 'ky', title: null, name_a: null, name_b: null, initials: null,
       from_whom: 'groom_parents', text_ky: null, text_ru: null, signature: null, map_url: null, show_countdown: !memorial,
       show_program: false, program: [], show_dress: false, dress_text: null, dress_colors: [], rsvp_enabled: true, rsvp_ask_count: true,
-      rsvp_deadline: null, wishes_mode: memorial ? 'off' : 'public',
+      rsvp_deadline: null, wishes_mode: memorial ? 'off' : 'public', envelope: 'classic', hero_photo: null, gallery: [],
     }, r.card || {});
+    if (!Array.isArray(c.gallery)) c.gallery = [];
     c.kind = kind;
     if (!THEMES[c.theme]) c.theme = 'ak-altyn';
     c.a = (c.name_a || '').trim() || (c.name_b ? '' : r.toi.title);
@@ -208,6 +217,16 @@
     $('envKind').textContent = k[lang][0];
     document.querySelector('.env-to .caps').textContent = L.envTo;
     $('envWho').textContent = guest ? guest.name : L.guestsAll;
+    $('venvToLabel').textContent = L.envTo; $('venvWho').textContent = guest ? guest.name : L.guestsAll; $('venvHint').textContent = L.tapOpen;
+    $('venv').setAttribute('aria-label', L.sealLabel);
+    // фото пары и галерея
+    const hp = $('heroPhoto');
+    hp.hidden = !C.hero_photo; document.querySelector('.hero').classList.toggle('has-photo', !!C.hero_photo);
+    if (C.hero_photo && !hp.dataset.src) { hp.dataset.src = C.hero_photo; hp.querySelector('img').src = photo(C.hero_photo); }
+    $('gallerySec').hidden = !C.gallery.length;
+    if (C.gallery.length && !$('gallery').childElementCount) {
+      $('gallery').innerHTML = C.gallery.map((p, i) => `<button type="button" data-i="${i}" aria-label="${i + 1}"><img src="${photo(esc(p))}" alt="" loading="lazy" decoding="async"></button>`).join('');
+    }
     // главный экран
     $('kindTitle').textContent = (C.title || '').trim() || k[lang][1];
     $('nameA').textContent = C.a;
@@ -368,13 +387,59 @@
     requestAnimationFrame(() => requestAnimationFrame(() => $('seal').classList.add('fly')));
     $('envelope').classList.add('open');
     $('page').removeAttribute('aria-hidden');
-    setTimeout(() => {
-      document.body.classList.remove('locked'); $('music').hidden = !audio.getAttribute('src');
-      document.querySelectorAll('.hero .reveal').forEach((el, i) => setTimeout(() => el.classList.add('in'), i * 140));
-    }, reduce ? 0 : 1400);
+    setTimeout(showPage, reduce ? 0 : 1400);
     setTimeout(() => $('envelope').classList.add('gone'), reduce ? 50 : 2500);
   }
+  function showPage() {
+    document.body.classList.remove('locked'); $('music').hidden = !audio.getAttribute('src');
+    $('heroPhoto').classList.add('in');
+    document.querySelectorAll('.hero .reveal').forEach((el, i) => setTimeout(() => el.classList.add('in'), i * 140));
+  }
   $('seal').onclick = open;
+
+  // ---------- Видео-конверт ----------
+  const venv = $('venv'), vid = $('venvVideo');
+  let revealed = false;
+  function videoReveal() {
+    if (revealed) return; revealed = true;
+    showPage(); venv.classList.add('done');
+    setTimeout(() => { venv.hidden = true; vid.pause(); }, 900);
+  }
+  function openVideo() {
+    if (opened || !R) return; opened = true;
+    play();
+    $('page').removeAttribute('aria-hidden');
+    venv.classList.add('playing');
+    if (reduce) { videoReveal(); return; }
+    vid.play().catch(videoReveal);
+    setTimeout(videoReveal, 6500);   // на случай, если ролик не доиграл
+  }
+  vid.addEventListener('timeupdate', () => { if (opened && vid.duration && vid.currentTime >= vid.duration - 0.55) videoReveal(); });
+  vid.addEventListener('ended', videoReveal);
+  venv.addEventListener('click', openVideo);
+  venv.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openVideo(); } });
+  function setupVideoEnvelope(id) {
+    const e = ENVS[id]; if (!e) return false;
+    venv.classList.toggle('light', !!e.light);
+    vid.poster = `/inv/env/${id}.jpg`; vid.src = `/inv/env/${id}.mp4`;
+    // ролик не загрузился до касания — показываем обычный конверт
+    vid.addEventListener('error', () => { if (!opened) { venv.hidden = true; $('envelope').classList.remove('gone'); } }, { once: true });
+    venv.hidden = false; $('envelope').classList.add('gone');
+    return true;
+  }
+
+  // ---------- Галерея: просмотр на весь экран, листание свайпом ----------
+  const lb = $('lightbox'); let lbI = 0;
+  const lbShow = (i) => { const g = C.gallery; lbI = (i + g.length) % g.length; $('lbImg').src = photo(g[lbI]); $('lbCount').textContent = `${lbI + 1} / ${g.length}`;
+    $('lbPrev').hidden = $('lbNext').hidden = g.length < 2; };
+  const lbClose = () => { lb.hidden = true; document.body.style.overflow = ''; };
+  $('gallery').addEventListener('click', (e) => { const b = e.target.closest('button[data-i]'); if (!b) return; lbShow(+b.dataset.i); lb.hidden = false; document.body.style.overflow = 'hidden'; $('lbClose').focus(); });
+  $('lbClose').onclick = lbClose; $('lbPrev').onclick = () => lbShow(lbI - 1); $('lbNext').onclick = () => lbShow(lbI + 1);
+  lb.addEventListener('click', (e) => { if (e.target === lb) lbClose(); });
+  document.addEventListener('keydown', (e) => { if (lb.hidden) return; if (e.key === 'Escape') lbClose(); if (e.key === 'ArrowLeft') lbShow(lbI - 1); if (e.key === 'ArrowRight') lbShow(lbI + 1); });
+  let tx = null;
+  lb.addEventListener('touchstart', (e) => { tx = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', (e) => { if (tx == null) return; const dx = e.changedTouches[0].clientX - tx; tx = null; if (Math.abs(dx) > 50) lbShow(lbI + (dx < 0 ? 1 : -1)); });
   const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting && opened) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.15 });
   document.querySelectorAll('main .reveal').forEach((el) => io.observe(el));
 
@@ -404,10 +469,11 @@
     document.title = `${KIND[C.kind][lang][1]} — ${[C.a, C.b].filter(Boolean).join(' & ')}`;
     if (r.demo) {
       const bar = $('demoBar'); bar.hidden = false;
-      bar.innerHTML = Object.entries(THEMES).map(([k, v]) => `<a href="?theme=${k}" aria-current="${k === theme}">${v.title}</a>`).join('');
+      bar.innerHTML = Object.entries(THEMES).map(([k, v]) => `<a href="?theme=${k}${q.get('env') ? `&env=${encodeURIComponent(q.get('env'))}` : ''}" aria-current="${k === theme}">${v.title}</a>`).join('');
     }
     render();
     hint.textContent = T[lang].envHint;
+    if (C.envelope && C.envelope !== 'classic') setupVideoEnvelope(C.envelope);
   }
   function fail(net) {
     const L = T[lang];
