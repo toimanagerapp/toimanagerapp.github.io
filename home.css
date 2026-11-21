@@ -264,3 +264,71 @@ section.block { padding: var(--s-96) 0; }
 /* Блок приглашения: кнопка «Сделать своё» + ссылка на пример; строка про тариф 490 */
 .inv-acts { margin-top: var(--s-24); display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-16) var(--s-24); }
 .note.inv-price { color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 14px 18px; }
+
+/* ================= Премиальная главная (body.lux): слоновая кость, полночный синий, золото ================= */
+@font-face { font-family: 'Cormorant Garamond'; font-style: normal; font-weight: 600; font-display: swap; src: url(inv/fonts/cormorant-garamond-cyrillic-600-normal.woff2) format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: 'Cormorant Garamond'; font-style: normal; font-weight: 600; font-display: swap; src: url(inv/fonts/cormorant-garamond-cyrillic-ext-600-normal.woff2) format('woff2'); unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: 'Cormorant Garamond'; font-style: normal; font-weight: 600; font-display: swap; src: url(inv/fonts/cormorant-garamond-latin-600-normal.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Cormorant Garamond'; font-style: italic; font-weight: 500; font-display: swap; src: url(inv/fonts/cormorant-garamond-cyrillic-500-italic.woff2) format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: 'Cormorant Garamond'; font-style: italic; font-weight: 500; font-display: swap; src: url(inv/fonts/cormorant-garamond-cyrillic-ext-500-italic.woff2) format('woff2'); unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: 'Cormorant Garamond'; font-style: italic; font-weight: 500; font-display: swap; src: url(inv/fonts/cormorant-garamond-latin-500-italic.woff2) format('woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+body.lux { --bg: #FAF7F2; --surface: #FFFFFF; --line: #ECE5D9; --ink: #1B1E2E; --muted: #67616F; --accent: #1F2547; --accent-dark: #151935; --accent-soft: #EFEFF5;
+  --gold: #A9843F; --gold-2: #D9B877; --gold-soft: #F7F0E2; --ring: rgba(185, 147, 80, .24); --serif: 'Cormorant Garamond', Georgia, serif;
+  --hero-soft: linear-gradient(150deg, #FBF7EF 0%, #F4EEE2 100%);
+  --shadow: 0 1px 2px rgba(20, 22, 40, .04), 0 8px 22px rgba(20, 22, 40, .05); --shadow-2: 0 14px 32px rgba(20, 22, 40, .11);
+  background: var(--bg); overflow-x: clip; }
+.lux .nav { background: rgba(250, 247, 242, .9); }
+.lux .h2 { hyphens: manual; -webkit-hyphens: manual; font-family: var(--serif); font-weight: 600; letter-spacing: 0; line-height: 1.05; font-size: clamp(32px, 6vw, 52px); }
+.lux .feature h3, .lux .cta h2 { font-family: var(--serif); font-weight: 600; letter-spacing: 0; }
+.lux .feature h3 { font-size: clamp(28px, 5vw, 38px); line-height: 1.08; }
+.lux .kicker { color: var(--gold); letter-spacing: .16em; }
+.lux .btn-primary { box-shadow: 0 8px 20px rgba(31, 37, 71, .22); }
+.lux .plan.pro { border: 1px solid var(--gold); box-shadow: 0 0 0 3px var(--ring), var(--shadow-2); }
+.lux .plan .badge { background: var(--gold-soft); color: #7A5A1E; border: 1px solid #EAD9B6; }
+.lux .plan .badge { white-space: nowrap; }
+.lux .list li::before, .lux .ticks span::before { color: var(--gold); }
+.lux .vendors-strip { border-color: var(--line); background: var(--surface); }
+.lux a:focus-visible, .lux button:focus-visible, .lux summary:focus-visible, .lux .btn:focus-visible { outline-color: var(--gold); }
+.plans.three { max-width: 1120px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 900px) { .plans.three { grid-template-columns: 1fr; max-width: 560px; } }
+
+/* Первый экран: два продукта */
+.lx-hero { position: relative; overflow: hidden; color: #F4ECDD; padding: 40px 0 52px; border-bottom: 1px solid rgba(217, 184, 119, .35);
+  background: radial-gradient(120% 60% at 50% 0%, #2A3266 0%, #181C38 55%, #0F1226 100%); }
+.lx-hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(45% 25% at 50% 8%, rgba(217, 184, 119, .14), transparent 70%); }
+.lx-head { position: relative; text-align: center; max-width: 780px; margin: 0 auto; }
+.lx-eyebrow { display: inline-flex; align-items: center; gap: 10px; color: var(--gold-2); font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 16px; }
+.lx-eyebrow::before, .lx-eyebrow::after { content: ""; width: 20px; height: 1px; background: currentColor; opacity: .6; flex: none; }
+.lx-hero h1 { hyphens: manual; -webkit-hyphens: manual; font-family: var(--serif); font-weight: 600; font-size: clamp(40px, 10vw, 72px); line-height: 1; letter-spacing: 0; color: #FBF5EA; margin: 0; text-wrap: balance; }
+.lx-hero h1 em { font-style: italic; font-weight: 500; color: var(--gold-2); }
+.lx-lead { color: rgba(244, 236, 221, .78); font-size: 17px; line-height: 1.55; margin: 18px auto 0; max-width: 620px; }
+.products { position: relative; display: grid; gap: 18px; margin-top: 32px; }
+@media (min-width: 900px) { .products { grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 44px; } .lx-hero { padding: 72px 0 80px; } .pmedia { height: 250px; } }
+.product { display: flex; flex-direction: column; border-radius: 26px; overflow: hidden; background: rgba(255, 255, 255, .045); border: 1px solid rgba(217, 184, 119, .22); }
+.product.gold { border-color: rgba(217, 184, 119, .6); box-shadow: 0 0 0 1px rgba(217, 184, 119, .15), 0 30px 60px rgba(0, 0, 0, .35); }
+.pmedia { position: relative; display: block; height: 210px; overflow: hidden; background: #1B2142; }
+.pmedia video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 52%; }
+.pmedia.app { background: linear-gradient(160deg, #2C3466, #161A33); }
+.pmedia.app img { position: absolute; left: 50%; top: 22px; width: 220px; height: auto; transform: translateX(-50%); border-radius: 26px; border: 6px solid #0F1226; box-shadow: 0 20px 40px rgba(0, 0, 0, .45); }
+.pbody { display: flex; flex-direction: column; gap: 12px; padding: 20px 20px 22px; flex: 1; }
+.pbadge { align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+  color: rgba(244, 236, 221, .75); border: 1px solid rgba(244, 236, 221, .2); border-radius: 999px; padding: 5px 10px; }
+.pbadge.live { color: #BFE8CF; border-color: rgba(120, 210, 160, .35); }
+.pbadge.live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #5FD08F; box-shadow: 0 0 0 3px rgba(95, 208, 143, .2); }
+.product h2 { font-family: var(--serif); font-weight: 600; font-size: 34px; line-height: 1.05; color: #FBF5EA; margin: 0; }
+.product ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; color: rgba(244, 236, 221, .82); font-size: 15px; }
+.product li { position: relative; padding-left: 24px; line-height: 1.45; }
+.product li::before { content: "✓"; position: absolute; left: 0; color: var(--gold-2); font-weight: 700; }
+.pprice { color: rgba(244, 236, 221, .7); font-size: 14.5px; margin: 2px 0 0; }
+.pprice b { color: #FBF5EA; font-size: 17px; }
+.pact { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin-top: 4px; }
+.pact .btn { width: auto; flex: 1 1 220px; }
+.plink { color: var(--gold-2); font-weight: 600; font-size: 15px; text-decoration: none; }
+.plink:hover { text-decoration: underline; }
+.btn-gold { background: linear-gradient(180deg, #E6CB91 0%, #C9A35E 100%); color: #1B1E2E; border: 1px solid #B8924F; box-shadow: 0 10px 26px rgba(201, 163, 94, .3), inset 0 1px 0 rgba(255, 255, 255, .55); }
+.btn-gold:hover { background: linear-gradient(180deg, #EBD29B 0%, #CFA964 100%); }
+.btn-ghost-light { background: rgba(255, 255, 255, .06); color: #F4ECDD; border: 1px solid rgba(217, 184, 119, .38); }
+.btn-ghost-light:hover { background: rgba(255, 255, 255, .1); }
+.product .stores { margin-top: 6px; }
+.product .store { background: rgba(0, 0, 0, .35); border: 1px solid rgba(244, 236, 221, .15); }
+@media (prefers-reduced-motion: reduce) { .pmedia video { display: none; } .pmedia { background: #1B2142 url(inv/env/navy.jpg) center 52% / cover; } }

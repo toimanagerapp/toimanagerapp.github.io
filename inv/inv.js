@@ -22,7 +22,7 @@
   // Готовые видео-конверты (остальные добавляются по мере готовности роликов; неизвестный — обычный конверт)
   const ENVS = { navy: { card: true } };   // ivory: { light: true }, garnet: {}, emerald: {}
   // путь в хранилище или (в предпросмотре) готовый адрес картинки — blob:, data:, https:
-  const photo = (path) => (/^(blob:|data:|https:)/.test(path) ? path : `${SB}/storage/v1/object/public/invite-photos/${path}`);
+  const photo = (path) => (/^(blob:|data:|https:|\/inv\/demo\/)/.test(path) ? path : `${SB}/storage/v1/object/public/invite-photos/${path}`);
   const PREVIEW = q.get('preview') === '1';
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -141,16 +141,22 @@
   };
 
   // ---------- Демо-данные ----------
+  const DRU = q.get('lang') === 'ru';   // пример на русском: программа, адрес и пожелания тоже по-русски
   const DEMO = {
     mode: 'personal', demo: true,
     toi: { title: 'Той Азамата и Айпери', kind: 'wedding' },
-    event: { starts_at: '2026-12-08T11:00:00Z', venue_name: '«Алтын Той» той залы', venue_address: 'Бишкек, Чүй проспектиси, 100' },
+    event: { starts_at: '2026-12-08T11:00:00Z', venue_name: DRU ? 'Той-холл «Алтын Той»' : '«Алтын Той» той залы', venue_address: DRU ? 'Бишкек, проспект Чуй, 100' : 'Бишкек, Чүй проспектиси, 100' },
     guest: { name: 'Таалай байке', party_size: 3, lang: null, rsvp: 'pending', rsvp_count: null },
-    card: { theme: q.get('theme') || q.get('t') || 'ak-altyn', music: 'theme', lang: 'ky', name_a: 'Азамат', name_b: 'Айпери', signature: 'жана Асановдордун үй-бүлөсү',
+    card: { theme: q.get('theme') || q.get('t') || 'ak-altyn', music: 'theme', lang: 'ky', name_a: 'Азамат', name_b: 'Айпери', signature: DRU ? 'и семья Асановых' : 'жана Асановдордун үй-бүлөсү',
       from_whom: 'groom_parents', show_countdown: true, show_program: true, rsvp_enabled: true, rsvp_ask_count: true, wishes_mode: 'public', show_dress: true,
-      program: [{ time: '16:30', text: 'Конокторду тосуп алуу' }, { time: '17:00', text: 'Тойдун башталышы' }, { time: '19:30', text: 'Жаштардын биринчи бийи' }, { time: '22:00', text: 'Той торту' }],
-      rsvp_deadline: '2026-12-01', envelope: q.get('env') || 'classic' },
-    wishes: [{ author: 'Гүлнара эже', body: 'Бактылуу болгула! Ак жолтой, түбөлүк бирге болгула.' }, { author: 'Бакыт', body: 'Ынтымактуу, ырыскылуу үй-бүлө болгула!' }],
+      program: DRU ? [{ time: '16:30', text: 'Встреча гостей' }, { time: '17:00', text: 'Начало тоя' }, { time: '19:30', text: 'Первый танец молодых' }, { time: '22:00', text: 'Свадебный торт' }]
+        : [{ time: '16:30', text: 'Конокторду тосуп алуу' }, { time: '17:00', text: 'Тойдун башталышы' }, { time: '19:30', text: 'Жаштардын биринчи бийи' }, { time: '22:00', text: 'Той торту' }],
+      rsvp_deadline: '2026-12-01', envelope: q.get('env') || 'classic',
+      // фото пары — только в примере (в предпросмотре конструктора — фото самого организатора)
+      hero_photo: q.get('preview') === '1' ? null : '/inv/demo/0.webp',
+      gallery: q.get('preview') === '1' ? [] : [1, 2, 3, 4, 5, 6, 7].map((i) => `/inv/demo/${i}.webp`) },
+    wishes: DRU ? [{ author: 'Гульнара эже', body: 'Будьте счастливы! Пусть ваш путь будет светлым, а семья — крепкой.' }, { author: 'Бакыт', body: 'Мира, достатка и согласия вашей семье!' }]
+      : [{ author: 'Гүлнара эже', body: 'Бактылуу болгула! Ак жолтой, түбөлүк бирге болгула.' }, { author: 'Бакыт', body: 'Ынтымактуу, ырыскылуу үй-бүлө болгула!' }],
   };
 
   // ---------- Состояние ----------

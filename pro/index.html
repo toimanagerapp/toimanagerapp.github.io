@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Оплата «Безлимита» для тоя — Той Менеджер</title>
-<meta name="description" content="«Безлимит» для тоя в приложении «Той Менеджер»: сколько угодно гостей, действует год.">
-<meta property="og:title" content="Безлимит для тоя — Той Менеджер">
-<meta property="og:description" content="Сколько угодно гостей в вашем тое. Оплата по QR через MBank или любой банк.">
+<title>Оплата для тоя — Той Менеджер</title>
+<meta name="description" content="Оплата для тоя: онлайн-приглашение — 490 сом, гости без ограничений; приложение — 990 сом. Один раз за той, по QR через MBank или любой банк.">
+<meta property="og:title" content="Оплата для тоя — Той Менеджер">
+<meta property="og:description" content="Онлайн-приглашение — 490 сом, приложение — 990 сом. Оплата по QR через MBank или любой банк.">
 <meta property="og:image" content="https://toimanager.app/og.jpg">
 <link rel="canonical" href="https://toimanager.app/pro/">
-<meta name="theme-color" content="#B9A2FF">
+<meta name="theme-color" content="#FAF7F2">
 <link rel="icon" href="../favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -42,6 +42,18 @@
   .pending-n #findCard, .pending-n .doc, .pending-n main > footer { display: none; }
   .pending-n #toiSkeleton { display: block; }
   #toiSkeleton { display: none; height: 120px; }
+  .plans { display: grid; gap: 10px; }
+  .plan-opt { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; text-align: left; padding: 14px 16px; border-radius: 16px;
+    border: 1px solid var(--line); background: var(--surface); font: inherit; color: var(--ink); cursor: pointer; }
+  .plan-opt b { display: block; font-size: 16px; } .plan-opt small { display: block; font-size: 13px; color: var(--muted); line-height: 1.35; margin-top: 2px; }
+  .plan-opt em { font-style: normal; font-weight: 700; font-size: 20px; white-space: nowrap; } .plan-opt em small { display: inline; font-size: 13px; font-weight: 500; }
+  .plan-opt[aria-checked="true"] { border-color: #A9843F; box-shadow: 0 0 0 3px rgba(185, 147, 80, .24); background: #FFFDF8; }
+  /* палитра как у конструктора: слоновая кость, полночный синий, золото */
+  :root { --bg: #FAF7F2; --line: #ECE5D9; --ink: #1B1E2E; --muted: #67616F; --accent: #1F2547; --accent-dark: #151935; --accent-soft: #EFEFF5;
+    --hero-soft: linear-gradient(150deg, #FBF7EF 0%, #F3ECDF 100%); }
+  body { background: var(--bg); }
+  .hero { border-color: #EADFCB !important; }
+  .btn-primary { box-shadow: 0 8px 20px rgba(31, 37, 71, .22); }
 </style>
 <script src="../analytics.js" defer></script>
 <script src="../wa.js" defer></script>
@@ -57,7 +69,7 @@
   </div>
 
   <section class="hero stack">
-    <h1 data-t="title">Безлимит для тоя</h1>
+    <h1 data-t="title">Оплата для тоя</h1>
     <p style="opacity:.95" data-t="lead">Сколько угодно гостей в вашем тое. Действует год — на подготовку, сам той и подсчёт конвертов.</p>
   </section>
 
@@ -96,6 +108,7 @@
 
     <!-- оплата -->
     <div class="card stack" id="payCard">
+      <div class="plans" id="plans" role="radiogroup"></div>
       <div>
         <div class="price"><span id="price">990</span> <small data-t="som">сом</small></div>
         <p class="muted" style="margin-top:6px" data-t="once">Один раз за этот той, действует год</p>
@@ -156,15 +169,17 @@
   // Кыргызские тексты — черновик, нужна вычитка носителем языка
   const T = {
     ru: {
-      title: 'Безлимит для тоя', lead: 'Сколько угодно гостей в вашем тое. Действует год — на подготовку, сам той и подсчёт конвертов.',
+      title: 'Оплата для тоя', lead: 'Онлайн-приглашение — гости без ограничений. Приложение — всё вместе: приглашение, «У входа», конверты, бюджет. Один раз за той, действует год.',
+      planInv: 'Онлайн-приглашение', planInvS: 'Без знака «Образец», личные ссылки, гости без ограничений',
+      planPro: 'Приложение', planProS: 'Всё из приглашения + полная версия приложения для тоя любого размера', planUp: 'доплата', unlimited: (p) => `В списке ${p} чел. — гости без ограничений`,
       numLabel: 'Номер тоя', numHint: 'В приложении: Настройки → Тариф. Когда гостей становится много, номер показывается и в карточке лимита.',
       find: 'Продолжить', finding: 'Ищем…', other: 'Другой номер', toiLabel: 'Той',
       notFound: 'Той с таким номером не найден. Проверьте 6 цифр.', numBad: 'Номер тоя — 6 цифр', loadError: 'Не удалось загрузить. Проверьте интернет.',
       people: (p, l) => p >= l ? `В списке ${p} из ${l} бесплатных — лимит исчерпан` : `В списке ${p} из ${l} бесплатных`,
-      proActive: (d) => `Безлимит открыт до ${d}`,
-      proActiveText: 'Добавляйте гостей без ограничений. Если нужно продлить — оплатите ещё раз, срок продлится на год.',
-      pendingTitle: 'Заявку получили', pendingText: 'Проверим оплату и откроем безлимит в течение дня. В приложении потяните экран вниз, чтобы обновить.',
-      provTitle: 'Безлимит уже открыт', provText: 'Добавляйте гостей без ограничений. Мы проверим платёж в течение дня. В приложении потяните экран вниз, чтобы обновить.',
+      proActive: (d) => `Полная версия открыта до ${d}`,
+      proActiveText: 'Гости без ограничений и все разделы приложения. Если нужно продлить — оплатите ещё раз, срок продлится на год.',
+      pendingTitle: 'Заявку получили', pendingText: 'Проверим оплату и откроем доступ в течение дня. В приложении потяните экран вниз, чтобы обновить.',
+      provTitle: 'Доступ уже открыт', provText: 'Мы проверим платёж в течение дня. В приложении потяните экран вниз, чтобы обновить.',
       som: 'сом', once: 'Один раз за этот той, действует год', howTitle: 'Как оплатить',
       payBtn: 'Оплатить в приложении банка', toClaim: 'Уже оплатили? Нажмите «Я оплатил» ↓', payTo: (n) => `Получатель: ${n} · MBank`,
       stepPay: 'Нажмите «Оплатить» — откроется приложение банка: MBank или любое другое банковское приложение Кыргызстана. С компьютера — отсканируйте QR ниже телефоном.',
@@ -175,25 +190,27 @@
       phoneLabel: 'Телефон для связи (необязательно)', claim: 'Я оплатил', sending: 'Отправляем…',
       claimError: 'Не удалось отправить. Проверьте интернет и попробуйте ещё раз.',
       faqTitle: 'Вопросы', q1: 'Что бесплатно?',
-      a1: 'До 35 человек в тое — считаются все приглашённые вместе с семьями. Гости, пришедшие без приглашения, в лимит не входят: у входа их всегда можно отметить.',
+      a1: 'Пробное приглашение со знаком «Образец» и приложение целиком, пока в тое до 35 человек (считаются все приглашённые вместе с семьями; гости без приглашения у входа не считаются).',
       q2: 'На что действует оплата?',
-      a2: 'На один той — тот, чей номер вы ввели. Вся команда тоя (родня, помощники) пользуется безлимитом без отдельной оплаты. Срок — год, но не меньше 90 дней после тоя.',
-      q3: 'Оплатил, но безлимит не открылся',
+      a2: 'На один той — тот, чей номер вы ввели. Вся команда тоя (родня, помощники) пользуется без отдельной оплаты. Срок — год, но не меньше 90 дней после тоя. Сначала взяли приглашение — до приложения доплата 500 сом.',
+      q3: 'Оплатил, но доступ не открылся',
       a3: 'Обычно открываем в течение дня. Если прошло больше суток — напишите на toimanager.app@gmail.com, укажите номер тоя и имя отправителя.',
       privacy: 'Политика конфиденциальности',
       months: ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
       date: (d, m, y, T) => `${d} ${T.months[m]} ${y}`, toiDate: (s) => `Дата тоя: ${s}`, noDate: 'Дата тоя не указана',
     },
     ky: {
-      title: 'Той үчүн чексиз', lead: 'Тойго каалагандай конок кошуңуз. Бир жылга жарактуу — даярдыкка, тойдун өзүнө жана конверттерди эсептөөгө.',
+      title: 'Той үчүн төлөм', lead: 'Онлайн чакыруу — коноктор чексиз. Тиркеме — баары бирге: чакыруу, «Кире бериш», конверттер, бюджет. Бир той үчүн бир жолу, бир жылга.',
+      planInv: 'Онлайн чакыруу', planInvS: '«Үлгү» белгисиз, жеке шилтемелер, коноктор чексиз',
+      planPro: 'Тиркеме', planProS: 'Чакыруунун баары + тиркеменин толук версиясы, тойдун көлөмүнө карабай', planUp: 'кошумча', unlimited: (p) => `Тизмеде ${p} киши — коноктор чексиз`,
       numLabel: 'Тойдун номери', numHint: 'Тиркемеде: Настройки → Тариф. Коноктор көбөйгөндө номер лимит карточкасында да көрүнөт.',
       find: 'Улантуу', finding: 'Изделүүдө…', other: 'Башка номер', toiLabel: 'Той',
       notFound: 'Мындай номердеги той табылган жок. 6 санды текшериңиз.', numBad: 'Тойдун номери — 6 сан', loadError: 'Жүктөлгөн жок. Интернетти текшериңиз.',
       people: (p, l) => p >= l ? `Тизмеде ${p} / ${l} акысыз — лимит бүттү` : `Тизмеде ${p} / ${l} акысыз`,
-      proActive: (d) => `Чексиз ${d} чейин ачык`,
-      proActiveText: 'Конокторду чектөөсүз кошуңуз. Узартуу керек болсо — кайра төлөңүз, мөөнөт бир жылга узарат.',
+      proActive: (d) => `Толук версия ${d} чейин ачык`,
+      proActiveText: 'Коноктор чексиз жана тиркеменин бардык бөлүмдөрү. Узартуу керек болсо — кайра төлөңүз, мөөнөт бир жылга узарат.',
       pendingTitle: 'Өтүнмө кабыл алынды', pendingText: 'Төлөмдү текшерип, бир күндүн ичинде ачабыз. Тиркемеде жаңыртуу үчүн экранды ылдый тартыңыз.',
-      provTitle: 'Чексиз ачылды', provText: 'Конокторду чектөөсүз кошо бериңиз. Төлөмдү бир күндүн ичинде текшеребиз. Тиркемеде жаңыртуу үчүн экранды ылдый тартыңыз.',
+      provTitle: 'Мүмкүнчүлүк ачылды', provText: 'Төлөмдү бир күндүн ичинде текшеребиз. Тиркемеде жаңыртуу үчүн экранды ылдый тартыңыз.',
       som: 'сом', once: 'Ушул той үчүн бир жолу, бир жылга', howTitle: 'Кантип төлөө керек',
       payBtn: 'Банк тиркемесинде төлөө', toClaim: 'Төлөдүңүзбү? «Төлөдүм» баскычын басыңыз ↓', payTo: (n) => `Алуучу: ${n} · MBank`,
       stepPay: '«Төлөө» баскычын басыңыз — банк тиркемеси ачылат: MBank же Кыргызстандагы башка банк тиркемеси. Компьютерден болсо — төмөндөгү QRди телефон менен сканерлеңиз.',
@@ -204,9 +221,9 @@
       phoneLabel: 'Байланыш үчүн телефон (милдеттүү эмес)', claim: 'Төлөдүм', sending: 'Жөнөтүлүүдө…',
       claimError: 'Жөнөтүлгөн жок. Интернетти текшерип, кайра аракет кылыңыз.',
       faqTitle: 'Суроолор', q1: 'Эмне акысыз?',
-      a1: 'Тойго 35 кишиге чейин — үй-бүлөсү менен чакырылгандардын баары эсептелет. Чакырусуз келген коноктор лимитке кирбейт: аларды кире бериште дайыма белгилесе болот.',
+      a1: '«Үлгү» белгиси бар сынамык чакыруу жана тиркеме толугу менен, тойдо 35 кишиге чейин (үй-бүлөсү менен чакырылгандардын баары эсептелет; кире бериштеги чакыруусуз коноктор эсептелбейт).',
       q2: 'Төлөм эмнеге жарактуу?',
-      a2: 'Бир тойго — номерин киргизген тойго. Тойдун бүт командасы (тууган-урук, жардамчылар) өзүнчө төлөбөй эле колдонот. Мөөнөтү — бир жыл, бирок тойдон кийин 90 күндөн кем эмес.',
+      a2: 'Бир тойго — номерин киргизген тойго. Тойдун бүт командасы (тууган-урук, жардамчылар) өзүнчө төлөбөй эле колдонот. Мөөнөтү — бир жыл, бирок тойдон кийин 90 күндөн кем эмес. Адегенде чакыруу алган болсоңуз — тиркемеге 500 сом кошумча.',
       q3: 'Төлөдүм, бирок ачылган жок',
       a3: 'Адатта бир күндүн ичинде ачабыз. Бир суткадан ашса — toimanager.app@gmail.com дарегине тойдун номерин жана жөнөтүүчүнүн атын жазыңыз.',
       privacy: 'Купуялык саясаты',
@@ -220,6 +237,9 @@
   let lang = (qLang === 'ky' || qLang === 'ru') ? qLang : (store.get('lang') || ((navigator.language || '').startsWith('ky') ? 'ky' : 'ru'));
   const $ = (id) => document.getElementById(id);
   let info = null, num = null, claimed = false, prov = false;
+  const qPlan = new URLSearchParams(location.search).get('plan');
+  let plan = qPlan === 'pro' ? 'pro' : 'invite';
+  const planPrice = () => (plan === 'invite' ? info.invite_price : info.price);
 
   async function rpc(name, body) {
     const r = await fetch(`${SB}/rest/v1/rpc/${name}`, {
@@ -237,6 +257,7 @@
 
   function render() {
     const L = T[lang];
+    if (info && info.invite_until) plan = 'pro';   // приглашение уже оплачено — остаётся только доплата до приложения
     document.documentElement.lang = lang;
     document.querySelectorAll('[data-t]').forEach((el) => { const v = L[el.dataset.t]; if (typeof v === 'string') el.textContent = v; });
     document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
@@ -247,7 +268,7 @@
     $('payLink').hidden = !PAY.link; if (PAY.link) $('payLink').href = PAY.link;
     $('toClaim').hidden = !PAY.link;
     $('payTo').hidden = !PAY.to; if (PAY.to) $('payTo').textContent = L.payTo(PAY.to);
-    $('stepAmount').textContent = L.stepAmount(info ? Number(info.price).toLocaleString('ru-RU') : '990');
+    $('stepAmount').textContent = L.stepAmount(info ? Number(planPrice()).toLocaleString('ru-RU') : '490');
     const hasPay = Boolean(PAY.qr || PAY.link);
     $('noPay').hidden = hasPay;
     $('steps').hidden = $('howTitle').hidden = !hasPay;
@@ -255,15 +276,21 @@
     $('toiNum').textContent = `№ ${fmtNum(info.num)}`;
     $('toiDate').textContent = info.starts_at ? L.toiDate(fmtDay(info.starts_at, L)) : L.noDate;
     const pro = Boolean(info.pro_until);
-    $('toiPeople').textContent = pro ? '' : L.people(info.people, info.limit);
+    const invPaid = Boolean(info.invite_until);
+    if (invPaid) plan = 'pro';
+    const free = !pro && !info.guests_unlimited;
+    $('toiPeople').textContent = pro ? '' : free ? L.people(info.people, info.limit) : L.unlimited(info.people);
     $('toiPeople').hidden = pro;
-    $('toiMeter').parentElement.hidden = pro;
+    $('toiMeter').parentElement.hidden = !free;
+    const opt = (id, t, sub, price, up) => `<button type="button" class="plan-opt" role="radio" data-plan="${id}" aria-checked="${plan === id}"><span><b>${t}</b><small>${sub}</small></span><em>${up ? `<small>${up}</small> ` : ''}${Number(price).toLocaleString('ru-RU')} <small>${L.som}</small></em></button>`;
+    $('plans').innerHTML = (invPaid ? '' : opt('invite', L.planInv, L.planInvS, info.invite_price)) + opt('pro', L.planPro, L.planProS, info.price, invPaid ? L.planUp : '');
+    $('plans').querySelectorAll('[data-plan]').forEach((b) => b.onclick = () => { plan = b.dataset.plan; render(); });
     $('toiMeter').style.width = `${Math.min(100, (info.people / info.limit) * 100)}%`;
-    $('price').textContent = Number(info.price).toLocaleString('ru-RU');
+    $('price').textContent = Number(planPrice()).toLocaleString('ru-RU');
     $('proActive').hidden = !pro;
     if (pro) $('proActiveTitle').textContent = L.proActive(fmtDay(info.pro_until, L));
     const pending = info.pending_claim || claimed;
-    const provNow = prov || info.prov_plan === 'pro';
+    const provNow = prov || Boolean(info.prov_plan);
     $('pending').hidden = !pending;
     const pt = $('pending').querySelector('[data-t="pendingTitle"]'), pp = $('pending').querySelector('[data-t="pendingText"]');
     if (pt) pt.textContent = provNow ? L.provTitle : L.pendingTitle;
@@ -308,9 +335,9 @@
     const L = T[lang];
     $('claim').disabled = true; $('claim').textContent = L.sending; $('claimErr').hidden = true;
     try {
-      const res = await rpc('public_pay_claim', { p_num: num, p_payer_name: $('payer').value.trim(), p_phone: $('phone').value.trim() || null });
+      const res = await rpc('public_pay_claim', { p_num: num, p_payer_name: $('payer').value.trim(), p_phone: $('phone').value.trim() || null, p_plan: plan });
       claimed = true; prov = Boolean(res && res.provisional);
-      window.tmTrack && window.tmTrack('pay_claim', { value: Number(info?.price || 990), currency: 'KGS' });
+      window.tmTrack && window.tmTrack('pay_claim', { plan, value: Number(planPrice() || 490), currency: 'KGS' });
       render();
       $('pending').scrollIntoView({ behavior: 'smooth', block: 'center' });
     } catch {
