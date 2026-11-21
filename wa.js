@@ -18,7 +18,7 @@
   #wa-fab .wa-btn{position:relative;width:60px;height:60px;border-radius:50%;background:#1B9E55;color:#fff;display:grid;place-items:center;
     box-shadow:0 10px 24px rgba(16,110,58,.35),0 2px 6px rgba(16,110,58,.25);transition:transform .2s ease,box-shadow .2s ease;text-decoration:none}
   #wa-fab .wa-btn:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 14px 30px rgba(16,110,58,.42),0 3px 8px rgba(16,110,58,.25)}
-  #wa-fab .wa-btn:focus-visible{outline:3px solid #5B3FD6;outline-offset:3px}
+  #wa-fab .wa-btn:focus-visible{outline:3px solid #1F2547;outline-offset:3px}
   #wa-fab .wa-btn svg{width:30px;height:30px;position:relative;z-index:1}
   #wa-fab .wa-btn::before,#wa-fab .wa-btn::after{content:"";position:absolute;inset:0;border-radius:50%;background:rgba(37,211,102,.45);z-index:0;animation:wa-pulse 2.6s cubic-bezier(.2,.6,.3,1) infinite}
   #wa-fab .wa-btn::after{animation-delay:1.3s}

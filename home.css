@@ -117,7 +117,7 @@ section.block { padding: var(--s-96) 0; }
 .list { list-style: none; padding: 0; margin: var(--s-16) 0 0; display: grid; gap: var(--s-12); }
 .list li { position: relative; padding-left: 32px; font-size: var(--fs-16); }
 .list li::before { content: ""; position: absolute; left: 0; top: 2px; width: 20px; height: 20px; border-radius: 50%;
-  background: var(--accent-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235B3FD6' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4L18 8'/%3E%3C/svg%3E") center / 14px no-repeat; }
+  background: var(--gold-soft, #F7F0E2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23A9843F' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4L18 8'/%3E%3C/svg%3E") center / 14px no-repeat; }
 @media (max-width: 860px) {
   .feature { grid-template-columns: 1fr; gap: var(--s-24); padding: var(--s-32) 0; }
   .feature .shot { order: 2; }

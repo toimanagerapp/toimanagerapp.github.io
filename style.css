@@ -136,3 +136,7 @@ h1 em, h2 em, .h2 em { font-style: inherit; font-weight: inherit; color: inherit
 /* Тоньше и аккуратнее (21.11): кнопки и подписи — 500, акценты — 600 */
 .btn, .btn-sm, .chip { font-weight: 500; }
 b, strong { font-weight: 600; }
+/* Узкие телефоны: в шапке короткая кнопка, чтобы ничего не вылезало за край */
+@media (max-width: 430px) { .nav .cta-l { display: none; } }
+@media (max-width: 380px) { .nav .right { gap: 6px; } .nav .right .btn-sm { padding-left: 12px; padding-right: 12px; } }
+html { overflow-x: clip; }
