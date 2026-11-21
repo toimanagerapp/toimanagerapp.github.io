@@ -836,7 +836,7 @@
         <div class="hx-in">
           <div class="hx-head"><span class="eyebrow">${esc(t.eyebrow)}</span><h1>${t.h1}</h1></div>
           <a class="hx-phone" href="${demoUrl}" target="_blank" rel="noopener" aria-label="${esc(t.seeDemo)}">
-            <video muted playsinline preload="auto" poster="../inv/env/navy.jpg" src="../inv/env/navy.mp4" aria-hidden="true"></video>
+            <video muted playsinline preload="auto" poster="../inv/env/navy-poster.webp" src="../inv/env/navy.mp4" aria-hidden="true"></video>
             <span class="hx-card" aria-hidden="true"><span class="t"><small>${esc(t.heroKind)}</small><b>${esc(t.heroNames)}</b></span><span class="d">${esc(t.heroDate)}</span></span>
           </a>
           <div class="hx-body">
@@ -867,7 +867,15 @@
     return `<a class="toi-card" href="#/t/${x.id}"><b>${esc(x.title)}</b><span class="sub2">${esc(when)}</span>
       <span class="stats">${st}<span class="pill2">${x.guests} ${esc(t.kGuests)}</span>${x.opened ? `<span class="pill2 acc">${x.opened} ${esc(t.kOpened)}</span>` : ''}${x.coming ? `<span class="pill2 ok">${x.coming} ${esc(t.kComing)}</span>` : ''}</span></a>`;
   }
+  let kindFromLink = KIND_IDS.includes(qs.get('kind')) ? qs.get('kind') : null; // с посадочных страниц: /create/?kind=wedding
   function bindHome(root) {
+    if (kindFromLink && !loadLocal() && !(S.user && S.tois && S.tois.length)) {
+      const k = kindFromLink; kindFromLink = null;
+      S.draft = newDraft(k); S.step = 0; S.toi = null; saveLocal();
+      track('create_start', { kind: k, from: 'landing' });
+      location.hash = '#/new'; return;
+    }
+    kindFromLink = null;
     root.querySelectorAll('[data-kind]').forEach((b) => b.addEventListener('click', () => {
       S.draft = newDraft(b.dataset.kind); S.step = 0; S.toi = null; saveLocal();
       track('create_start', { kind: b.dataset.kind });

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Онлайн-приглашение на той за 5 минут — Той Менеджер</title>
-<meta name="description" content="Красивое онлайн-приглашение на свадьбу, кыз узатуу, сүннөт той и юбилей: конверт с печатью, музыка, фото, карта 2ГИС и ответы гостей. Личная ссылка каждому гостю и видно, кто открыл. Бесплатно попробовать.">
+<meta name="description" content="Онлайн-приглашение на свадьбу, кыз узатуу, сүннөт той и юбилей за 5 минут: видео-конверт, музыка, фото, 2ГИС и ответы гостей в WhatsApp. Попробовать бесплатно.">
 <link rel="canonical" href="https://toimanager.app/create/">
 <link rel="alternate" hreflang="ru" href="https://toimanager.app/create/">
 <link rel="alternate" hreflang="ky" href="https://toimanager.app/create/?lang=ky">
@@ -14,7 +14,9 @@
 <meta property="og:image" content="https://toimanager.app/og.jpg?v=2">
 <meta property="og:url" content="https://toimanager.app/create/">
 <meta name="theme-color" content="#FAF7F2">
-<link rel="icon" href="../favicon.png?v=2">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon.png?v=3">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="manifest" href="/site.webmanifest">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,7 +39,7 @@
 <body>
 <header class="head">
   <div class="in">
-    <a class="brand" href="../"><img src="../favicon.png?v=2" alt="" width="34" height="34"><span>Той Менеджер</span></a>
+    <a class="brand" href="../"><img src="../favicon.png?v=3" alt="" width="34" height="34"><span>Той Менеджер</span></a>
     <span class="save-state" id="saveState" hidden><i></i><span></span></span>
     <div class="lang" role="group" aria-label="Тил / Язык"><button type="button" data-lang="ru">Рус</button><button type="button" data-lang="ky">Кыр</button></div>
     <div class="acct" id="acct"></div>
@@ -45,7 +47,32 @@
 </header>
 
 <main class="page" id="app" aria-live="polite">
-  <div class="center-box"><div><div class="skeleton" style="width:220px;height:22px;margin:0 auto"></div></div></div>
+<!-- prerender: стартовый экран для поисковиков и быстрого первого показа; create.js перерисует его тем же содержимым. Обновлять: tools/seo/prerender-create -->
+<section class="hx">
+        <div class="hx-in">
+          <div class="hx-head"><span class="eyebrow">Онлайн-приглашение на той</span><h1>Приглашение, которое хочется открыть</h1></div>
+          <a class="hx-phone" href="../inv/?env=navy&amp;theme=tun&amp;lang=ru&amp;utm_source=create&amp;utm_medium=hero" target="_blank" rel="noopener" aria-label="Посмотреть пример">
+            <video muted="" playsinline="" preload="none" poster="../inv/env/navy-poster.webp" aria-hidden="true"></video>
+            <span class="hx-card" aria-hidden="true"><span class="t"><small>Приглашение на свадьбу</small><b>Азамат &amp; Айпери</b></span><span class="d">20 · 12 · 2026</span></span>
+          </a>
+          <div class="hx-body">
+            <p class="lead">Конверт с печатью раскрывается, играет музыка — и гость отвечает «Приду» в одно касание. Каждому — личная ссылка с его именем.</p>
+            <div class="hx-cta"><a class="btn gold" href="#pick" data-act="to-pick">Создать приглашение</a>
+              <a class="btn ghost-light" href="../inv/?env=navy&amp;theme=tun&amp;lang=ru&amp;utm_source=create&amp;utm_medium=hero" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>Посмотреть пример</a></div>
+            <div class="ticks"><span>Готово за 5 минут</span><span>Без установки приложения</span><span>Кыргызча и по-русски</span></div>
+          </div>
+        </div>
+      </section>
+      
+      <section class="pick" id="pick"><h2 class="sec-title">Какой у вас той?</h2><div class="kinds"><button type="button" class="kind" data-kind="wedding" aria-pressed="false"><b>Свадьба</b><small>Үйлөнүү той</small></button><button type="button" class="kind" data-kind="kyz_uzatuu" aria-pressed="false"><b>Кыз узатуу</b><small>проводы невесты</small></button><button type="button" class="kind" data-kind="sunnot" aria-pressed="false"><b>Сүннөт той</b></button><button type="button" class="kind" data-kind="beshik" aria-pressed="false"><b>Бешик той</b></button><button type="button" class="kind" data-kind="tushoo" aria-pressed="false"><b>Тушоо кесүү</b><small>первые шаги</small></button><button type="button" class="kind" data-kind="jubilee" aria-pressed="false"><b>Юбилей</b><small>маараке</small></button><button type="button" class="kind" data-kind="memorial" aria-pressed="false"><b>Аш</b><small>поминки</small></button><button type="button" class="kind" data-kind="other" aria-pressed="false"><b>Другое</b><small>любой праздник</small></button></div></section>
+      <section class="how"><div><i>1</i><b>Соберите</b><p>Имена, дата, место, фото и оформление. Всё видно сразу в предпросмотре.</p></div><div><i>2</i><b>Отправьте</b><p>Одной общей ссылкой или каждому гостю — своей, в WhatsApp.</p></div><div><i>3</i><b>Следите</b><p>Кто открыл, кто придёт и сколько человек — в одном списке.</p></div></section>
+      <section class="compare"><h2 class="sec-title">Сколько стоит</h2><div class="prices">
+        <div class="price-card"><b>Попробовать</b><div class="p">0 <small>сом</small></div><ul><li>Всё приглашение целиком</li><li>Ответы гостей</li><li>Со знаком «Образец», до 35 человек</li></ul></div>
+        <div class="price-card"><b>Онлайн-приглашение</b><div class="p">490 <small>сом · за один той</small></div><ul><li>Без знака «Образец»</li><li>Личные ссылки и «кто открыл»</li><li>Гости без ограничений</li></ul></div>
+        <div class="price-card best"><b>Приложение</b> <span class="tag">Всё вместе</span><div class="p">990 <small>сом · за один той</small></div><ul><li>Всё из онлайн-приглашения</li><li>Полная версия приложения для тоя</li><li>«У входа», конверты, бюджет, подарки</li></ul></div>
+      </div></section>
+      <section class="faq"><h2 class="sec-title">Вопросы</h2><details><summary>Гостям нужно что-то устанавливать?</summary><p>Нет. Приглашение открывается по ссылке из WhatsApp на любом телефоне.</p></details><details><summary>Можно исправить после отправки?</summary><p>Да, в любой момент. Гости увидят новое по той же ссылке — заново отправлять не нужно.</p></details><details><summary>Как оплатить?</summary><p>По QR в MBank или любом банке Кыргызстана. Знак «Образец» снимается сразу после нажатия «Я оплатил».</p></details><details><summary>Сколько гостей можно пригласить?</summary><p>Сколько угодно: в «Онлайн-приглашении» за 490 сом ограничений нет. В бесплатной пробной версии — до 35 человек.</p></details></section>
+      <div class="lbar" id="lbar"><a class="btn gold block" href="#pick" data-act="to-pick"><span>Создать приглашение</span><small>бесплатно, без установки</small></a></div><footer class="foot"><span>© Той Менеджер</span><a href="../privacy/">Политика конфиденциальности</a><a href="https://wa.me/996755666999" target="_blank" rel="noopener">Помощь в WhatsApp</a></footer>
 </main>
 
 <!-- Предпросмотр приглашения: одна рамка на всю страницу (переносится CSS-ом: справа на компьютере, на весь экран на телефоне) -->
@@ -59,7 +86,7 @@
 <div id="toastRoot"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/dist/umd/supabase.js"></script>
-<script src="create.js?v=1121q"></script>
+<script src="create.js?v=1122a"></script>
 <script src="../analytics.js" defer></script>
 </body>
 </html>
