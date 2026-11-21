@@ -54,6 +54,9 @@
       lead: 'Конверт с восковой печатью, музыка, ваши фото, карта 2ГИС и ответы гостей. Каждому гостю — личная ссылка с его именем, и вы видите, кто уже открыл.',
       ticks: ['Готово за 5 минут', 'Без установки приложения', 'Кыргызча и по-русски'],
       pick: 'Какой у вас той?', seeDemo: 'Посмотреть пример', demoNote: 'Так увидит гость — нажмите на печать',
+      ctaCreate: 'Создать приглашение', ctaFree: 'бесплатно, без установки', heroLead: 'Конверт с печатью раскрывается, играет музыка — и гость отвечает «Приду» в одно касание. Каждому — личная ссылка с его именем.',
+      heroKind: 'Приглашение на свадьбу', heroNames: 'Азамат & Айпери', heroDate: '20 · 12 · 2026', pv: 'Просмотр', save: 'Сохранить',
+      faqT: 'Вопросы', faq: [['Гостям нужно что-то устанавливать?', 'Нет. Приглашение открывается по ссылке из WhatsApp на любом телефоне.'], ['Можно исправить после отправки?', 'Да, в любой момент. Гости увидят новое по той же ссылке — заново отправлять не нужно.'], ['Как оплатить?', 'По QR в MBank или любом банке Кыргызстана. Знак «Образец» снимается сразу после нажатия «Я оплатил».'], ['Гостей больше 35?', '«Безлимит» за 990 сом снимает ограничение. Если «Приглашение» уже оплачено — доплата 500 сом.']],
       how: [['Соберите', 'Имена, дата, место, фото и оформление. Всё видно сразу в предпросмотре.'], ['Отправьте', 'Одной общей ссылкой или каждому гостю — своей, в WhatsApp.'], ['Следите', 'Кто открыл, кто придёт и сколько человек — в одном списке.']],
       pricesT: 'Сколько стоит', try: 'Попробовать', free: 'бесплатно', som: 'сом',
       priceTry: ['Всё приглашение целиком', 'Ответы гостей', 'Со знаком «Образец»'],
@@ -144,6 +147,9 @@
       lead: 'Мөөр басылган конверт, музыка, сүрөттөрүңүз, 2ГИС картасы жана коноктордун жообу. Ар бир конокко — өз аты жазылган шилтеме, ким ачканын көрүп турасыз.',
       ticks: ['5 мүнөттө даяр', 'Тиркеме орнотпой эле', 'Кыргызча жана орусча'],
       pick: 'Кандай той?', seeDemo: 'Мисалды көрүү', demoNote: 'Конок ушинтип көрөт — мөөрдү басыңыз',
+      ctaCreate: 'Чакыруу жасоо', ctaFree: 'акысыз, орнотпостон', heroLead: 'Мөөрлүү конверт ачылат, музыка ойнойт — конок бир басуу менен «Барам» деп жооп берет. Ар бирине — өз аты жазылган шилтеме.',
+      heroKind: 'Үйлөнүү тоюна чакыруу', heroNames: 'Азамат & Айпери', heroDate: '20 · 12 · 2026', pv: 'Көрүү', save: 'Сактоо',
+      faqT: 'Суроолор', faq: [['Конокторго бир нерсе орнотуу керекпи?', 'Жок. Чакыруу WhatsAppтагы шилтеме аркылуу каалаган телефондо ачылат.'], ['Жөнөткөндөн кийин оңдосо болобу?', 'Ооба, каалаган убакта. Коноктор жаңысын ошол эле шилтемеден көрүшөт — кайра жөнөтүүнүн кереги жок.'], ['Кантип төлөйм?', 'QR аркылуу MBank же Кыргызстандын каалаган банкында. «Төлөдүм» баскычын басканда эле «Үлгү» белгиси алынат.'], ['Коноктор 35тен көппү?', '«Чексиз» — 990 сом, чектөөнү алып салат. «Чакыруу» мурун төлөнгөн болсо — 500 сом кошумча.']],
       how: [['Түзүңүз', 'Аттар, күнү, жери, сүрөттөр жана жасалгасы. Баары дароо алдын ала көрүнөт.'], ['Жөнөтүңүз', 'Бир жалпы шилтеме менен же ар бир конокко өзүнчө — WhatsAppта.'], ['Көзөмөлдөңүз', 'Ким ачты, ким келет жана канча киши — бир тизмеде.']],
       pricesT: 'Баасы', try: 'Сынап көрүү', free: 'акысыз', som: 'сом',
       priceTry: ['Чакыруу толугу менен', 'Коноктордун жообу', '«Үлгү» белгиси менен'],
@@ -267,7 +273,7 @@
     return {
       kind, name_a: '', name_b: '', from_whom: 'groom_parents', title: '', signature: '',
       date: '', time: memorial ? '12:00' : '17:00', venue_name: '', venue_address: '', map_url: '',
-      hero_photo: null, gallery: [], theme: memorial ? 'tunku' : 'ak-altyn', envelope: 'classic', music: memorial ? 'none' : 'theme', lang: lang === 'ru' ? 'ru' : 'ky',
+      hero_photo: null, gallery: [], theme: memorial ? 'tunku' : 'tun', envelope: memorial ? 'classic' : 'navy', music: memorial ? 'none' : 'theme', lang: lang === 'ru' ? 'ru' : 'ky',
       own_text: false, text_ky: '', text_ru: '',
       show_countdown: !memorial, show_program: false, program: [], show_dress: false, dress_text: '', dress_colors: [],
       rsvp_enabled: true, rsvp_ask_count: true, rsvp_deadline: '', wishes_mode: memorial ? 'off' : 'public',
@@ -582,8 +588,8 @@
       names = field(lab[0], inp('name_a', lab[1], 'maxlength="40" autocomplete="off"'));
     }
     return `<h1>${esc(t.whoH)}</h1><p class="lead2">${esc(t.whoL)}</p>
-      <div class="group stack">${names}${field(t.sign, inp('signature', t.ph.sign, 'maxlength="120"'), null, true)}</div>
-      <div class="group">${field(t.kindL, `<div class="seg" role="group">${KIND_IDS.map((x) => `<button type="button" data-kind="${x}" aria-pressed="${x === k}">${esc(L().kinds[x][0])}</button>`).join('')}</div>`)}</div>`;
+      <div class="kind-row" role="group" aria-label="${esc(t.kindL)}">${KIND_IDS.map((x) => `<button type="button" data-kind="${x}" aria-pressed="${x === k}">${esc(L().kinds[x][0])}</button>`).join('')}</div>
+      <div class="group stack">${names}${field(t.sign, inp('signature', t.ph.sign, 'maxlength="120"'), null, true)}</div>`;
   }
   function stepWhen() {
     const t = L();
@@ -672,7 +678,7 @@
     const chips = STEPS.map((s, k) => `<button type="button" data-step="${k}" ${k === i ? 'aria-current="step"' : ''} class="${k !== i && validStep(k) && (S.toi || k < i) ? 'done' : ''}"><i>${k + 1}</i>${esc(t.steps[k])}</button>`).join('');
     const last = i === n - 1;
     const nextBtn = isNew
-      ? (last ? `<button type="button" class="btn primary" data-act="finish">${esc(t.finish)}</button>` : `<button type="button" class="btn primary" data-act="next">${esc(t.next)}</button>`)
+      ? (last ? `<button type="button" class="btn primary" data-act="finish">${esc(t.save)}</button>` : `<button type="button" class="btn primary" data-act="next">${esc(t.next)}</button>`)
       : (last ? `<a class="btn primary" href="#/t/${S.toi.id}/send">${esc(t.tabSend)} →</a>` : `<button type="button" class="btn primary" data-act="next">${esc(t.next)}</button>`);
     const body = `
       ${isNew ? `<div class="steps-top"><div class="meta"><span>${esc(t.stepOf(i + 1, n))} · <b>${esc(t.steps[i])}</b></span>${i > 0 ? `<button type="button" class="link" data-act="back">${esc(t.back)}</button>` : ''}</div>
@@ -681,8 +687,8 @@
       <section class="wstep" id="step">${STEP_FN[STEPS[i]]()}</section>
       <p class="err" id="stepErr" role="alert" hidden></p>
       <div class="bar"><div class="in">
-        <button type="button" class="btn ghost pv-open-btn" data-act="preview" aria-label="${esc(t.preview)}">${I.eye}</button>
-        ${i > 0 ? `<button type="button" class="btn ghost" data-act="back" style="flex:0 0 auto">${esc(t.back)}</button>` : ''}
+        ${i > 0 ? `<button type="button" class="btn ghost back-btn" data-act="back" aria-label="${esc(t.back)}">${I.back.replace(/width="18" height="18"/, 'width="22" height="22"')}<span>${esc(t.back)}</span></button>` : ''}
+        <button type="button" class="btn ghost pv-open-btn" data-act="preview" aria-label="${esc(t.preview)}">${I.eye}<span>${esc(t.pv)}</span></button>
         <span class="spacer"></span>${nextBtn}
       </div></div>`;
     return `<div class="editor-wrap"><div class="panel">${isNew ? '' : toiHead('card')}${body}</div><div class="pv-slot"></div></div>`;
@@ -709,7 +715,7 @@
     root.querySelectorAll('[data-kind]').forEach((b) => b.addEventListener('click', () => {
       const k = b.dataset.kind; if (k === d.kind) return;
       d.kind = k;
-      if (k === 'memorial') { d.theme = 'tunku'; d.music = 'none'; d.wishes_mode = 'off'; d.show_countdown = false; d.time = d.time || '12:00'; }
+      if (k === 'memorial') { d.theme = 'tunku'; d.envelope = 'classic'; d.music = 'none'; d.wishes_mode = 'off'; d.show_countdown = false; d.time = d.time || '12:00'; pvLoad(false); }
       changed(); redrawStep();
     }));
     const music = root.querySelector('[data-music]');
@@ -825,25 +831,32 @@
     const local = loadLocal();
     const draftBox = local && !mine ? `<div class="status check" style="margin-top:20px"><div class="ic">${I.clock}</div><div style="flex:1"><b>${esc(t.draftFound)}</b><p>${esc(titleFor(local.d))}</p>
       <div class="btns"><a class="btn primary sm" href="#/new">${esc(t.draftGo)}</a><button type="button" class="btn ghost sm" data-act="drop">${esc(t.draftNew)}</button></div></div></div>` : '';
-    const landing = `<section class="landing">
-        <div>
-          <span class="eyebrow">${I.star.replace('<svg', '<svg width="16" height="16"')}${esc(t.eyebrow)}</span>
-          <h1>${t.h1}</h1>
-          <p class="lead">${esc(t.lead)}</p>
-          <div class="ticks">${t.ticks.map((x) => `<span>${esc(x)}</span>`).join('')}</div>
-          <a class="btn ghost sm demo-link" href="../inv/?theme=ak-altyn&amp;lang=${lang}" target="_blank" rel="noopener">${I.eye}${esc(t.seeDemo)}</a>
-          ${draftBox}
-          <h2 class="pick-title" style="margin-top:32px">${esc(t.pick)}</h2>
-          ${kindTiles(null)}
+    const demoUrl = `../inv/?env=navy&amp;theme=tun&amp;lang=${lang}&amp;utm_source=create&amp;utm_medium=hero`;
+    const landing = `<section class="hx">
+        <div class="hx-in">
+          <div class="hx-head"><span class="eyebrow">${esc(t.eyebrow)}</span><h1>${t.h1}</h1></div>
+          <a class="hx-phone" href="${demoUrl}" target="_blank" rel="noopener" aria-label="${esc(t.seeDemo)}">
+            <video muted playsinline preload="auto" poster="../inv/env/navy.jpg" src="../inv/env/navy.mp4" aria-hidden="true"></video>
+            <span class="hx-card" aria-hidden="true"><span class="t"><small>${esc(t.heroKind)}</small><b>${esc(t.heroNames)}</b></span><span class="d">${esc(t.heroDate)}</span></span>
+          </a>
+          <div class="hx-body">
+            <p class="lead">${esc(t.heroLead)}</p>
+            <div class="hx-cta"><a class="btn gold" href="#pick" data-act="to-pick">${esc(t.ctaCreate)}</a>
+              <a class="btn ghost-light" href="${demoUrl}" target="_blank" rel="noopener">${I.eye}${esc(t.seeDemo)}</a></div>
+            <div class="ticks">${t.ticks.map((x) => `<span>${esc(x)}</span>`).join('')}</div>
+          </div>
         </div>
-        <div class="demo"><div class="phone"><iframe src="../inv/?theme=ak-altyn&amp;lang=${lang}" title="Пример" loading="lazy"></iframe></div><p>${esc(t.demoNote)}</p></div>
       </section>
+      ${draftBox}
+      <section class="pick" id="pick"><h2 class="sec-title">${esc(t.pick)}</h2>${kindTiles(null)}</section>
       <section class="how">${t.how.map(([h, p], k) => `<div><i>${k + 1}</i><b>${esc(h)}</b><p>${esc(p)}</p></div>`).join('')}</section>
-      <section class="compare"><h2 class="pick-title">${esc(t.pricesT)}</h2><div class="prices">
+      <section class="compare"><h2 class="sec-title">${esc(t.pricesT)}</h2><div class="prices">
         <div class="price-card"><b>${esc(t.try)}</b><div class="p">0 <small>${esc(t.som)}</small></div><ul>${t.priceTry.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
         <div class="price-card"><b>${esc(t.planInv)}</b><div class="p">490 <small>${esc(t.som)} · ${esc(t.oneToi)}</small></div><ul>${t.priceInv.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
         <div class="price-card best"><b>${esc(t.planPro)}</b> <span class="tag">${esc(t.best)}</span><div class="p">990 <small>${esc(t.som)} · ${esc(t.oneToi)}</small></div><ul>${t.pricePro.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
-      </div></section>`;
+      </div></section>
+      <section class="faq"><h2 class="sec-title">${esc(t.faqT)}</h2>${t.faq.map(([q, x]) => `<details><summary>${esc(q)}</summary><p>${esc(x)}</p></details>`).join('')}</section>
+      <div class="lbar" id="lbar"><a class="btn gold block" href="#pick" data-act="to-pick"><span>${esc(t.ctaCreate)}</span><small>${esc(t.ctaFree)}</small></a></div>`;
     return `${mine}${mine ? '' : landing}${foot()}`;
   }
   const foot = () => `<footer class="foot"><span>© Той Менеджер</span><a href="../privacy/">${esc(L().privacy)}</a><a href="https://wa.me/996755666999" target="_blank" rel="noopener">${esc(L().help)}</a></footer>`;
@@ -861,6 +874,26 @@
       location.hash = '#/new';
     }));
     root.querySelector('[data-act="drop"]')?.addEventListener('click', () => { store.del(DRAFT_KEY); renderApp(); });
+    root.querySelectorAll('[data-act="to-pick"]').forEach((a) => a.addEventListener('click', (e) => {
+      e.preventDefault(); track('create_cta', { from: a.closest('.lbar') ? 'bar' : 'hero' });
+      $('pick')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }));
+    // Живой конверт: раскрывается, на карточке проявляются имена, пауза — и снова
+    const v = root.querySelector('.hx-phone video'), card = root.querySelector('.hx-card');
+    if (v) {
+      const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const play = () => { card.classList.remove('on'); v.currentTime = 0; v.play().catch(() => card.classList.add('on')); };
+      v.addEventListener('ended', () => { card.classList.add('on'); setTimeout(() => { if (document.body.contains(v)) play(); }, 3200); });
+      if (still) { v.currentTime = 3.9; card.classList.add('on'); } else setTimeout(play, 500);
+    }
+    // Нижняя кнопка «Создать» на телефоне: видна, пока не дошли до выбора тоя
+    const bar = root.querySelector('#lbar'), pick = root.querySelector('#pick'), hx = root.querySelector('.hx-cta');
+    if (bar && pick && 'IntersectionObserver' in window) {
+      const seen = { pick: false, hero: true };
+      const upd = () => bar.classList.toggle('on', !seen.pick && !seen.hero);
+      new IntersectionObserver((es) => { es.forEach((x) => { seen[x.target === pick ? 'pick' : 'hero'] = x.isIntersecting; }); upd(); }).observe(pick);
+      if (hx) new IntersectionObserver((es) => { seen.hero = es[0].isIntersecting; upd(); }).observe(hx);
+    }
   }
 
   // ---------- Той: шапка и вкладки ----------
