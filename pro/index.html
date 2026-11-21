@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../style.css?v=2">
+<link rel="stylesheet" href="../style.css?v=3">
 <script>
   // пришли по ссылке из приложения (?n=номер) — пока грузим той, не показываем форму номера и нижние блоки, чтобы страница не прыгала
   if (/[?&]n=\d{3}\s?\d{3}/.test(location.search)) document.documentElement.classList.add('pending-n');
@@ -46,7 +46,7 @@
   .plan-opt { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; text-align: left; padding: 14px 16px; border-radius: 16px;
     border: 1px solid var(--line); background: var(--surface); font: inherit; color: var(--ink); cursor: pointer; }
   .plan-opt b { display: block; font-size: 16px; } .plan-opt small { display: block; font-size: 13px; color: var(--muted); line-height: 1.35; margin-top: 2px; }
-  .plan-opt em { font-style: normal; font-weight: 700; font-size: 20px; white-space: nowrap; } .plan-opt em small { display: inline; font-size: 13px; font-weight: 500; }
+  .plan-opt em { font-style: normal; font-weight: 600; font-size: 20px; white-space: nowrap; } .plan-opt em small { display: inline; font-size: 13px; font-weight: 500; }
   .plan-opt[aria-checked="true"] { border-color: #A9843F; box-shadow: 0 0 0 3px rgba(185, 147, 80, .24); background: #FFFDF8; }
   /* палитра как у конструктора: слоновая кость, полночный синий, золото */
   :root { --bg: #FAF7F2; --line: #ECE5D9; --ink: #1B1E2E; --muted: #67616F; --accent: #1F2547; --accent-dark: #151935; --accent-soft: #EFEFF5;
