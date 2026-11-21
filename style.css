@@ -140,3 +140,5 @@ b, strong { font-weight: 600; }
 @media (max-width: 430px) { .nav .cta-l { display: none; } }
 @media (max-width: 380px) { .nav .right { gap: 6px; } .nav .right .btn-sm { padding-left: 12px; padding-right: 12px; } }
 html { overflow-x: clip; }
+/* В кнопке-флексе пробел в начале вложенного span пропадает — даём отступ явно */
+.nav .cta-l { margin-left: .3em; }
