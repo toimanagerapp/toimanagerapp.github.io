@@ -218,7 +218,7 @@ section.block { padding: var(--s-96) 0; }
 }
 
 /* Статьи (страницы для поиска: приглашения, чек-лист) */
-.article { max-width: 760px; margin: 0 auto; padding: var(--s-48) 0 var(--s-64); }
+.article { max-width: 760px; margin: 0 auto; padding-top: var(--s-48); padding-bottom: var(--s-64); } /* боковые отступы — от .container */
 .crumbs { font-size: var(--fs-14); color: var(--muted); margin-bottom: var(--s-16); }
 .crumbs a { color: var(--muted); }
 .article h1 { font-size: clamp(30px, 5vw, var(--fs-44)); line-height: 1.12; letter-spacing: -0.025em; font-weight: 700; margin: 0 0 var(--s-16); text-wrap: balance; hyphens: manual; }
@@ -254,3 +254,9 @@ section.block { padding: var(--s-96) 0; }
 .cta-create small { font-size: var(--fs-14); opacity: .85; }
 .cta-create i { font-style: normal; font-size: 22px; }
 .cta-create + .stores { margin-top: var(--s-16); }
+/* Образцы текстов в статьях: карточка с кнопкой «Скопировать» */
+.article .sample { position: relative; background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: var(--r-lg); padding: var(--s-16) var(--s-16) var(--s-16) var(--s-20, 20px); margin: var(--s-12) 0 var(--s-20, 20px); white-space: pre-line; line-height: 1.6; }
+.article .sample .copy { position: absolute; top: 8px; right: 8px; font: inherit; font-size: var(--fs-14); font-weight: 600; color: var(--accent-dark); background: var(--accent-soft); border: 0; border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.article .sample .copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.article .sample p { margin: 0; padding-right: 96px; }
+@media (max-width: 480px) { .article .sample p { padding-right: 0; padding-top: 30px; } }

@@ -11,4 +11,6 @@
   <url><loc>https://toimanager.app/pro/</loc><lastmod>2026-11-16</lastmod><priority>0.4</priority></url>
   <url><loc>https://toimanager.app/privacy/</loc><lastmod>2026-11-18</lastmod><priority>0.3</priority></url>
   <url><loc>https://toimanager.app/delete-account/</loc><lastmod>2026-11-16</lastmod><priority>0.3</priority></url>
+  <url><loc>https://toimanager.app/teksty-priglasheniy-na-toi/</loc><lastmod>2026-11-21</lastmod><priority>0.8</priority><xhtml:link rel="alternate" hreflang="ru" href="https://toimanager.app/teksty-priglasheniy-na-toi/"/><xhtml:link rel="alternate" hreflang="ky" href="https://toimanager.app/ky/chakyruu-tekstteri/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://toimanager.app/teksty-priglasheniy-na-toi/"/></url>
+  <url><loc>https://toimanager.app/ky/chakyruu-tekstteri/</loc><lastmod>2026-11-21</lastmod><priority>0.7</priority><xhtml:link rel="alternate" hreflang="ru" href="https://toimanager.app/teksty-priglasheniy-na-toi/"/><xhtml:link rel="alternate" hreflang="ky" href="https://toimanager.app/ky/chakyruu-tekstteri/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://toimanager.app/teksty-priglasheniy-na-toi/"/></url>
 </urlset>
