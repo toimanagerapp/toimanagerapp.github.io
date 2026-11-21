@@ -243,3 +243,14 @@ section.block { padding: var(--s-96) 0; }
 .btn-sm.ghost { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
 .related { margin-top: var(--s-32); display: grid; gap: var(--s-8); }
 .related a { font-weight: 500; }
+
+/* Кнопка «Создать приглашение онлайн» на первом экране */
+.cta-create { display: flex; align-items: center; gap: 14px; max-width: 520px; margin-top: var(--s-32); padding: 16px 18px; border-radius: var(--r-lg);
+  background: var(--accent); color: #fff; text-decoration: none; box-shadow: 0 10px 24px rgba(91, 63, 214, .28); transition: background .15s, transform .1s; }
+.cta-create:hover { background: var(--accent-dark); }
+.cta-create:active { transform: scale(.99); }
+.cta-create span { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.cta-create b { font-size: var(--fs-18); font-weight: 600; }
+.cta-create small { font-size: var(--fs-14); opacity: .85; }
+.cta-create i { font-style: normal; font-size: 22px; }
+.cta-create + .stores { margin-top: var(--s-16); }

@@ -18,7 +18,7 @@
 <link rel="preload" href="fonts/bad-script-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/cormorant-garamond-cyrillic-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add('js')</script>
-<link rel="stylesheet" href="inv.css?v=1121b">
+<link rel="stylesheet" href="inv.css?v=1121w">
 </head>
 <body data-theme="ak-altyn" class="locked">
 <div class="backdrop" aria-hidden="true"></div>
@@ -58,6 +58,7 @@
   </div>
 
   <section class="hero">
+    <div class="wm-stamp" id="wmStamp" aria-hidden="true"></div>
     <figure class="hero-photo" id="heroPhoto" hidden><img alt="" decoding="async" fetchpriority="high"></figure>
     <svg class="orn reveal" viewBox="0 0 200 60" aria-hidden="true"><use href="#orn" width="200" height="60"/></svg>
     <div class="hero-top">
@@ -184,6 +185,9 @@
 
 <button class="music off" id="music" type="button" hidden><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span></button>
 <nav class="demo-bar" id="demoBar" hidden aria-label="Шаблон"></nav>
+<!-- Знак «пробная версия» (тариф не оплачен) -->
+<div class="wm-ribbon" id="wmRibbon" hidden aria-hidden="true"></div>
+<a class="wm-bar" id="wmBar" hidden href="https://toimanager.app/create/?utm_source=invitation&amp;utm_medium=watermark" target="_blank" rel="noopener"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2l2.2 4.6 5 .7-3.6 3.5.9 5L10 13.4 5.5 15.8l.9-5L2.8 7.3l5-.7z" fill="currentColor"/></svg><span id="wmBarText"></span></a>
 <audio id="audio" loop preload="none"></audio>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -206,6 +210,6 @@
   </defs>
 </svg>
 
-<script src="inv.js?v=1121b"></script>
+<script src="inv.js?v=1121w"></script>
 </body>
 </html>

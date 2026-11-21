@@ -359,11 +359,13 @@
       <div class="card">
         <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline">
           <h3>${esc(c.payer_name)}</h3><span class="meta">${when(c.created_at)}</span></div>
+        <div style="margin-top:6px"><span class="badge ${c.plan === 'invite' ? 'gray' : 'ok'}">${c.plan === 'invite' ? 'Приглашение' : 'Безлимит'} · ${Number(c.amount || 0).toLocaleString('ru-RU')} сом</span>
+          ${c.prov_active ? '<span class="meta" style="margin-left:6px">уже открыт временно — проверьте платёж</span>' : (c.provisional ? '' : '<span class="meta" style="margin-left:6px">ждёт проверки (по тою был отказ)</span>')}</div>
         ${c.phone ? `<div style="margin-top:4px">${esc(c.phone)}</div>` : ''}
         <div class="meta" style="margin-top:6px">№ ${fmtNum(c.num)} · ${esc(c.title)}</div>
         <div class="meta">${c.people} чел.${c.starts_at ? ' · той ' + day(c.starts_at) : ''}</div>
         <div class="actions">
-          <button class="b primary" data-grant="${c.num}" data-claim="${c.id}">Открыть безлимит</button>
+          <button class="b primary" data-grant="${c.num}" data-claim="${c.id}" data-plan="${c.plan || 'pro'}">Оплата пришла — подтвердить</button>
           <button class="b sec" data-reject="${c.id}" data-name="${esc(c.payer_name)}">Отклонить</button>
           <button class="b sec" data-open="${c.num}">Подробнее</button>
         </div>
@@ -371,7 +373,7 @@
     $('handledList').innerHTML = handled.length ? handled.map((c) => `
       <tr><td>${when(c.created_at)}</td><td>${esc(c.payer_name)}${c.phone ? `<div class="meta">${esc(c.phone)}</div>` : ''}</td>
       <td><button class="row-link" data-open="${c.num}">№ ${fmtNum(c.num)}<div class="meta">${esc(c.title)}</div></button></td>
-      <td>${c.status === 'approved' ? '<span class="badge ok">Открыт</span>' : '<span class="badge gray">Отклонён</span>'}</td>
+      <td>${c.status === 'approved' ? `<span class="badge ok">${c.plan === 'invite' ? 'Приглашение' : 'Безлимит'}</span>` : '<span class="badge gray">Отклонён</span>'}</td>
       <td class="meta">${esc(c.handled_by_email || '')}</td></tr>`).join('') : '<tr><td colspan="5" class="empty">Пока пусто</td></tr>';
   }
 
@@ -379,14 +381,15 @@
   document.addEventListener('click', async (ev) => {
     const b = ev.target.closest('button'); if (!b) return;
     if (b.dataset.grant) {
-      const num = Number(b.dataset.grant);
-      if (!confirm(`Открыть оплаченный безлимит для тоя № ${fmtNum(num)} на год?`)) return;
+      const num = Number(b.dataset.grant), plan = b.dataset.plan === 'invite' ? 'invite' : 'pro';
+      const what = plan === 'invite' ? '«Приглашение» (без знака «Образец»)' : 'безлимит';
+      if (!confirm(`Открыть оплаченный ${what} для тоя № ${fmtNum(num)} на год?`)) return;
       b.disabled = true;
-      try { const until = await rpc('admin_grant_pro', { p_num: num, p_claim: b.dataset.claim || null });
-        toast(until ? `Готово: № ${fmtNum(num)} — безлимит до ${day(until)}` : 'Готово'); refresh(num); }
+      try { const until = await rpc('admin_grant_plan', { p_num: num, p_plan: plan, p_claim: b.dataset.claim || null });
+        toast(until ? `Готово: № ${fmtNum(num)} — ${plan === 'invite' ? 'приглашение' : 'безлимит'} до ${day(until)}` : 'Готово'); refresh(num); }
       catch (e) { toast(errRu(e), true); b.disabled = false; }
     } else if (b.dataset.reject) {
-      if (!confirm(`Отклонить заявку «${b.dataset.name}»? Делайте так, только если оплаты точно нет.`)) return;
+      if (!confirm(`Отклонить заявку «${b.dataset.name}»? Делайте так, только если оплаты точно нет. Временный доступ (без знака / безлимит) снимется.`)) return;
       try { await rpc('admin_reject_claim', { p_claim: b.dataset.reject }); toast('Заявка отклонена'); loadClaims(); }
       catch (e) { toast(errRu(e), true); }
     } else if (b.dataset.open) {
@@ -438,8 +441,10 @@
   }
   const peopleTxt = (t) => t.is_pro ? `${t.people} чел.` : `${t.people} из ${t.limit} чел.`;
   function proBadge(t) {
-    return t.is_pro ? `<span class="badge ok">Безлимит до ${day(t.pro_until)}</span>`
-      : t.people >= t.limit ? '<span class="badge warn">Лимит исчерпан</span>' : '<span class="badge gray">Бесплатно</span>';
+    const inv = t.invite_until && Date.parse(t.invite_until) > Date.now() ? ` <span class="badge ok">Приглашение до ${day(t.invite_until)}</span>` : '';
+    const prov = t.prov_plan ? ` <span class="badge warn">Временно открыт: ${t.prov_plan === 'invite' ? 'приглашение' : 'безлимит'} (ждёт проверки)</span>` : '';
+    return (t.is_pro ? `<span class="badge ok">Безлимит до ${day(t.pro_until)}</span>`
+      : t.people >= t.limit ? '<span class="badge warn">Лимит исчерпан</span>' : '<span class="badge gray">Бесплатно</span>') + inv + prov;
   }
   function toiCard(t) {
     return `<div class="card"><button class="row-link" data-open="${t.num}">
@@ -462,7 +467,8 @@
         </div>
         <div>${proBadge(t)} <span class="meta" style="margin-left:6px">${peopleTxt(t)} · гостей ${t.guests}</span></div>
         <div class="actions" style="margin-top:0">
-          <button class="b primary" data-grant="${t.num}">Открыть оплаченный (год)</button>
+          <button class="b primary" data-grant="${t.num}">Открыть безлимит (год)</button>
+          ${!t.is_pro ? `<button class="b sec" data-grant="${t.num}" data-plan="invite">Открыть «Приглашение» (год)</button>` : ''}
           ${owner && t.is_pro ? `<button class="b danger" data-revoke="${t.num}">Отменить безлимит</button>` : ''}
         </div>
         ${owner ? `<div class="inline">

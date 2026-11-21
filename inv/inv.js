@@ -1,6 +1,8 @@
 // Приглашение-открытка «Той Менеджер»: конверт с восковой печатью → страница с прокруткой.
 // Личная ссылка: /i/?t=<токен приглашения> (перенаправляет сюда), общая: ?c=<код открытки>.
 // Без токена — демо (?theme=ak-altyn | tunku). Данные берутся из базы через public_card.
+// ?preview=1 — живой предпросмотр в конструкторе на сайте: данные приходят из родительской страницы (postMessage).
+// ?own=1 — открыл сам организатор: отметку «гость открыл» не ставим.
 (() => {
   const SB = 'https://ybygcijdpswvqrkxyimi.supabase.co';
   const KEY = 'sb_publishable_AMNeSGIK-aTmllo1Q13bNw_aTCbRkPn'; // публичный ключ: даёт доступ только к одному приглашению по токену
@@ -19,7 +21,9 @@
   // Видео-конверты (4 с, 720×1280): кадр-заставка .jpg и ролик .mp4 в /inv/env/. light — светлый конверт, тёмный текст
   // Готовые видео-конверты (остальные добавляются по мере готовности роликов; неизвестный — обычный конверт)
   const ENVS = { navy: { card: true } };   // ivory: { light: true }, garnet: {}, emerald: {}
-  const photo = (path) => `${SB}/storage/v1/object/public/invite-photos/${path}`;
+  // путь в хранилище или (в предпросмотре) готовый адрес картинки — blob:, data:, https:
+  const photo = (path) => (/^(blob:|data:|https:)/.test(path) ? path : `${SB}/storage/v1/object/public/invite-photos/${path}`);
+  const PREVIEW = q.get('preview') === '1';
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const pad = (n) => String(n).padStart(2, '0');
@@ -109,6 +113,7 @@
       thanksCta: 'Сиз да той камдап жатасызбы? Бул чакыруу Той Менеджерде жасалган →',
       oopsTitle: 'Чакыруу табылган жок', oopsText: 'Шилтеме толук көчүрүлбөй калгандыр же уюштуруучулар чакырууну өчүрүшкөн. Шилтемени кайра жөнөтүүсүн сураныңыз.',
       oopsNet: 'Интернет жок окшойт. Байланышты текшерип, баракты жаңылаңыз.',
+      wmRibbon: 'Үлгү', wmBar: 'Сынамык версия · Той Менеджер',
     },
     ru: {
       envTitle: 'Приглашение', envTo: 'Дорогой гость', guestsAll: 'гости', envHint: 'Нажмите на печать, чтобы открыть', loading: 'Загружаем…', sealLabel: 'Открыть приглашение',
@@ -131,6 +136,7 @@
       thanksCta: 'Тоже готовите той? Это приглашение сделано в Той Менеджер →',
       oopsTitle: 'Приглашение не найдено', oopsText: 'Возможно, ссылка скопирована не полностью или организаторы удалили приглашение. Попросите прислать ссылку ещё раз.',
       oopsNet: 'Похоже, нет интернета. Проверьте связь и обновите страницу.',
+      wmRibbon: 'Образец', wmBar: 'Пробная версия · Той Менеджер',
     },
   };
 
@@ -283,6 +289,11 @@
     $('closingNames').textContent = [C.a, C.b].filter(Boolean).join(' & ');
     $('family').textContent = C.signature || '';
     $('music').setAttribute('aria-label', L.music);
+    // знак «пробная версия», пока тариф не оплачен
+    const wm = R.paid === false;
+    document.body.classList.toggle('wm', wm);
+    $('wmRibbon').hidden = $('wmBar').hidden = !wm;
+    $('wmRibbon').textContent = L.wmRibbon; $('wmBarText').textContent = L.wmBar; $('wmStamp').dataset.t = L.wmRibbon;
     tick();
   }
 
@@ -478,7 +489,7 @@
     audio.volume = 0;
     $('seal').innerHTML = sealSvg(C.initials || '·'); $('seal').disabled = false;
     document.title = `${KIND[C.kind][lang][1]} — ${[C.a, C.b].filter(Boolean).join(' & ')}`;
-    if (r.demo) {
+    if (r.demo && !r.preview) {
       const bar = $('demoBar'); bar.hidden = false;
       bar.innerHTML = Object.entries(THEMES).map(([k, v]) => `<a href="?theme=${k}${q.get('env') ? `&env=${encodeURIComponent(q.get('env'))}` : ''}" aria-current="${k === theme}">${v.title}</a>`).join('');
     }
@@ -502,6 +513,7 @@
 
   const raw = q.get('t') || q.get('c');
   if (!token && raw && !THEMES[raw]) { fail(false); return; }   // ?t=ak-altyn — старая демо-ссылка; другое — неверная ссылка
+  if (PREVIEW) { startPreview(); return; }
   if (!token) { start(DEMO); return; }
   // Пока в базе нет public_card (SQL 0.10 ещё не применён) — берём старую public_invitation, чтобы ссылки гостей не ломались
   const legacy = () => rpc('public_invitation', { p_token: token }).then((o) => (o ? {
@@ -511,6 +523,55 @@
   } : null));
   rpc('public_card', { p_token: token })
     .catch((e) => (e.status === 404 ? legacy().then((r) => { if (r) r.legacy = true; return r; }) : Promise.reject(e)))
-    .then((r) => (r ? start(r) : fail(false)))
+    .then((r) => {
+      if (!r) { fail(false); return; }
+      start(r);
+      // отметка «гость открыл приглашение» (не для организатора и не для старых ссылок)
+      if (!r.legacy && q.get('own') !== '1') rpc('public_card_seen', { p_token: token }).catch(() => {});
+    })
     .catch((e) => fail(!e.status || e.status >= 500));
+
+  // ---------- Предпросмотр в конструкторе ----------
+  // Родительская страница присылает { type: 'tm-card', r, lang, open }. Первое сообщение запускает открытку,
+  // следующие — перерисовывают её без перезагрузки (фото, тексты, оформление меняются сразу).
+  function startPreview() {
+    hint.textContent = '';
+    let started = false;
+    window.addEventListener('message', (e) => {
+      if (e.origin !== location.origin || !e.data || e.data.type !== 'tm-card') return;
+      const r = Object.assign({ demo: true, preview: true, wishes: [] }, e.data.r);
+      const want = e.data.lang === 'ky' || e.data.lang === 'ru' ? e.data.lang : null;   // язык из конструктора (не запоминаем)
+      if (!started) {
+        started = true;
+        start(r);
+        if (want && want !== lang) { lang = want; render(); hint.textContent = T[lang].envHint; }
+        if (e.data.open) openInstant();
+        return;
+      }
+      if (want) lang = want;
+      const prevTheme = theme;
+      R = r; C = withDefaults(r); theme = C.theme;
+      if (theme !== prevTheme) applyTheme();
+      // фото перерисовываем заново
+      const hp = $('heroPhoto'); delete hp.dataset.src; hp.querySelector('img').removeAttribute('src');
+      $('gallery').innerHTML = '';
+      $('seal').innerHTML = sealSvg(C.initials || '·');
+      if (C.music === 'none') { audio.pause(); audio.removeAttribute('src'); $('music').hidden = true; }
+      else if (!audio.getAttribute('src')) { audio.src = C.kind === 'memorial' ? '/inv/music/tunku.mp3' : THEMES[theme].music; $('music').hidden = !opened; }
+      render();
+      if (opened) document.querySelectorAll('main .reveal').forEach((el) => el.classList.add('in'));
+    });
+    // сообщаем родителю, что готовы принимать данные
+    try { parent.postMessage({ type: 'tm-ready' }, location.origin); } catch {}
+  }
+  // Сразу показать страницу (без конверта) — для предпросмотра
+  function openInstant() {
+    opened = true; revealed = true;
+    $('envelope').classList.add('gone'); venv.hidden = true;
+    $('page').removeAttribute('aria-hidden');
+    document.body.classList.remove('locked');
+    $('music').hidden = !audio.getAttribute('src');
+    $('heroPhoto').classList.add('in');
+    document.querySelectorAll('.reveal').forEach((el) => el.classList.add('in'));
+  }
 })();

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Онлайн-приглашение на той за 5 минут — Той Менеджер</title>
+<meta name="description" content="Красивое онлайн-приглашение на свадьбу, кыз узатуу, сүннөт той и юбилей: конверт с печатью, музыка, фото, карта 2ГИС и ответы гостей. Личная ссылка каждому гостю и видно, кто открыл. Бесплатно попробовать.">
+<link rel="canonical" href="https://toimanager.app/create/">
+<link rel="alternate" hreflang="ru" href="https://toimanager.app/create/">
+<link rel="alternate" hreflang="ky" href="https://toimanager.app/create/?lang=ky">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Онлайн-приглашение на той за 5 минут">
+<meta property="og:description" content="Конверт с печатью, музыка, фото и ответы гостей. Каждому гостю — своя ссылка, видно, кто открыл.">
+<meta property="og:image" content="https://toimanager.app/og.jpg">
+<meta property="og:url" content="https://toimanager.app/create/">
+<meta name="theme-color" content="#FCFBFE">
+<link rel="icon" href="../favicon.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://ybygcijdpswvqrkxyimi.supabase.co" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="create.css?v=1121a">
+<style>
+  @font-face { font-family: 'Cormorant Garamond'; font-style: italic; font-weight: 500; font-display: swap;
+    src: url(../inv/fonts/cormorant-garamond-cyrillic-500-italic.woff2) format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+  @font-face { font-family: 'Cormorant Garamond'; font-style: italic; font-weight: 500; font-display: swap;
+    src: url(../inv/fonts/cormorant-garamond-cyrillic-ext-500-italic.woff2) format('woff2'); unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+  @font-face { font-family: 'Cormorant Garamond'; font-style: italic; font-weight: 500; font-display: swap;
+    src: url(../inv/fonts/cormorant-garamond-latin-500-italic.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Той Менеджер — онлайн-приглашения","url":"https://toimanager.app/create/","applicationCategory":"LifestyleApplication","operatingSystem":"Web, Android","inLanguage":["ru","ky"],"offers":[{"@type":"Offer","price":"0","priceCurrency":"KGS","name":"Попробовать"},{"@type":"Offer","price":"490","priceCurrency":"KGS","name":"Приглашение"},{"@type":"Offer","price":"990","priceCurrency":"KGS","name":"Безлимит"}]}
+</script>
+</head>
+<body>
+<header class="head">
+  <div class="in">
+    <a class="brand" href="../"><img src="../favicon.png" alt="" width="34" height="34"><span>Той Менеджер</span></a>
+    <span class="save-state" id="saveState" hidden><i></i><span></span></span>
+    <div class="lang" role="group" aria-label="Тил / Язык"><button type="button" data-lang="ru">Рус</button><button type="button" data-lang="ky">Кыр</button></div>
+    <div class="acct" id="acct"></div>
+  </div>
+</header>
+
+<main class="page" id="app" aria-live="polite">
+  <div class="center-box"><div><div class="skeleton" style="width:220px;height:22px;margin:0 auto"></div></div></div>
+</main>
+
+<!-- Предпросмотр приглашения: одна рамка на всю страницу (переносится CSS-ом: справа на компьютере, на весь экран на телефоне) -->
+<aside class="pv" id="pv" hidden aria-label="Предпросмотр">
+  <div class="pv-head"><b id="pvTitle"></b><button type="button" id="pvEnv"></button><button type="button" id="pvClose"></button></div>
+  <div class="phone"><iframe id="pvFrame" title="Приглашение" loading="eager"></iframe></div>
+  <div class="pv-tools"><button type="button" class="btn ghost sm" id="pvEnv2"></button><a class="btn ghost sm" id="pvOpen" target="_blank" rel="noopener"></a></div>
+</aside>
+
+<div id="sheetRoot"></div>
+<div id="toastRoot"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/dist/umd/supabase.js"></script>
+<script src="create.js?v=1121a"></script>
+<script src="../analytics.js" defer></script>
+</body>
+</html>

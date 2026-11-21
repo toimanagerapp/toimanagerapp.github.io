@@ -380,3 +380,22 @@ body[data-theme="tunku"] .err { color: #F2B8A0; }
   body.venv-card .lang { color: #4A3826; }
 }
 .venv.done { transition-duration: 1.3s; }
+
+/* Знак «пробная версия»: пока тариф не оплачен. Заметный, но не мешает читать. */
+.wm-ribbon { position: fixed; z-index: 70; top: 20px; left: -50px; width: 190px; transform: rotate(-45deg); pointer-events: none;
+  background: linear-gradient(#B3263F, #8F1B30); color: #fff; text-align: center; font: 700 12px/30px Inter, system-ui, -apple-system, sans-serif;
+  letter-spacing: .22em; text-transform: uppercase; box-shadow: 0 4px 14px rgba(60, 10, 20, .28); }
+.wm-bar { position: fixed; z-index: 70; left: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); max-width: calc(100% - 100px);
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px 0 12px; border-radius: 999px;
+  background: rgba(24, 19, 38, .82); color: #fff; font: 500 13px/1.2 Inter, system-ui, -apple-system, sans-serif; text-decoration: none;
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 8px 22px rgba(0, 0, 0, .22); }
+.wm-bar svg { width: 16px; height: 16px; flex: none; color: #FFD27A; }
+.wm-bar span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wm-stamp { display: none; }
+body.wm .hero { position: relative; }
+body.wm .wm-stamp { display: block; position: absolute; z-index: 3; left: 50%; top: 52%; transform: translate(-50%, -50%) rotate(-18deg);
+  pointer-events: none; padding: 6px 22px; border: 3px solid currentColor; border-radius: 12px; color: rgba(160, 30, 50, .24);
+  font: 800 clamp(34px, 11vw, 56px)/1.1 Inter, system-ui, -apple-system, sans-serif; letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; }
+body.wm .wm-stamp::before { content: attr(data-t); }
+body.locked .wm-bar { display: none; }
+body.wm .demo-bar { bottom: calc(72px + env(safe-area-inset-bottom)); }

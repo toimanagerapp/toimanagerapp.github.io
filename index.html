@@ -2,6 +2,10 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
+<script>
+  // Вход через Google из конструктора: если сервер входа вернул на главную (?code=…), передаём код конструктору
+  (function () { try { var r = localStorage.getItem('tm_auth_return'); if (/[?&]code=/.test(location.search) && r && r.indexOf('/create/') === 0) location.replace('/create/' + location.search); } catch (e) {} })();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Организация тоя и свадьбы в Кыргызстане — Той Менеджер</title>
 <meta name="description" content="Приложение для тоя и свадьбы в Бишкеке и по всему Кыргызстану: список гостей, онлайн-приглашения в WhatsApp, рассадка, конверты и бюджет. Бесплатно до 35 человек.">
@@ -53,6 +57,7 @@
     <a class="brand" href="#top" aria-label="Той Менеджер — наверх"><img src="icon-192.png" alt=""><span>Той Менеджер</span></a>
     <nav aria-label="Разделы" id="menu">
       <ul>
+        <li><a href="create/">Приглашение онлайн</a></li>
         <li><a href="#features">Возможности</a></li>
         <li><a href="#how">Как начать</a></li>
         <li><a href="#price">Цены</a></li>
@@ -78,6 +83,7 @@
         <p class="eyebrow">Для свадьбы, кыз узатуу, сүннөт тоя, бешик тоя и юбилея</p>
         <h1>Гости, конверты и бюджет тоя — <span class="grad">в одном приложении</span></h1>
         <p class="lead">Составьте список гостей, разошлите приглашения в WhatsApp и узнайте, кто придёт. В день тоя родня отмечает гостей и конверты у входа, а вы видите, сколько собрано и сколько ещё платить.</p>
+        <a class="cta-create" href="create/" data-ev="create_click"><span><b>Создать приглашение онлайн</b><small>Конверт, музыка, фото и ответы гостей · попробовать бесплатно</small></span><i aria-hidden="true">→</i></a>
         <div class="stores" aria-label="Скачать приложение">
           <a class="store" aria-disabled="true" role="link" title="Скоро" data-ev="store_click">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M12 7.5v7m-3-3 3 3 3-3"/></svg>

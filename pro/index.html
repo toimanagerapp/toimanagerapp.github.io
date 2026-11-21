@@ -164,6 +164,7 @@
       proActive: (d) => `Безлимит открыт до ${d}`,
       proActiveText: 'Добавляйте гостей без ограничений. Если нужно продлить — оплатите ещё раз, срок продлится на год.',
       pendingTitle: 'Заявку получили', pendingText: 'Проверим оплату и откроем безлимит в течение дня. В приложении потяните экран вниз, чтобы обновить.',
+      provTitle: 'Безлимит уже открыт', provText: 'Добавляйте гостей без ограничений. Мы проверим платёж в течение дня. В приложении потяните экран вниз, чтобы обновить.',
       som: 'сом', once: 'Один раз за этот той, действует год', howTitle: 'Как оплатить',
       payBtn: 'Оплатить в приложении банка', toClaim: 'Уже оплатили? Нажмите «Я оплатил» ↓', payTo: (n) => `Получатель: ${n} · MBank`,
       stepPay: 'Нажмите «Оплатить» — откроется приложение банка: MBank или любое другое банковское приложение Кыргызстана. С компьютера — отсканируйте QR ниже телефоном.',
@@ -192,6 +193,7 @@
       proActive: (d) => `Чексиз ${d} чейин ачык`,
       proActiveText: 'Конокторду чектөөсүз кошуңуз. Узартуу керек болсо — кайра төлөңүз, мөөнөт бир жылга узарат.',
       pendingTitle: 'Өтүнмө кабыл алынды', pendingText: 'Төлөмдү текшерип, бир күндүн ичинде ачабыз. Тиркемеде жаңыртуу үчүн экранды ылдый тартыңыз.',
+      provTitle: 'Чексиз ачылды', provText: 'Конокторду чектөөсүз кошо бериңиз. Төлөмдү бир күндүн ичинде текшеребиз. Тиркемеде жаңыртуу үчүн экранды ылдый тартыңыз.',
       som: 'сом', once: 'Ушул той үчүн бир жолу, бир жылга', howTitle: 'Кантип төлөө керек',
       payBtn: 'Банк тиркемесинде төлөө', toClaim: 'Төлөдүңүзбү? «Төлөдүм» баскычын басыңыз ↓', payTo: (n) => `Алуучу: ${n} · MBank`,
       stepPay: '«Төлөө» баскычын басыңыз — банк тиркемеси ачылат: MBank же Кыргызстандагы башка банк тиркемеси. Компьютерден болсо — төмөндөгү QRди телефон менен сканерлеңиз.',
@@ -217,7 +219,7 @@
   const qLang = new URLSearchParams(location.search).get('lang');
   let lang = (qLang === 'ky' || qLang === 'ru') ? qLang : (store.get('lang') || ((navigator.language || '').startsWith('ky') ? 'ky' : 'ru'));
   const $ = (id) => document.getElementById(id);
-  let info = null, num = null, claimed = false;
+  let info = null, num = null, claimed = false, prov = false;
 
   async function rpc(name, body) {
     const r = await fetch(`${SB}/rest/v1/rpc/${name}`, {
@@ -261,7 +263,11 @@
     $('proActive').hidden = !pro;
     if (pro) $('proActiveTitle').textContent = L.proActive(fmtDay(info.pro_until, L));
     const pending = info.pending_claim || claimed;
+    const provNow = prov || info.prov_plan === 'pro';
     $('pending').hidden = !pending;
+    const pt = $('pending').querySelector('[data-t="pendingTitle"]'), pp = $('pending').querySelector('[data-t="pendingText"]');
+    if (pt) pt.textContent = provNow ? L.provTitle : L.pendingTitle;
+    if (pp) pp.textContent = provNow ? L.provText : L.pendingText;
     $('payCard').hidden = pending;
     $('claimCard').hidden = pending || !(PAY.qr || PAY.link);
     $('claim').disabled = !$('payer').value.trim();
@@ -302,8 +308,8 @@
     const L = T[lang];
     $('claim').disabled = true; $('claim').textContent = L.sending; $('claimErr').hidden = true;
     try {
-      await rpc('public_pay_claim', { p_num: num, p_payer_name: $('payer').value.trim(), p_phone: $('phone').value.trim() || null });
-      claimed = true;
+      const res = await rpc('public_pay_claim', { p_num: num, p_payer_name: $('payer').value.trim(), p_phone: $('phone').value.trim() || null });
+      claimed = true; prov = Boolean(res && res.provisional);
       window.tmTrack && window.tmTrack('pay_claim', { value: Number(info?.price || 990), currency: 'KGS' });
       render();
       $('pending').scrollIntoView({ behavior: 'smooth', block: 'center' });
