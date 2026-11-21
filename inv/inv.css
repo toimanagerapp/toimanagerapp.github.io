@@ -356,3 +356,27 @@ body[data-theme="tunku"] .err { color: #F2B8A0; }
 .lb-count { position: absolute; bottom: calc(18px + env(safe-area-inset-bottom)); left: 0; right: 0; text-align: center; color: rgba(255, 255, 255, .75); font-size: 14px; letter-spacing: .1em; }
 @media (hover: none) { .lb-nav { display: none; } }
 @media (prefers-reduced-motion: reduce) { .hero-photo img { transition: none; transform: none; } }
+
+/* ---------- Карточка из видео-конверта: первый экран — та же карточка, на которой проявляется текст ----------
+   Фон — последний кадр ролика (тот же масштаб, что у видео), поэтому при растворении ролика картинка не меняется:
+   рамка и орнамент остаются на месте, а имена «проявляются» над и под центральным орнаментом (он вместо «&»). */
+.hero-top, .hero-bot { display: contents; }
+@media (max-aspect-ratio: 3/4) {
+  body.venv-card .hero { position: relative; min-height: 0; height: 100svh; padding: 0; margin: 0 calc(50% - 50vw); width: 100vw;
+    background: #CEC8C1 var(--card-img) center / cover no-repeat; display: block;
+    --gold1: #7E5C22; --gold2: #B8904A; --gold3: #8E6A2C; --ink: #3A2C1E; --muted: #6E5E4E; --line: rgba(126, 92, 34, .35); }
+  body.venv-card .hero::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 9%; background: linear-gradient(to bottom, transparent, var(--bg)); pointer-events: none; }
+  body.venv-card .hero .orn, body.venv-card .hero .amp, body.venv-card .hero .scroll-cue { display: none; }
+  body.venv-card .hero-top, body.venv-card .hero-bot { display: flex; flex-direction: column; align-items: center; position: absolute; left: 13%; right: 13%; text-align: center; }
+  body.venv-card .hero-top { bottom: 52.6%; justify-content: flex-end; }   /* орнамент карточки: 49,2–57,9 % высоты */
+  body.venv-card .hero-bot { top: 59.6%; }
+  body.venv-card .hero .names { font-size: clamp(38px, 11.5vw, 60px); line-height: 1.08; margin: 4px 0; text-wrap: balance; }
+  body.venv-card .hero .caps { color: var(--muted); }
+  body.venv-card .hero .date { color: var(--ink); margin-top: 12px; font-size: 18px; }
+  body.venv-card .hero .reveal { transition-duration: 1.4s; transform: translateY(10px); filter: blur(4px); transition-property: opacity, transform, filter; }
+  body.venv-card .hero .reveal.in { transform: none; filter: none; }
+  /* фото пары — сразу под карточкой */
+  body.venv-card .hero-photo.below { margin: 0 calc(50% - 50vw) 8px; height: min(70svh, 600px); }
+  body.venv-card .lang { color: #4A3826; }
+}
+.venv.done { transition-duration: 1.3s; }

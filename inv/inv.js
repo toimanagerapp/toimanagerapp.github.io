@@ -9,16 +9,16 @@
   const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   const token = [q.get('t'), q.get('c')].find((x) => x && UUID.test(x)) || null;
   const THEMES = {
-    'ak-altyn': { title: 'Ак алтын', music: '/inv/music/ak-altyn.mp3', swatches: ['#FFFFFF', '#F1E6D2', '#D9BE8C', '#B48A3E'], color: '#F3EADB' },
-    'tunku': { title: 'Түнкү', music: '/inv/music/tunku.mp3', swatches: ['#173E35', '#0F2A25', '#E9D7AE', '#C49A4A'], color: '#17433A' },
+    'ak-altyn': { title: 'Ак алтын', music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FFFFFF', '#F1E6D2', '#D9BE8C', '#B48A3E'], color: '#F3EADB' },
+    'tunku': { title: 'Түнкү', music: '/inv/music/bakyt-kushu.mp3', swatches: ['#173E35', '#0F2A25', '#E9D7AE', '#C49A4A'], color: '#17433A' },
     'tun': { title: 'Түн', music: '/inv/music/bakyt-kushu.mp3', swatches: ['#16213F', '#0D1530', '#EFE6D2', '#C49A4A'], color: '#0D1530' },
-    'ak': { title: 'Ак', music: '/inv/music/ak-altyn.mp3', swatches: ['#FFFFFF', '#F1E6D2', '#A87F38', '#7A1E2C'], color: '#F8F3E9' },
-    'anar': { title: 'Анар', music: '/inv/music/tunku.mp3', swatches: ['#5A1424', '#3A0D18', '#F5E8D8', '#C9A04F'], color: '#3A0D18' },
-    'jashyl': { title: 'Жашыл', music: '/inv/music/tunku.mp3', swatches: ['#0F3A31', '#0D2B25', '#F1E8D6', '#C49A4A'], color: '#0D2B25' },
+    'ak': { title: 'Ак', music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FFFFFF', '#F1E6D2', '#A87F38', '#7A1E2C'], color: '#F8F3E9' },
+    'anar': { title: 'Анар', music: '/inv/music/bakyt-kushu.mp3', swatches: ['#5A1424', '#3A0D18', '#F5E8D8', '#C9A04F'], color: '#3A0D18' },
+    'jashyl': { title: 'Жашыл', music: '/inv/music/bakyt-kushu.mp3', swatches: ['#0F3A31', '#0D2B25', '#F1E8D6', '#C49A4A'], color: '#0D2B25' },
   };
   // Видео-конверты (4 с, 720×1280): кадр-заставка .jpg и ролик .mp4 в /inv/env/. light — светлый конверт, тёмный текст
   // Готовые видео-конверты (остальные добавляются по мере готовности роликов; неизвестный — обычный конверт)
-  const ENVS = { navy: {} };   // ivory: { light: true }, garnet: {}, emerald: {}
+  const ENVS = { navy: { card: true } };   // ivory: { light: true }, garnet: {}, emerald: {}
   const photo = (path) => `${SB}/storage/v1/object/public/invite-photos/${path}`;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -393,7 +393,8 @@
   function showPage() {
     document.body.classList.remove('locked'); $('music').hidden = !audio.getAttribute('src');
     $('heroPhoto').classList.add('in');
-    document.querySelectorAll('.hero .reveal').forEach((el, i) => setTimeout(() => el.classList.add('in'), i * 140));
+    const step = document.body.classList.contains('venv-card') ? 260 : 140;
+    document.querySelectorAll('.hero .reveal').forEach((el, i) => setTimeout(() => el.classList.add('in'), i * step));
   }
   $('seal').onclick = open;
 
@@ -402,8 +403,11 @@
   let revealed = false;
   function videoReveal() {
     if (revealed) return; revealed = true;
-    showPage(); venv.classList.add('done');
-    setTimeout(() => { venv.hidden = true; vid.pause(); }, 900);
+    window.scrollTo(0, 0);
+    venv.classList.add('done');
+    // текст проявляется на карточке, пока ролик растворяется
+    setTimeout(showPage, document.body.classList.contains('venv-card') ? 350 : 0);
+    setTimeout(() => { venv.hidden = true; vid.pause(); }, 1400);
   }
   function openVideo() {
     if (opened || !R) return; opened = true;
@@ -425,6 +429,12 @@
     // ролик не загрузился до касания — показываем обычный конверт
     vid.addEventListener('error', () => { if (!opened) { venv.hidden = true; $('envelope').classList.remove('gone'); } }, { once: true });
     venv.hidden = false; $('envelope').classList.add('gone');
+    // Первый экран — та же карточка, что в конце ролика
+    if (e.card) {
+      document.body.classList.add('venv-card');
+      document.querySelector('.hero').style.setProperty('--card-img', `url(/inv/env/${id}-card.jpg)`);
+      const hp = $('heroPhoto'); hp.classList.add('below'); document.querySelector('.hero').after(hp);
+    }
     return true;
   }
 
@@ -463,7 +473,8 @@
     lang = q.get('lang') === 'ru' || q.get('lang') === 'ky' ? q.get('lang') : saved || r.guest?.lang || C.lang || 'ky';
     if (r.guest && (r.guest.rsvp === 'yes' || r.guest.rsvp === 'no')) { answer = r.guest.rsvp; sent = true; }
     count = r.guest?.rsvp === 'yes' && r.guest.rsvp_count ? r.guest.rsvp_count : r.guest?.party_size || 1;
-    if (C.music === 'none') audio.removeAttribute('src'); else audio.src = THEMES[theme].music;
+    // Одна мелодия для всех оформлений; для аша (поминки) — спокойная
+    if (C.music === 'none') audio.removeAttribute('src'); else audio.src = C.kind === 'memorial' ? '/inv/music/tunku.mp3' : THEMES[theme].music;
     audio.volume = 0;
     $('seal').innerHTML = sealSvg(C.initials || '·'); $('seal').disabled = false;
     document.title = `${KIND[C.kind][lang][1]} — ${[C.a, C.b].filter(Boolean).join(' & ')}`;
