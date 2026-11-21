@@ -4,7 +4,7 @@
 (() => {
   const ID = {
     ga4: '',      // Google Analytics 4, вид «G-XXXXXXXXXX»
-    ym: '',       // Яндекс Метрика, номер счётчика, например «98765432»
+    ym: '114440873', // Яндекс Метрика, номер счётчика, например «98765432»
     meta: '',     // Пиксель Meta (Instagram и Facebook), число из 15–16 цифр
     tiktok: '',   // Пиксель TikTok, вида «C1ABCDEF2GHIJK»
   };
@@ -26,7 +26,8 @@
   if (ID.ym) {
     window.ym = window.ym || function () { (window.ym.a = window.ym.a || []).push(arguments); }; window.ym.l = Date.now();
     add('https://mc.yandex.ru/metrika/tag.js');
-    window.ym(Number(ID.ym), 'init', { clickmap: true, trackLinks: true, accurateTrackBounce: true });
+    // Вебвизор (запись прокрутки и кликов) — кроме страницы оплаты: там вводят имя и телефон
+    window.ym(Number(ID.ym), 'init', { clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: !location.pathname.startsWith('/pro') });
   }
   if (ID.meta) {
     const f = window.fbq = function () { f.callMethod ? f.callMethod.apply(f, arguments) : f.queue.push(arguments); };
