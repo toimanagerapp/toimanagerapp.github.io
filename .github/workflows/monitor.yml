@@ -16,7 +16,7 @@ jobs:
           check() { code=$(curl -sS -o /tmp/p -w '%{http_code}' --max-time 20 "$1"); echo "$1 → $code"; [ "$code" = 200 ] || { echo "::error::$1 ответил $code"; exit 1; }; grep -q "$2" /tmp/p || { echo "::error::$1 — нет текста «$2»"; exit 1; }; }
           check https://toimanager.app/ 'Той Менеджер'
           check https://toimanager.app/ky/ 'Той Менеджер'
-          check https://toimanager.app/pro/ 'Безлимит'
+          check https://toimanager.app/pro/ 'Онлайн-приглашение'
           check 'https://toimanager.app/inv/?t=ak-altyn' 'inv.js'
           check https://toimanager.app/sitemap.xml 'urlset'
       - name: База Supabase
