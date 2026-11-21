@@ -234,7 +234,7 @@ section { padding: 56px 0; text-align: center; position: relative; }
 .timeline b { font-size: 22px; font-weight: 600; font-variant-numeric: lining-nums; }
 .timeline span { font-size: 21px; }
 .swatches { display: flex; justify-content: center; gap: 12px; margin-top: 18px; }
-.swatches i { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .35); }
+.swatches i { width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid color-mix(in srgb, var(--ink) 45%, transparent); box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .35), 0 2px 8px rgba(0, 0, 0, .18); }
 .opts { display: grid; gap: 12px; margin: 20px 0 6px; }
 .opt { display: flex; align-items: center; gap: 14px; min-height: 60px; padding: 0 20px; border-radius: 999px; border: 1.5px solid var(--line);
   background: transparent; cursor: pointer; text-align: left; font-size: 20px; letter-spacing: .06em; text-transform: uppercase; font-weight: 600; }
@@ -260,14 +260,14 @@ textarea.field { min-height: 110px; resize: vertical; }
 .made { margin-top: 40px; font-size: 15px; color: var(--muted); letter-spacing: .04em; }
 .made a { text-decoration: none; border-bottom: 1px solid var(--line); }
 /* Ненавязчивая карточка приложения в самом конце приглашения и строка после ответа */
-.made-cta { display: grid; gap: 6px; max-width: 340px; margin: 18px auto 0; padding: 16px 18px; border-radius: 16px; text-align: center;
+.made-cta { display: grid; gap: 8px; max-width: 360px; margin: 22px auto 0; padding: 24px 20px 22px; border-radius: 16px; text-align: center;
   border: 1px solid var(--line); background: var(--card); color: var(--ink); text-decoration: none; box-shadow: var(--shadow);
   transition: transform .2s ease, border-color .2s ease; }
 .made-cta:hover { transform: translateY(-2px); border-color: var(--gold1); }
 .made-cta:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
-.made-q { font-size: 16px; font-weight: 600; }
-.made-s { font-size: 14px; line-height: 1.45; color: var(--muted); }
-.made-go { font-size: 14px; font-weight: 600; color: var(--gold1); margin-top: 2px; }
+.made-q { font-family: var(--f-display, inherit), serif; font-size: 22px; line-height: 1.2; color: var(--ink); }
+.made-s { font-size: 15px; line-height: 1.5; color: var(--muted); }
+.made-go { justify-self: center; margin-top: 8px; padding: 11px 22px; border-radius: 999px; background: var(--btn); color: var(--btn-ink); font-size: 15px; font-weight: 600; letter-spacing: .03em; }
 .thanks-cta { margin: 16px 0 0; font-size: 13px; line-height: 1.45; }
 .thanks-cta a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--line); }
 
