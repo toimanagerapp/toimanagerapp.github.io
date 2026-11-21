@@ -109,7 +109,7 @@
       wishesTitle: 'Тилектер', wishesHint: 'Жылуу сөзүңүздү калтырыңыз', wishName: 'Атыңыз', wishText: 'Тилегиңиз', wishSend: 'Тилек калтыруу',
       wishPrivate: 'Тилегиңизди үй-ээлери гана көрөт.', wishThanks: 'Рахмат! Тилегиңиз жөнөтүлдү.',
       respect: 'Урматтоо менен,', made: 'Чакыруу жасалган:', music: 'Музыка', galleryTitle: 'Сүрөттөр', tapOpen: 'Ачуу үчүн басыңыз',
-      madeQ: 'Сиз да той камдап жатасызбы?', madeS: 'Ушундай чакыруу, коноктордун тизмеси жана конверттер — бир тиркемеде. Акысыз баштаңыз.', madeGo: 'Чакыруу жасоо',
+      madeQ: 'Сиз да той камдап жатасызбы?', madeS: 'Ушундай чакырууну 5 мүнөттө жасаңыз — тиркеме орнотпостон. Акысыз сынап көрүңүз.', madeGo: 'Чакыруу жасоо',
       thanksCta: 'Сиз да той камдап жатасызбы? Бул чакыруу Той Менеджерде жасалган →',
       oopsTitle: 'Чакыруу табылган жок', oopsText: 'Шилтеме толук көчүрүлбөй калгандыр же уюштуруучулар чакырууну өчүрүшкөн. Шилтемени кайра жөнөтүүсүн сураныңыз.',
       oopsNet: 'Интернет жок окшойт. Байланышты текшерип, баракты жаңылаңыз.',
@@ -132,7 +132,7 @@
       wishesTitle: 'Пожелания', wishesHint: 'Оставьте тёплые слова', wishName: 'Ваше имя', wishText: 'Ваше пожелание', wishSend: 'Оставить пожелание',
       wishPrivate: 'Ваше пожелание увидят только хозяева тоя.', wishThanks: 'Спасибо! Пожелание отправлено.',
       respect: 'С уважением,', made: 'Приглашение сделано в', music: 'Музыка', galleryTitle: 'Фото', tapOpen: 'Нажмите, чтобы открыть',
-      madeQ: 'Тоже готовите той?', madeS: 'Такое же приглашение, список гостей и конверты — в одном приложении. Начать бесплатно.', madeGo: 'Сделать приглашение',
+      madeQ: 'Тоже готовите той?', madeS: 'Такое же приглашение за 5 минут — без установки приложения. Попробуйте бесплатно.', madeGo: 'Сделать приглашение',
       thanksCta: 'Тоже готовите той? Это приглашение сделано в Той Менеджер →',
       oopsTitle: 'Приглашение не найдено', oopsText: 'Возможно, ссылка скопирована не полностью или организаторы удалили приглашение. Попросите прислать ссылку ещё раз.',
       oopsNet: 'Похоже, нет интернета. Проверьте связь и обновите страницу.',
@@ -216,6 +216,7 @@
     const L = T[lang], k = KIND[C.kind];
     document.documentElement.lang = lang;
     document.querySelectorAll('[data-t]').forEach((el) => { const v = L[el.dataset.t]; if (typeof v === 'string') el.textContent = v; });
+    document.querySelectorAll('a[href*="/create/"]').forEach((a) => { const u = new URL(a.href); if (lang === 'ky') u.searchParams.set('lang', 'ky'); else u.searchParams.delete('lang'); a.href = u.toString(); });
     document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
     const guest = R.mode === 'personal' ? R.guest : null;
     // конверт
