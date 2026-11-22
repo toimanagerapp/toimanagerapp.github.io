@@ -117,7 +117,7 @@
       msgGeneral: 'Приглашаем вас на наш праздник!',
       payH: 'Убрать знак «Образец»', payL: 'Оплата один раз за этот той. Всё, что вы уже сделали, сохранится.',
       payInvT: 'Онлайн-приглашение', payProT: 'Приложение', payUp: 'доплата',
-      payInvL: ['Приглашение без знака «Образец»', 'Личные ссылки и «кто открыл»', 'Гости без ограничений'],
+      payInvL: ['Приглашение без знака «Образец»', 'Личные ссылки и «кто открыл»', 'Гости без ограничений', 'Только для этого тоя · на год, не меньше 3 месяцев после тоя'],
       payProL: ['Всё из онлайн-приглашения', 'Полная версия приложения для тоя', '«У входа», конверты, бюджет, подарки'],
       payNext: 'Перейти к оплате', payAmount: 'К оплате', payNum: (n) => `Номер тоя для комментария: ${n}`,
       payStep1: 'Нажмите «Оплатить» — откроется приложение банка (MBank или любой банк Кыргызстана). С компьютера — отсканируйте QR телефоном.',
@@ -210,7 +210,7 @@
       msgGeneral: 'Сизди тоюбузга чакырабыз!',
       payH: '«Үлгү» белгисин алып салуу', payL: 'Ушул той үчүн бир жолу төлөнөт. Жасаганыңыздын баары сакталат.',
       payInvT: 'Онлайн чакыруу', payProT: 'Тиркеме', payUp: 'кошумча төлөм',
-      payInvL: ['«Үлгү» белгисиз чакыруу', 'Жеке шилтемелер жана «ким ачты»', 'Коноктор чексиз'],
+      payInvL: ['«Үлгү» белгисиз чакыруу', 'Жеке шилтемелер жана «ким ачты»', 'Коноктор чексиз', 'Ушул той үчүн гана · бир жылга, тойдон кийин 3 айдан кем эмес'],
       payProL: ['Онлайн чакыруунун баары', 'Тиркеменин толук версиясы', '«Кире бериш», конверттер, бюджет, белектер'],
       payNext: 'Төлөөгө өтүү', payAmount: 'Төлөө', payNum: (n) => `Комментарий үчүн тойдун номери: ${n}`,
       payStep1: '«Төлөө» баскычын басыңыз — банк тиркемеси ачылат (MBank же Кыргызстандагы башка банк). Компьютерден болсо — QRди телефон менен сканерлеңиз.',
@@ -467,9 +467,22 @@
     pv.style.left = `${slot.getBoundingClientRect().left}px`;
   }
   addEventListener('resize', placePv);
-  $('pvClose').onclick = () => pv.classList.remove('open');
+  // Кнопка «Назад» на телефоне закрывает открытое окно (предпросмотр, оплата…), а не уходит со страницы
+  let layerPushed = false;
+  const layerOpen = () => { if (!layerPushed) { history.pushState({ tmLayer: 1 }, ''); layerPushed = true; } };
+  const layerDone = () => {
+    if (!layerPushed) return;
+    layerPushed = false;
+    setTimeout(() => { if (history.state && history.state.tmLayer) history.back(); }, 0);
+  };
+  addEventListener('popstate', () => {
+    if (!layerPushed) return;
+    layerPushed = false;
+    if (sheetClose) sheetClose(); else pv.classList.remove('open');
+  });
+  $('pvClose').onclick = () => { pv.classList.remove('open'); layerDone(); };
   $('pvEnv').onclick = $('pvEnv2').onclick = () => pvLoad(!pvEnv);
-  const openPreview = () => { pv.classList.add('open'); if (pvReady) pvSend(!pvEnv); };
+  const openPreview = () => { pv.classList.add('open'); layerOpen(); if (pvReady) pvSend(!pvEnv); };
 
   // ---------- Сохранение ----------
   function setSave(state) {
@@ -514,7 +527,8 @@
     const root = $('sheetRoot');
     root.innerHTML = `<div class="sheet-bg" role="dialog" aria-modal="true"><div class="sheet"><button class="x" type="button" data-close aria-label="${esc(L().close)}">×</button>${html}</div></div>`;
     const bg = root.firstElementChild;
-    const close = () => { root.innerHTML = ''; document.body.style.overflow = ''; sheetClose = null; };
+    const close = () => { root.innerHTML = ''; document.body.style.overflow = ''; sheetClose = null; layerDone(); };
+    layerOpen();
     sheetClose = close;
     bg.addEventListener('click', (e) => { if (e.target === bg || e.target.closest('[data-close]')) close(); });
     document.body.style.overflow = 'hidden';
@@ -522,7 +536,7 @@
     setTimeout(() => bg.querySelector('input:not([type=hidden]), textarea, button.primary')?.focus(), 60);
     return close;
   }
-  addEventListener('keydown', (e) => { if (e.key === 'Escape') { if (sheetClose) sheetClose(); else pv.classList.remove('open'); } });
+  addEventListener('keydown', (e) => { if (e.key === 'Escape') { if (sheetClose) sheetClose(); else { pv.classList.remove('open'); layerDone(); } } });
   async function copy(text) {
     try { await navigator.clipboard.writeText(text); }
     catch { const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); }
@@ -1256,7 +1270,7 @@
     if (S.user && !S.tois) { renderApp(); const { data } = await sb.rpc('web_my_tois'); S.tois = (data || []).filter((x) => !x.is_demo); }
     renderApp();
   }
-  addEventListener('hashchange', () => { if (sheetClose) sheetClose(); pv.classList.remove('open'); route(); });
+  addEventListener('hashchange', () => { if (sheetClose) sheetClose(); pv.classList.remove('open'); layerPushed = false; route(); });
 
   function renderApp() {
     const app = $('app'), t = L();
