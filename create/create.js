@@ -90,7 +90,7 @@
       rsvp: 'Ответ гостей', rsvpS: '«Приду / Не смогу» прямо в приглашении', askCount: 'Спрашивать, сколько человек придёт', deadline: 'Ответить до',
       wishes: 'Пожелания гостей', wishesS: 'Гости оставляют тёплые слова', wPublic: 'Видят все', wPrivate: 'Только вы', wOff: 'Выключить',
       saveH: 'Сохраните приглашение', saveL: 'Войдите через Google — приглашение сохранится, и вы получите ссылку для гостей. Оно же появится в приложении «Той Менеджер».',
-      google: 'Войти через Google', loginErr: 'Не удалось войти. Попробуйте ещё раз.', creating: 'Сохраняем приглашение…',
+      google: 'Войти через Google', loginAlt: 'Не получается? Войти другим способом', loginErr: 'Не удалось войти. Попробуйте ещё раз.', creating: 'Сохраняем приглашение…',
       createErr: 'Не удалось сохранить. Проверьте интернет и попробуйте ещё раз.',
       tabCard: 'Приглашение', tabGuests: 'Гости', tabSend: 'Отправить', allInv: 'Все приглашения',
       trialT: 'Пробная версия', trialP: 'На приглашении знак «Образец». Уберите его — и можно отправлять гостям.',
@@ -183,7 +183,7 @@
       rsvp: 'Коноктордун жообу', rsvpS: '«Барам / Бара албайм» — чакыруунун ичинде эле', askCount: 'Канча киши келерин суроо', deadline: 'Жооп берүү мөөнөтү',
       wishes: 'Тилектер', wishesS: 'Коноктор жылуу сөздөрүн калтырышат', wPublic: 'Баары көрөт', wPrivate: 'Сиз гана', wOff: 'Өчүрүү',
       saveH: 'Чакырууну сактаңыз', saveL: 'Google аркылуу кириңиз — чакыруу сакталат жана коноктор үчүн шилтеме аласыз. Ал «Той Менеджер» тиркемесинде да пайда болот.',
-      google: 'Google аркылуу кирүү', loginErr: 'Кирүү болгон жок. Кайра аракет кылыңыз.', creating: 'Чакыруу сакталууда…',
+      google: 'Google аркылуу кирүү', loginAlt: 'Болбой жатабы? Башка жол менен кирүү', loginErr: 'Кирүү болгон жок. Кайра аракет кылыңыз.', creating: 'Чакыруу сакталууда…',
       createErr: 'Сакталган жок. Интернетти текшерип, кайра аракет кылыңыз.',
       tabCard: 'Чакыруу', tabGuests: 'Коноктор', tabSend: 'Жөнөтүү', allInv: 'Бардык чакыруулар',
       trialT: 'Сынамык версия', trialP: 'Чакырууда «Үлгү» белгиси бар. Аны алып салыңыз — анан конокторго жөнөтсө болот.',
@@ -558,10 +558,53 @@
     const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: `${location.origin}/create/` } });
     if (error) toast(L().loginErr, true);
   }
+  // Вход официальной кнопкой Google: в окне выбора аккаунта видно «Той Менеджер» / toimanager.app, а не адрес базы.
+  // Если кнопка Google не загрузилась (блокировщик, встроенный браузер) — остаётся прежний вход с переходом.
+  const GIS_ID = '81399528422-4qkukvj81iu9f8f7nv54kboaadfblaij.apps.googleusercontent.com';
+  let gisP = null;
+  function loadGis() {
+    if (!gisP) {
+      gisP = new Promise((res, rej) => {
+        if (window.google?.accounts?.id) { res(); return; }
+        const sc = document.createElement('script'); sc.src = 'https://accounts.google.com/gsi/client'; sc.async = true;
+        sc.onload = () => (window.google?.accounts?.id ? res() : rej(new Error('gis'))); sc.onerror = () => rej(new Error('gis'));
+        document.head.appendChild(sc); setTimeout(() => rej(new Error('gis timeout')), 6000);
+      });
+      gisP.catch(() => { gisP = null; });
+    }
+    return gisP;
+  }
+  const hex = (buf) => Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, '0')).join('');
+  async function gisButton(slot, reasonSave, close) {
+    try {
+      if (!window.crypto?.subtle) return false;
+      await loadGis();
+      const raw = hex(crypto.getRandomValues(new Uint8Array(16)));
+      const hashed = hex(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(raw)));
+      google.accounts.id.initialize({
+        client_id: GIS_ID, nonce: hashed, ux_mode: 'popup', itp_support: true,
+        callback: async (r) => {
+          const { data, error } = await sb.auth.signInWithIdToken({ provider: 'google', token: r.credential, nonce: raw });
+          if (error || !data?.user) { toast(L().loginErr, true); return; }
+          S.user = data.user; S.tois = null; close(); renderAcct();
+          track('login', { method: 'google_gis' });
+          if (reasonSave || store.get('tm_pending_save')) { store.del('tm_pending_save'); createFromDraft(); } else route();
+        },
+      });
+      slot.replaceChildren();
+      google.accounts.id.renderButton(slot, { type: 'standard', theme: 'outline', size: 'large', text: 'continue_with', shape: 'pill',
+        logo_alignment: 'center', locale: lang === 'ky' ? 'ky' : 'ru', width: Math.min(320, slot.clientWidth || 300) });
+      return true;
+    } catch (e) { return false; }
+  }
   function loginSheet(reasonSave) {
     sheet(`<h2>${esc(reasonSave ? L().saveH : L().login)}</h2><p class="lead3">${esc(L().saveL)}</p>
-      <button class="google" type="button" id="gBtn">${G_LOGO}<span>${esc(L().google)}</span></button>`, (el) => {
-      el.querySelector('#gBtn').onclick = () => { if (reasonSave) store.set('tm_pending_save', '1'); signIn(); };
+      <div id="gisSlot" style="display:flex;justify-content:center;min-height:44px"><button class="google" type="button" id="gBtn">${G_LOGO}<span>${esc(L().google)}</span></button></div>
+      <button type="button" class="link" id="gAlt" hidden style="display:block;margin:12px auto 0;font-size:14px">${esc(L().loginAlt)}</button>`, (el, close) => {
+      const legacy = () => { if (reasonSave) store.set('tm_pending_save', '1'); signIn(); };
+      el.querySelector('#gBtn').onclick = legacy;
+      el.querySelector('#gAlt').onclick = legacy;
+      gisButton(el.querySelector('#gisSlot'), reasonSave, close).then((ok) => { if (ok) el.querySelector('#gAlt').hidden = false; });
     });
   }
   function renderAcct() {
