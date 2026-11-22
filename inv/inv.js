@@ -17,6 +17,10 @@
     'ak': { title: 'Ак', music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FFFFFF', '#F1E6D2', '#A87F38', '#7A1E2C'], color: '#F8F3E9' },
     'anar': { title: 'Анар', music: '/inv/music/bakyt-kushu.mp3', swatches: ['#5A1424', '#3A0D18', '#F5E8D8', '#C9A04F'], color: '#3A0D18' },
     'jashyl': { title: 'Жашыл', music: '/inv/music/bakyt-kushu.mp3', swatches: ['#0F3A31', '#0D2B25', '#F1E8D6', '#C49A4A'], color: '#0D2B25' },
+    'bermet': { title: 'Бермет', music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FFFAF8', '#F5E6E1', '#DDA2A9', '#B07A5E'], color: '#FBF3F0' },
+    'asman': { title: 'Асман', music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FBFDFF', '#E3ECF4', '#5D8AB8', '#2F5D8A'], color: '#F2F6FA' },
+    'kiyiz': { title: 'Кийиз', music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FCF7EE', '#EDE1CE', '#C94A35', '#A3271F'], color: '#F6EEE1' },
+    'boz': { title: 'Боз', music: '/inv/music/bakyt-kushu.mp3', swatches: ['#F7F6F3', '#E4E2DE', '#94989C', '#45494D'], color: '#EEEDEA' },
   };
   // Видео-конверты (4 с, 720×1280): кадр-заставка .jpg и ролик .mp4 в /inv/env/. light — светлый конверт, тёмный текст
   // Готовые видео-конверты (остальные добавляются по мере готовности роликов; неизвестный — обычный конверт)
@@ -142,6 +146,24 @@
 
   // ---------- Демо-данные ----------
   const DRU = q.get('lang') === 'ru';   // пример на русском: программа, адрес и пожелания тоже по-русски
+  // Пример под вид тоя (?kind=…): свои имена, без свадебного фото
+  function demoFor(kind) {
+    // [имя, вид тоя в базе]; день рождения — вид «other»
+    const K = { beshik: ['Арсен', 'beshik'], tushoo: ['Айсулуу', 'tushoo'], sunnot: ['Нурсултан', 'sunnot'], birthday: ['Айлин', 'other'],
+      kyz_uzatuu: ['Айпери', 'kyz_uzatuu'], jubilee: ['Бакыт Асанович', 'jubilee'], memorial: ['Бакыт Асанович', 'memorial'] };
+    if (!kind || !K[kind]) return DEMO;
+    const [name, real] = K[kind];
+    const d = JSON.parse(JSON.stringify(DEMO));
+    d.toi = { title: name, kind: real };
+    d.card.name_a = name; d.card.name_b = null; d.card.from_whom = 'parents';
+    if (real !== 'kyz_uzatuu') { d.card.hero_photo = null; d.card.gallery = []; }
+    if (real === 'memorial') {
+      Object.assign(d.card, { music: 'none', show_countdown: false, wishes_mode: 'off', show_dress: false, show_program: false,
+        signature: DRU ? 'Семья Асановых' : 'Асановдордун үй-бүлөсү', theme: q.get('theme') || 'boz' });
+      d.wishes = [];
+    }
+    return d;
+  }
   const DEMO = {
     mode: 'personal', demo: true,
     toi: { title: 'Той Азамата и Айпери', kind: 'wedding' },
@@ -170,7 +192,7 @@
     const kind = KIND[r.toi.kind] ? r.toi.kind : 'other';
     const memorial = kind === 'memorial';
     const c = Object.assign({
-      theme: memorial ? 'tunku' : 'ak-altyn', music: memorial ? 'none' : 'theme', lang: 'ky', title: null, name_a: null, name_b: null, initials: null,
+      theme: memorial ? 'boz' : 'ak-altyn', music: memorial ? 'none' : 'theme', lang: 'ky', title: null, name_a: null, name_b: null, initials: null,
       from_whom: 'groom_parents', text_ky: null, text_ru: null, signature: null, map_url: null, show_countdown: !memorial,
       show_program: false, program: [], show_dress: false, dress_text: null, dress_colors: [], rsvp_enabled: true, rsvp_ask_count: true,
       rsvp_deadline: null, wishes_mode: memorial ? 'off' : 'public', envelope: 'classic', hero_photo: null, gallery: [],
@@ -498,7 +520,7 @@
     document.title = `${KIND[C.kind][lang][1]} — ${[C.a, C.b].filter(Boolean).join(' & ')}`;
     if (r.demo && !r.preview) {
       const bar = $('demoBar'); bar.hidden = false;
-      bar.innerHTML = Object.entries(THEMES).map(([k, v]) => `<a href="?theme=${k}${q.get('env') ? `&env=${encodeURIComponent(q.get('env'))}` : ''}" aria-current="${k === theme}">${v.title}</a>`).join('');
+      bar.innerHTML = Object.entries(THEMES).map(([k, v]) => `<a href="?theme=${k}${q.get('env') ? `&env=${encodeURIComponent(q.get('env'))}` : ''}${q.get('kind') ? `&kind=${encodeURIComponent(q.get('kind'))}` : ''}${q.get('lang') ? `&lang=${encodeURIComponent(q.get('lang'))}` : ''}" aria-current="${k === theme}">${v.title}</a>`).join('');
     }
     render();
     hint.textContent = T[lang].envHint;
@@ -521,7 +543,7 @@
   const raw = q.get('t') || q.get('c');
   if (!token && raw && !THEMES[raw]) { fail(false); return; }   // ?t=ak-altyn — старая демо-ссылка; другое — неверная ссылка
   if (PREVIEW) { startPreview(); return; }
-  if (!token) { start(DEMO); return; }
+  if (!token) { start(demoFor(q.get('kind'))); return; }
   // Пока в базе нет public_card (SQL 0.10 ещё не применён) — берём старую public_invitation, чтобы ссылки гостей не ломались
   const legacy = () => rpc('public_invitation', { p_token: token }).then((o) => (o ? {
     mode: 'personal', toi: { title: o.toi_title, kind: o.toi_kind }, card: null, wishes: [],

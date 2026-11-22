@@ -98,6 +98,61 @@ body[data-theme="jashyl"] {
   --card: rgba(20, 68, 58, 0.72); --shadow: 0 18px 40px rgba(0, 0, 0, 0.3);
   --f-display: 'Forum'; --f-head: 'Forum'; --ornament: 1;
 }
+
+/* Новые шаблоны (22.11): «Бермет» — жемчужно-розовый для бешик тоя, тушоо кесүү, кыз узатуу; «Асман» — небесный для мальчиков
+   и дней рождения; «Кийиз» — светлый войлок с красным орнаментом, национальный; «Боз» — спокойный серый для аша */
+body[data-theme="bermet"] {
+  --bg: #FBF3F0; --bg2: #F5E6E1; --paper: #FFFAF8; --ink: #46302E; --muted: #7C6360; --focus: #A3525E;
+  --gold1: #9A5560; --gold2: #CF9098; --gold3: #A9636F; --line: rgba(154, 85, 96, 0.24);
+  --env1: #F6E8E3; --env2: #F0DCD6; --env3: #E8D0C9; --env-ink: #8E4A55;
+  --wax1: #D7A3A8; --wax2: #A96B74; --wax-ink: #FFF3EE;
+  --btn: linear-gradient(135deg, #B9737E, #DDA2A9 55%, #A9636F); --btn-ink: #FFFAF8;
+  --card: rgba(255, 250, 248, 0.9); --shadow: 0 18px 40px rgba(150, 90, 90, 0.12);
+  --f-display: 'Cormorant'; --f-head: 'Cormorant SC'; --accent: #9A5560;
+}
+body[data-theme="asman"] {
+  --bg: #F2F6FA; --bg2: #E3ECF4; --paper: #FBFDFF; --ink: #22344A; --muted: #5D6E82; --focus: #2F5D8A;
+  --gold1: #2C5580; --gold2: #6F97C2; --gold3: #3B6896; --line: rgba(47, 93, 138, 0.22);
+  --env1: #E6EEF6; --env2: #DCE6F1; --env3: #D0DCEA; --env-ink: #2F5D8A;
+  --wax1: #5D86B0; --wax2: #34587E; --wax-ink: #F2F7FC;
+  --btn: linear-gradient(135deg, #34618F, #5D8AB8 55%, #2C5580); --btn-ink: #FBFDFF;
+  --card: rgba(251, 253, 255, 0.9); --shadow: 0 18px 40px rgba(40, 70, 110, 0.12);
+  --f-display: 'Prata'; --f-head: 'Cormorant SC'; --accent: #2F5D8A;
+}
+body[data-theme="kiyiz"] {
+  --bg: #F6EEE1; --bg2: #EDE1CE; --paper: #FCF7EE; --ink: #3A231C; --muted: #6E5446; --focus: #A3271F;
+  --gold1: #A3271F; --gold2: #D2563F; --gold3: #B33A2A; --line: rgba(163, 39, 31, 0.24);
+  --env1: #F1E6D4; --env2: #E9DCC6; --env3: #E0D0B6; --env-ink: #A3271F;
+  --wax1: #B8322A; --wax2: #7E1A15; --wax-ink: #F6E3C4;
+  --btn: linear-gradient(135deg, #A3271F, #C94A35 55%, #8F2019); --btn-ink: #FCF7EE;
+  --card: rgba(252, 247, 238, 0.9); --shadow: 0 18px 40px rgba(120, 50, 30, 0.12);
+  --f-display: 'Forum'; --f-head: 'Forum'; --accent: #A3271F;
+}
+body[data-theme="boz"] {
+  --bg: #EEEDEA; --bg2: #E4E2DE; --paper: #F7F6F3; --ink: #2F3133; --muted: #66696C; --focus: #3E4246;
+  --gold1: #3C4044; --gold2: #7E8286; --gold3: #55595D; --line: rgba(60, 64, 68, 0.2);
+  --env1: #E7E5E1; --env2: #DFDDD8; --env3: #D6D3CE; --env-ink: #45494D;
+  --wax1: #6E7276; --wax2: #45494D; --wax-ink: #EEEDEA;
+  --btn: linear-gradient(135deg, #45494D, #5F6367 55%, #3C4044); --btn-ink: #F7F6F3;
+  --card: rgba(247, 246, 243, 0.92); --shadow: 0 18px 40px rgba(40, 40, 40, 0.1);
+  --f-display: 'Cormorant'; --f-head: 'Cormorant SC'; --accent: #45494D;
+}
+body:is([data-theme="bermet"], [data-theme="asman"], [data-theme="kiyiz"], [data-theme="boz"]) .script {
+  font-family: var(--f-display), 'Cormorant', Georgia, serif; font-weight: 500; letter-spacing: .01em; }
+body:is([data-theme="bermet"], [data-theme="asman"], [data-theme="kiyiz"], [data-theme="boz"]) .script.gold { padding: .12em .2em .06em; margin: -.12em -.2em -.06em; }
+body:is([data-theme="bermet"], [data-theme="asman"], [data-theme="kiyiz"], [data-theme="boz"]) .h-script {
+  font-family: var(--f-head), 'Cormorant', serif; font-weight: 600; text-transform: none; letter-spacing: .08em; font-size: 30px; }
+body[data-theme="kiyiz"] .h-script { text-transform: uppercase; letter-spacing: .14em; font-size: 24px; font-weight: 400; }
+body:is([data-theme="bermet"], [data-theme="asman"], [data-theme="boz"]) .hero .names { font-size: clamp(44px, 13vw, 68px); line-height: 1.1; }
+body[data-theme="bermet"] .hero .names { font-style: italic; }
+body[data-theme="kiyiz"] .hero .names { font-size: clamp(42px, 12.5vw, 66px); text-transform: uppercase; letter-spacing: .06em; line-height: 1.12; }
+body:is([data-theme="bermet"], [data-theme="asman"], [data-theme="boz"]) .hero .amp { font-family: 'Cormorant', serif; font-style: italic; font-size: clamp(30px, 8vw, 40px); }
+body:is([data-theme="bermet"], [data-theme="asman"], [data-theme="kiyiz"], [data-theme="boz"]) :is(.h-script.gold, .caps) { color: var(--accent); }
+body:is([data-theme="bermet"], [data-theme="asman"], [data-theme="kiyiz"], [data-theme="boz"]) .h-script.gold { background: none; -webkit-background-clip: initial; background-clip: initial; }
+body:is([data-theme="bermet"], [data-theme="asman"], [data-theme="kiyiz"], [data-theme="boz"]) .greet.script { font-size: 30px; }
+/* «Боз» — без блёсток */
+body[data-theme="boz"] :is(.sparkles, .stars, .dust) { display: none !important; }
+
 /* имена и заголовки в новых шаблонах — без рукописного шрифта */
 body[data-theme="tun"] .script, body[data-theme="ak"] .script, body[data-theme="anar"] .script, body[data-theme="jashyl"] .script {
   font-family: var(--f-display), 'Cormorant', Georgia, serif; font-weight: 400; letter-spacing: .01em; }
@@ -112,7 +167,7 @@ body[data-theme="ak"] .h-script.gold, body[data-theme="ak"] .caps { color: var(-
 body[data-theme="ak"] .h-script.gold { background: none; -webkit-background-clip: initial; background-clip: initial; }
 body[data-theme="tun"] .greet.script, body[data-theme="ak"] .greet.script, body[data-theme="anar"] .greet.script, body[data-theme="jashyl"] .greet.script { font-size: 30px; }
 /* «Жашыл»: орнамент «кочкор мүйүз» по краям разделов — национальный акцент */
-body[data-theme="jashyl"] main > section:not(.hero)::before { content: ""; display: block; width: 120px; height: 36px; margin: 0 auto 18px; opacity: .8;
+body:is([data-theme="jashyl"], [data-theme="kiyiz"]) main > section:not(.hero)::before { content: ""; display: block; width: 120px; height: 36px; margin: 0 auto 18px; opacity: .8;
   background: linear-gradient(100deg, var(--gold1), var(--gold2), var(--gold3)); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'%3E%3Cg fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M7 30 H13 C21 30 22 15 35 15 C48 15 50 31 40 33 C33 34 31 26 37 24'/%3E%3Cpath d='M13 30 C21 30 22 45 35 45 C48 45 50 29 40 27 C33 26 31 34 37 36'/%3E%3Cpath d='M93 30 H87 C79 30 78 15 65 15 C52 15 50 31 60 33 C67 34 69 26 63 24'/%3E%3Cpath d='M87 30 C79 30 78 45 65 45 C52 45 50 29 60 27 C67 26 69 34 63 36'/%3E%3C/g%3E%3Cpath d='M50 21 L57 30 L50 39 L43 30 Z'/%3E%3C/svg%3E") center / contain no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'%3E%3Cg fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M7 30 H13 C21 30 22 15 35 15 C48 15 50 31 40 33 C33 34 31 26 37 24'/%3E%3Cpath d='M13 30 C21 30 22 45 35 45 C48 45 50 29 40 27 C33 26 31 34 37 36'/%3E%3Cpath d='M93 30 H87 C79 30 78 15 65 15 C52 15 50 31 60 33 C67 34 69 26 63 24'/%3E%3Cpath d='M87 30 C79 30 78 45 65 45 C52 45 50 29 60 27 C67 26 69 34 63 36'/%3E%3C/g%3E%3Cpath d='M50 21 L57 30 L50 39 L43 30 Z'/%3E%3C/svg%3E") center / contain no-repeat; }
 

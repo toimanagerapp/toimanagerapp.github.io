@@ -361,3 +361,16 @@ a:focus-visible, button:focus-visible, summary:focus-visible, .btn:focus-visible
 /* Тариф «скоро» — приглушён, кнопка неактивна */
 .plan.soon { opacity: .6; }
 .plan.soon .btn[aria-disabled="true"] { pointer-events: none; }
+
+/* Блок «Выберите оформление» — 10 карточек-конвертов; на телефоне листаются вбок */
+.designs { display: grid; grid-auto-flow: column; grid-auto-columns: 150px; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory;
+  padding: 4px 16px 14px; margin: 0 -16px; scroll-padding-inline: 16px; text-align: left; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+.design { scroll-snap-align: start; display: flex; flex-direction: column; gap: 4px; text-decoration: none; color: var(--ink, #1B1E2E); }
+.design img { width: 100%; height: auto; aspect-ratio: 1 / 2; object-fit: cover; border-radius: 14px; box-shadow: 0 10px 24px rgba(15, 18, 38, .14);
+  transition: transform .2s ease, box-shadow .2s ease; }
+.design:hover img { transform: translateY(-3px); box-shadow: 0 16px 30px rgba(15, 18, 38, .2); }
+.design b { font-weight: 600; font-size: 15px; margin-top: 6px; }
+.design small { font-size: 13px; color: var(--muted, #67616F); line-height: 1.35; }
+@media (min-width: 900px) { .designs { grid-auto-flow: row; grid-template-columns: repeat(5, 1fr); grid-auto-columns: auto; overflow: visible; max-width: 860px; margin: 0 auto; padding: 4px 0 0; } }
+.article .designs { margin: 0 -16px 24px; }
+@media (min-width: 900px) { .article .designs { margin: 0 0 24px; max-width: none; } }

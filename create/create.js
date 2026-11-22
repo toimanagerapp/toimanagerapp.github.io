@@ -253,6 +253,10 @@
     { id: 'tunku', name: 'Түнкү', bg: 'linear-gradient(150deg,#1D4A40,#0F2A25)', ink: '#E9D7AE' },
     { id: 'anar', name: 'Анар', bg: 'linear-gradient(150deg,#6B1A2C,#3A0D18)', ink: '#EFD9A8' },
     { id: 'jashyl', name: 'Жашыл', bg: 'linear-gradient(150deg,#164A3F,#0D2B25)', ink: '#E7D3A2' },
+    { id: 'kiyiz', name: 'Кийиз', bg: 'linear-gradient(150deg,#FBF4E8,#EADCC4)', ink: '#A3271F' },
+    { id: 'bermet', name: 'Бермет', bg: 'linear-gradient(150deg,#FFF8F5,#F1DCD6)', ink: '#9A5560' },
+    { id: 'asman', name: 'Асман', bg: 'linear-gradient(150deg,#FBFDFF,#DCE6F1)', ink: '#2C5580' },
+    { id: 'boz', name: 'Боз', bg: 'linear-gradient(150deg,#F7F6F3,#DFDDD8)', ink: '#3C4044' },
   ];
   const DRESS = ['#FFFFFF', '#F1E6D2', '#D9BE8C', '#B48A3E', '#7A1E2C', '#16213F', '#0F3A31', '#C9A7D8', '#F4B8C8', '#1E1E1E'];
 
@@ -275,7 +279,7 @@
     return {
       kind, name_a: '', name_b: '', from_whom: 'groom_parents', title: '', signature: '',
       date: '', time: memorial ? '12:00' : '17:00', venue_name: '', venue_address: '', map_url: '',
-      hero_photo: null, gallery: [], theme: memorial ? 'tunku' : 'tun', envelope: memorial ? 'classic' : 'navy', music: memorial ? 'none' : 'theme', lang: lang === 'ru' ? 'ru' : 'ky',
+      hero_photo: null, gallery: [], theme: memorial ? 'boz' : 'tun', envelope: memorial ? 'classic' : 'navy', music: memorial ? 'none' : 'theme', lang: lang === 'ru' ? 'ru' : 'ky',
       own_text: false, text_ky: '', text_ru: '',
       show_countdown: !memorial, show_program: false, program: [], show_dress: false, dress_text: '', dress_colors: [],
       rsvp_enabled: true, rsvp_ask_count: true, rsvp_deadline: '', wishes_mode: memorial ? 'off' : 'public',
@@ -717,7 +721,7 @@
     root.querySelectorAll('[data-kind]').forEach((b) => b.addEventListener('click', () => {
       const k = b.dataset.kind; if (k === d.kind) return;
       d.kind = k;
-      if (k === 'memorial') { d.theme = 'tunku'; d.envelope = 'classic'; d.music = 'none'; d.wishes_mode = 'off'; d.show_countdown = false; d.time = d.time || '12:00'; pvLoad(false); }
+      if (k === 'memorial') { d.theme = 'boz'; d.envelope = 'classic'; d.music = 'none'; d.wishes_mode = 'off'; d.show_countdown = false; d.time = d.time || '12:00'; pvLoad(false); }
       changed(); redrawStep();
     }));
     const music = root.querySelector('[data-music]');
