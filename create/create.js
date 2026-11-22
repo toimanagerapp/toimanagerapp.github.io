@@ -121,7 +121,7 @@
       payProL: ['Всё из онлайн-приглашения', 'Полная версия приложения для тоя', '«У входа», конверты, бюджет, подарки'],
       payNext: 'Перейти к оплате', payAmount: 'К оплате', payNum: (n) => `Номер тоя для комментария: ${n}`,
       payStep1: 'Нажмите «Оплатить» — откроется приложение банка (MBank или любой банк Кыргызстана). С компьютера — отсканируйте QR телефоном.',
-      payStep2: (p) => `Введите сумму ${p} сом.`, payStep3: 'Вернитесь сюда и нажмите «Я оплатил».',
+      payStep2: (p) => `Сумма ${p} сом уже указана — проверьте её и нажмите «Перевести».`, payStep3: 'Вернитесь сюда и нажмите «Я оплатил».',
       payBtn: 'Оплатить в приложении банка', payer: 'Имя отправителя — как в банке', payerS: 'Например, «Айбек Т.» — так мы найдём ваш платёж.',
       paid: 'Я оплатил', sending: 'Отправляем…', payErr: 'Не отправилось. Проверьте интернет и попробуйте ещё раз.',
       payOkT: 'Спасибо! Знак снят', payOkP: 'Мы проверим платёж в течение дня. Приглашение уже можно отправлять гостям.',
@@ -214,7 +214,7 @@
       payProL: ['Онлайн чакыруунун баары', 'Тиркеменин толук версиясы', '«Кире бериш», конверттер, бюджет, белектер'],
       payNext: 'Төлөөгө өтүү', payAmount: 'Төлөө', payNum: (n) => `Комментарий үчүн тойдун номери: ${n}`,
       payStep1: '«Төлөө» баскычын басыңыз — банк тиркемеси ачылат (MBank же Кыргызстандагы башка банк). Компьютерден болсо — QRди телефон менен сканерлеңиз.',
-      payStep2: (p) => `${p} сом сумманы жазыңыз.`, payStep3: 'Бул жакка кайтып, «Төлөдүм» баскычын басыңыз.',
+      payStep2: (p) => `${p} сом сумма жазылып турат — текшерип, которууну ырастаңыз.`, payStep3: 'Бул жакка кайтып, «Төлөдүм» баскычын басыңыз.',
       payBtn: 'Банк тиркемесинде төлөө', payer: 'Жөнөтүүчүнүн аты — банктагыдай', payerS: 'Мисалы, «Айбек Т.» — ушундай төлөмүңүздү табабыз.',
       paid: 'Төлөдүм', sending: 'Жөнөтүлүүдө…', payErr: 'Жөнөтүлгөн жок. Интернетти текшерип, кайра аракет кылыңыз.',
       payOkT: 'Рахмат! Белги алынды', payOkP: 'Төлөмдү бир күндүн ичинде текшеребиз. Чакырууну конокторго азыр эле жөнөтө берсеңиз болот.',
@@ -999,13 +999,17 @@
       } else if (stage === 'pay') {
         el.innerHTML = `<button class="x" type="button" data-close aria-label="${esc(t.close)}">×</button><h2>${esc(plan === 'invite' ? t.payInvT : t.payProT)}</h2>
           <div class="pay-amount"><span>${esc(t.payAmount)}</span><b>${price()} ${esc(t.som)}</b><span>${esc(t.payNum(num))}</span></div>
-          <a class="btn primary block" href="${esc(PAY.link)}" target="_blank" rel="noopener" style="margin-top:14px">${esc(t.payBtn)}</a>
-          <img class="qr" src="${PAY.qr}" alt="QR MBank" width="220" height="225">
+          <a class="btn primary block" data-paylink href="${esc(PAY.link)}" target="_blank" rel="noopener" style="margin-top:14px">${esc(t.payBtn)}</a>
+          <img class="qr" data-payqr src="${PAY.qr}" alt="QR MBank" width="220" height="225">
           <ol class="paysteps"><li>${esc(t.payStep1)}</li><li>${esc(t.payStep2(price()))}</li><li>${esc(t.payStep3)}</li></ol>
           <div class="stack" style="margin-top:16px">${field(t.payer, `<input class="input" id="payer" maxlength="100" autocomplete="name" value="${esc(payer)}">`, t.payerS)}${field(t.phoneL, `<input class="input" id="payPhone" type="tel" inputmode="tel" maxlength="20" autocomplete="tel" placeholder="0700 123 456" value="${esc(store.get('tm_phone') || '')}">`, t.phoneS)}</div>
           <p class="err" id="payErr" hidden></p>
           <button type="button" class="btn primary block" id="paidBtn" style="margin-top:14px">${esc(t.paid)}</button>
           <button type="button" class="link" data-back style="display:block;margin:12px auto 0">${esc(t.back)}</button>`;
+        if (window.PayQR) PayQR(PAY.link, price()).then((r) => {
+          const a = el.querySelector('[data-paylink]'), q = el.querySelector('[data-payqr]');
+          if (a) a.href = r.link; if (q && r.qr) q.src = r.qr;
+        });
         const inpEl = el.querySelector('#payer'), btn = el.querySelector('#paidBtn');
         const sync = () => { payer = inpEl.value; btn.disabled = !payer.trim(); };
         inpEl.addEventListener('input', sync); sync();

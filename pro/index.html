@@ -58,6 +58,8 @@
   .hero { border-color: #EADFCB !important; }
   .btn-primary { box-shadow: 0 8px 20px rgba(31, 37, 71, .22); }
 </style>
+<script src="../lib/qrcode.js?v=1"></script>
+<script src="../lib/payqr.js?v=1"></script>
 <script src="../analytics.js" defer></script>
 <script src="../wa.js?v=2" defer></script>
 </head>
@@ -123,7 +125,7 @@
       <ol class="steps" id="steps">
         <li data-t="stepPay">Нажмите «Оплатить» — откроется приложение банка: MBank или любое другое банковское приложение Кыргызстана. С компьютера — отсканируйте QR ниже телефоном.</li>
         <li id="stepAmount"></li>
-        <li data-t="stepComment">Если в банке есть поле «Комментарий» — укажите номер тоя.</li>
+        <li data-t="stepComment">В поле «Комментарий» можно указать номер тоя — так мы быстрее найдём платёж.</li>
         <li data-t="stepClaim">Вернитесь сюда и нажмите «Я оплатил» внизу.</li>
       </ol>
       <img class="qr" id="qr" alt="QR для оплаты" width="600" height="613" hidden>
@@ -186,7 +188,7 @@
       som: 'сом', once: 'Один раз за этот той, действует год', howTitle: 'Как оплатить',
       payBtn: 'Оплатить в приложении банка', toClaim: 'Уже оплатили? Нажмите «Я оплатил» ↓', payTo: (n) => `Получатель: ${n} · MBank`,
       stepPay: 'Нажмите «Оплатить» — откроется приложение банка: MBank или любое другое банковское приложение Кыргызстана. С компьютера — отсканируйте QR ниже телефоном.',
-      stepAmount: (p) => `Введите сумму ${p} сом — в QR её нет.`, stepComment: 'Если в банке есть поле «Комментарий» — укажите номер тоя.',
+      stepAmount: (p) => `Сумма ${p} сом уже указана — проверьте её.`, stepComment: 'В поле «Комментарий» можно указать номер тоя — так мы быстрее найдём платёж.',
       stepClaim: 'Вернитесь сюда и нажмите «Я оплатил» внизу.', qrSave: 'Сохранить QR в галерею',
       noPay: 'Реквизиты для оплаты появятся здесь совсем скоро. Если нужно срочно — напишите на toimanager.app@gmail.com с номером тоя.',
       claimTitle: 'После оплаты', payerLabel: 'Имя отправителя — как в банке', payerHint: 'Например, «Айбек Т.» — так мы найдём ваш платёж.',
@@ -217,7 +219,7 @@
       som: 'сом', once: 'Ушул той үчүн бир жолу, бир жылга', howTitle: 'Кантип төлөө керек',
       payBtn: 'Банк тиркемесинде төлөө', toClaim: 'Төлөдүңүзбү? «Төлөдүм» баскычын басыңыз ↓', payTo: (n) => `Алуучу: ${n} · MBank`,
       stepPay: '«Төлөө» баскычын басыңыз — банк тиркемеси ачылат: MBank же Кыргызстандагы башка банк тиркемеси. Компьютерден болсо — төмөндөгү QRди телефон менен сканерлеңиз.',
-      stepAmount: (p) => `${p} сом сумманы жазыңыз — QRде сумма жок.`, stepComment: 'Банкта «Комментарий» талаасы болсо — тойдун номерин жазыңыз.',
+      stepAmount: (p) => `${p} сом сумма жазылып турат — текшерип коюңуз.`, stepComment: '«Комментарий» талаасына тойдун номерин жазсаңыз — төлөмдү тезирээк табабыз.',
       stepClaim: 'Бул жакка кайтып, ылдыйдагы «Төлөдүм» баскычын басыңыз.', qrSave: 'QRди галереяга сактоо',
       noPay: 'Төлөм реквизиттери жакында ушул жерде пайда болот. Шашылыш болсо — toimanager.app@gmail.com дарегине тойдун номери менен жазыңыз.',
       claimTitle: 'Төлөгөндөн кийин', payerLabel: 'Жөнөтүүчүнүн аты — банктагыдай', payerHint: 'Мисалы, «Айбек Т.» — ушундай төлөмүңүздү табабыз.',
@@ -271,6 +273,10 @@
     $('qr').hidden = $('qrSave').hidden = !PAY.qr;
     if (PAY.qr) { $('qr').src = PAY.qr; $('qrSave').href = PAY.qr; }
     $('payLink').hidden = !PAY.link; if (PAY.link) $('payLink').href = PAY.link;
+    if (PAY.link && info && window.PayQR) PayQR(PAY.link, planPrice()).then((r) => {
+      $('payLink').href = r.link;
+      if (r.qr) { $('qr').src = r.qr; $('qrSave').href = r.qr; }
+    });
     $('toClaim').hidden = !PAY.link;
     $('payTo').hidden = !PAY.to; if (PAY.to) $('payTo').textContent = L.payTo(PAY.to);
     $('stepAmount').textContent = L.stepAmount(info ? Number(planPrice()).toLocaleString('ru-RU') : '490');
