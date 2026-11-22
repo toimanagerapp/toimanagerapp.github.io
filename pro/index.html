@@ -5,7 +5,7 @@
 <meta name="robots" content="noindex, follow">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Оплата для тоя — Той Менеджер</title>
-<meta name="description" content="Оплата для тоя: онлайн-приглашение — 490 сом, гости без ограничений; приложение — 990 сом. Один раз за той, по QR через MBank или любой банк.">
+<meta name="description" content="Оплата онлайн-приглашения: 490 сом за той, гости без ограничений. Один раз, по QR через MBank или любой банк.">
 <meta property="og:title" content="Оплата для тоя — Той Менеджер">
 <meta property="og:description" content="Онлайн-приглашение — 490 сом, приложение — 990 сом. Оплата по QR через MBank или любой банк.">
 <meta property="og:image" content="https://toimanager.app/og.jpg?v=2">
@@ -81,7 +81,7 @@
     <div>
       <label class="flabel" for="num" data-t="numLabel">Номер тоя</label>
       <input class="num-input" id="num" inputmode="numeric" autocomplete="off" maxlength="7" placeholder="000 000">
-      <p class="muted" style="font-size:14px;margin-top:8px" data-t="numHint">В приложении: Настройки → Тариф. Когда гостей становится много, номер показывается и в карточке лимита.</p>
+      <p class="muted" style="font-size:14px;margin-top:8px" data-t="numHint">Номер тоя — в конструкторе приглашения: кнопка «Убрать знак» → окно оплаты.</p>
     </div>
     <button class="btn btn-primary" type="button" id="find" data-t="find">Продолжить</button>
     <p class="err" id="findErr" role="alert" hidden></p>
@@ -113,7 +113,7 @@
     <div class="card stack" id="payCard">
       <div class="plans" id="plans" role="radiogroup"></div>
       <div>
-        <div class="price"><span id="price">990</span> <small data-t="som">сом</small></div>
+        <div class="price"><span id="price">490</span> <small data-t="som">сом</small></div>
         <p class="muted" style="margin-top:6px" data-t="once">Один раз за этот той, действует год</p>
       </div>
       <a class="btn btn-primary" id="payLink" target="_blank" rel="noopener" hidden data-t="payBtn">Оплатить в приложении банка</a>
@@ -172,10 +172,10 @@
   // Кыргызские тексты — черновик, нужна вычитка носителем языка
   const T = {
     ru: {
-      title: 'Оплата для тоя', lead: 'Онлайн-приглашение — гости без ограничений. Приложение — всё вместе: приглашение, «У входа», конверты, бюджет. Один раз за той, действует год.',
+      title: 'Оплата для тоя', lead: 'Онлайн-приглашение — 490 сом за той: без знака «Образец», гостей сколько угодно. Платите один раз, действует год.',
       planInv: 'Онлайн-приглашение', planInvS: 'Без знака «Образец», личные ссылки, гости без ограничений',
       planPro: 'Приложение', planProS: 'Всё из приглашения + полная версия приложения для тоя любого размера', planUp: 'доплата', unlimited: (p) => `В списке ${p} чел. — гости без ограничений`,
-      numLabel: 'Номер тоя', numHint: 'В приложении: Настройки → Тариф. Когда гостей становится много, номер показывается и в карточке лимита.',
+      numLabel: 'Номер тоя', numHint: 'Номер тоя — в конструкторе приглашения: кнопка «Убрать знак» → окно оплаты.',
       find: 'Продолжить', finding: 'Ищем…', other: 'Другой номер', toiLabel: 'Той',
       notFound: 'Той с таким номером не найден. Проверьте 6 цифр.', numBad: 'Номер тоя — 6 цифр', loadError: 'Не удалось загрузить. Проверьте интернет.',
       people: (p, l) => p >= l ? `В списке ${p} из ${l} бесплатных — лимит исчерпан` : `В списке ${p} из ${l} бесплатных`,
@@ -203,10 +203,10 @@
       date: (d, m, y, T) => `${d} ${T.months[m]} ${y}`, toiDate: (s) => `Дата тоя: ${s}`, noDate: 'Дата тоя не указана',
     },
     ky: {
-      title: 'Той үчүн төлөм', lead: 'Онлайн чакыруу — коноктор чексиз. Тиркеме — баары бирге: чакыруу, «Кире бериш», конверттер, бюджет. Бир той үчүн бир жолу, бир жылга.',
+      title: 'Той үчүн төлөм', lead: 'Онлайн чакыруу — бир той үчүн 490 сом: «Үлгү» белгисиз, коноктор чексиз. Бир жолу төлөйсүз, бир жылга.',
       planInv: 'Онлайн чакыруу', planInvS: '«Үлгү» белгисиз, жеке шилтемелер, коноктор чексиз',
       planPro: 'Тиркеме', planProS: 'Чакыруунун баары + тиркеменин толук версиясы, тойдун көлөмүнө карабай', planUp: 'кошумча', unlimited: (p) => `Тизмеде ${p} киши — коноктор чексиз`,
-      numLabel: 'Тойдун номери', numHint: 'Тиркемеде: Настройки → Тариф. Коноктор көбөйгөндө номер лимит карточкасында да көрүнөт.',
+      numLabel: 'Тойдун номери', numHint: 'Тойдун номери чакыруу конструкторунда: «Белгини алып салуу» баскычы → төлөм терезеси.',
       find: 'Улантуу', finding: 'Изделүүдө…', other: 'Башка номер', toiLabel: 'Той',
       notFound: 'Мындай номердеги той табылган жок. 6 санды текшериңиз.', numBad: 'Тойдун номери — 6 сан', loadError: 'Жүктөлгөн жок. Интернетти текшериңиз.',
       people: (p, l) => p >= l ? `Тизмеде ${p} / ${l} акысыз — лимит бүттү` : `Тизмеде ${p} / ${l} акысыз`,
@@ -241,6 +241,8 @@
   const $ = (id) => document.getElementById(id);
   let info = null, num = null, claimed = false, prov = false;
   const qPlan = new URLSearchParams(location.search).get('plan');
+  // Приложение ещё не в Google Play: вариант «Приложение 990» показываем только тем, кто пришёл из приложения (?plan=pro). Снять после публикации.
+  const APP_SOON = true;
   let plan = qPlan === 'pro' ? 'pro' : 'invite';
   const planPrice = () => (plan === 'invite' ? info.invite_price : info.price);
 
@@ -286,7 +288,9 @@
     $('toiPeople').hidden = pro;
     $('toiMeter').parentElement.hidden = !free;
     const opt = (id, t, sub, price, up) => `<button type="button" class="plan-opt" role="radio" data-plan="${id}" aria-checked="${plan === id}"><span><b>${t}</b><small>${sub}</small></span><em>${up ? `<small>${up}</small> ` : ''}${Number(price).toLocaleString('ru-RU')} <small>${L.som}</small></em></button>`;
-    $('plans').innerHTML = (invPaid ? '' : opt('invite', L.planInv, L.planInvS, info.invite_price)) + opt('pro', L.planPro, L.planProS, info.price, invPaid ? L.planUp : '');
+    const proOk = !APP_SOON || qPlan === 'pro' || invPaid || pro;
+    if (!proOk) plan = 'invite';
+    $('plans').innerHTML = (invPaid ? '' : opt('invite', L.planInv, L.planInvS, info.invite_price)) + (proOk ? opt('pro', L.planPro, L.planProS, info.price, invPaid ? L.planUp : '') : '');
     $('plans').querySelectorAll('[data-plan]').forEach((b) => b.onclick = () => { plan = b.dataset.plan; render(); });
     $('toiMeter').style.width = `${Math.min(100, (info.people / info.limit) * 100)}%`;
     $('price').textContent = Number(planPrice()).toLocaleString('ru-RU');

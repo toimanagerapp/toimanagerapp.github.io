@@ -358,3 +358,6 @@ a:focus-visible, button:focus-visible, summary:focus-visible, .btn:focus-visible
   .article table.cmp td { margin-top: 4px; }
   .article table.cmp td::before { content: attr(data-l) ": "; color: var(--muted, #67616F); font-weight: 500; }
 }
+/* Тариф «скоро» — приглушён, кнопка неактивна */
+.plan.soon { opacity: .6; }
+.plan.soon .btn[aria-disabled="true"] { pointer-events: none; }

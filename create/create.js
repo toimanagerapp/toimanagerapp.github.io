@@ -62,7 +62,7 @@
       priceTry: ['Всё приглашение целиком', 'Ответы гостей', 'Со знаком «Образец», до 35 человек'],
       priceInv: ['Без знака «Образец»', 'Личные ссылки и «кто открыл»', 'Гости без ограничений'],
       pricePro: ['Всё из онлайн-приглашения', 'Полная версия приложения для тоя', '«У входа», конверты, бюджет, подарки'],
-      planInv: 'Онлайн-приглашение', planPro: 'Приложение', best: 'Всё вместе', oneToi: 'за один той',
+      planInv: 'Онлайн-приглашение', planPro: 'Приложение', best: 'Всё вместе', soon: 'Скоро в Google Play', oneToi: 'за один той',
       kinds: { wedding: ['Свадьба', 'Үйлөнүү той'], kyz_uzatuu: ['Кыз узатуу', 'проводы невесты'], sunnot: ['Сүннөт той', ''], beshik: ['Бешик той', ''], tushoo: ['Тушоо кесүү', 'первые шаги'], jubilee: ['Юбилей', 'маараке'], memorial: ['Аш', 'поминки'], other: ['Другое', 'любой праздник'] },
       steps: ['Кто празднует', 'Когда и где', 'Фото', 'Оформление', 'Детали'],
       stepOf: (i, n) => `Шаг ${i} из ${n}`,
@@ -155,7 +155,7 @@
       priceTry: ['Чакыруу толугу менен', 'Коноктордун жообу', '«Үлгү» белгиси менен, 35 кишиге чейин'],
       priceInv: ['«Үлгү» белгисиз', 'Жеке шилтемелер жана «ким ачты»', 'Коноктор чексиз'],
       pricePro: ['Онлайн чакыруунун баары', 'Тиркеменин толук версиясы', '«Кире бериш», конверттер, бюджет, белектер'],
-      planInv: 'Онлайн чакыруу', planPro: 'Тиркеме', best: 'Баары бирге', oneToi: 'бир той үчүн',
+      planInv: 'Онлайн чакыруу', planPro: 'Тиркеме', best: 'Баары бирге', soon: 'Жакында Google Playде', oneToi: 'бир той үчүн',
       kinds: { wedding: ['Үйлөнүү той', 'свадьба'], kyz_uzatuu: ['Кыз узатуу', ''], sunnot: ['Сүннөт той', ''], beshik: ['Бешик той', ''], tushoo: ['Тушоо кесүү', ''], jubilee: ['Маараке', 'юбилей'], memorial: ['Эскерүү ашы', ''], other: ['Башка', 'каалаган майрам'] },
       steps: ['Кимдин тою', 'Качан жана кайда', 'Сүрөттөр', 'Жасалгасы', 'Кошумча'],
       stepOf: (i, n) => `${n} кадамдын ${i}-кадамы`,
@@ -234,6 +234,8 @@
     },
   };
 
+  // Приложение ещё не в Google Play: продаём только онлайн-приглашение, «Приложение 990» показываем как «скоро». Снять флаг после публикации.
+  const APP_SOON = true;
   const KIND_IDS = ['wedding', 'kyz_uzatuu', 'sunnot', 'beshik', 'tushoo', 'jubilee', 'memorial', 'other'];
   // Стороны и категории гостей — как у тоя из приложения
   const SIDES = {
@@ -853,7 +855,7 @@
       <section class="compare"><h2 class="sec-title">${esc(t.pricesT)}</h2><div class="prices">
         <div class="price-card"><b>${esc(t.try)}</b><div class="p">0 <small>${esc(t.som)}</small></div><ul>${t.priceTry.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
         <div class="price-card"><b>${esc(t.planInv)}</b><div class="p">490 <small>${esc(t.som)} · ${esc(t.oneToi)}</small></div><ul>${t.priceInv.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
-        <div class="price-card best"><b>${esc(t.planPro)}</b> <span class="tag">${esc(t.best)}</span><div class="p">990 <small>${esc(t.som)} · ${esc(t.oneToi)}</small></div><ul>${t.pricePro.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
+        <div class="price-card ${APP_SOON ? 'soon' : 'best'}"><b>${esc(t.planPro)}</b> <span class="tag">${esc(APP_SOON ? t.soon : t.best)}</span><div class="p">990 <small>${esc(t.som)} · ${esc(t.oneToi)}</small></div><ul>${t.pricePro.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
       </div></section>
       <section class="faq"><h2 class="sec-title">${esc(t.faqT)}</h2>${t.faq.map(([q, x]) => `<details><summary>${esc(q)}</summary><p>${esc(x)}</p></details>`).join('')}</section>
       <div class="lbar" id="lbar"><a class="btn gold block" href="#pick" data-act="to-pick"><span>${esc(t.ctaCreate)}</span><small>${esc(t.ctaFree)}</small></a></div>`;
@@ -941,7 +943,7 @@
     if (p.prov_plan && !p.invite_until && !p.pro_until) return `<div class="status check"><div class="ic">${I.clock}</div><div><b>${esc(t.checkT)}</b><p>${esc(t.checkP)}</p></div></div>`;
     if (p.card_paid) {
       const until = p.pro_until && Date.parse(p.pro_until) > Date.now() ? t.proP(fmtDay(p.pro_until)) : p.invite_until ? t.paidP(fmtDay(p.invite_until)) : '';
-      const up = !p.is_pro ? `<div class="btns"><button type="button" class="btn ghost sm" data-act="pay-pro">${I.users}${esc(t.upgrade)} · ${p.pro_price || 500} ${esc(t.som)}</button></div>` : '';
+      const up = !p.is_pro && !APP_SOON ? `<div class="btns"><button type="button" class="btn ghost sm" data-act="pay-pro">${I.users}${esc(t.upgrade)} · ${p.pro_price || 500} ${esc(t.som)}</button></div>` : '';
       return `<div class="status paid"><div class="ic">${I.check}</div><div><b>${esc(t.paidT)}</b><p>${esc(until)}</p>${up}</div></div>`;
     }
     if (p.pending_claim) return `<div class="status check"><div class="ic">${I.clock}</div><div><b>${esc(t.waitT)}</b><p>${esc(t.waitP)}</p></div></div>`;
@@ -976,7 +978,7 @@
   // ---------- Оплата ----------
   function paySheet(initial) {
     const t = L(), p = S.toi.plan || {};
-    let plan = p.invite_until || p.card_paid ? 'pro' : initial || 'invite';
+    let plan = APP_SOON ? 'invite' : (p.invite_until || p.card_paid ? 'pro' : initial || 'invite');
     const invPaid = Boolean(p.invite_until);
     const proPrice = p.pro_price || (invPaid ? 500 : 990), invPrice = p.invite_price || 490;
     const price = () => (plan === 'invite' ? invPrice : proPrice);
@@ -989,7 +991,7 @@
       if (stage === 'choose') {
         el.innerHTML = `<button class="x" type="button" data-close aria-label="${esc(t.close)}">×</button><h2>${esc(t.payH)}</h2><p class="lead3">${esc(t.payL)}</p>
           ${invPaid ? '' : planBtn('invite', t.payInvT, invPrice, t.payInvL)}
-          ${planBtn('pro', t.payProT, invPaid ? `${proPrice}` : proPrice, t.payProL, invPaid ? t.payUp : t.best)}
+          ${APP_SOON ? '' : planBtn('pro', t.payProT, invPaid ? `${proPrice}` : proPrice, t.payProL, invPaid ? t.payUp : t.best)}
           <button type="button" class="btn primary block" data-go style="margin-top:16px">${esc(t.payNext)} · ${price()} ${esc(t.som)}</button>
           <p class="muted" style="font-size:13px;text-align:center;margin-top:12px">${esc(t.payHelp)}</p>`;
         el.querySelectorAll('[data-plan]').forEach((b) => b.addEventListener('click', () => { plan = b.dataset.plan; draw(el); }));

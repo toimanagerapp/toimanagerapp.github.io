@@ -498,3 +498,6 @@ body { background: var(--bg); overflow-x: clip; }
 @media (max-width: 699px) { .chips { display: none; } .steps-top { padding-top: 18px; } }
 @media (max-width: 420px) { .pv .pv-head b { display: none; } .pv .pv-head { justify-content: flex-end; } }
 .pv .pv-head { background: #0F1226; }
+/* Приложение — «скоро»: цена приглушена, без выделения */
+.price-card.soon { opacity: .62; }
+.price-card.soon .tag { background: #EEEFF5; color: #1F2547; }
