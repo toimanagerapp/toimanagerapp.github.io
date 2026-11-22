@@ -342,3 +342,19 @@ a:focus-visible, button:focus-visible, summary:focus-visible, .btn:focus-visible
 .kind-links { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 var(--s-24); }
 .kind-links a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--line, #ECE5D9); background: var(--surface, #fff); color: var(--ink, #1B1E2E); font-weight: 500; text-decoration: none; }
 .kind-links a:hover { border-color: #D9B877; }
+/* Таблица сравнения в статьях */
+.article table.cmp { width: 100%; border-collapse: collapse; margin: 0 0 var(--s-24); font-size: 15px; background: var(--surface, #fff); border: 1px solid var(--line, #ECE5D9); border-radius: 16px; overflow: hidden; }
+.article table.cmp th, .article table.cmp td { text-align: left; vertical-align: top; padding: 12px 14px; border-top: 1px solid var(--line, #ECE5D9); }
+.article table.cmp thead th { border-top: 0; background: #F4EFE6; font-weight: 600; }
+.article table.cmp tbody th { font-weight: 600; white-space: nowrap; }
+.article table.cmp td:last-child { color: #1F2547; font-weight: 500; }
+@media (max-width: 600px) {
+  .article table.cmp thead { display: none; }
+  .article table.cmp, .article table.cmp tbody, .article table.cmp tr, .article table.cmp th, .article table.cmp td { display: block; width: auto; }
+  .article table.cmp tr { padding: 12px 14px; border-top: 1px solid var(--line, #ECE5D9); }
+  .article table.cmp tr:first-child { border-top: 0; }
+  .article table.cmp th, .article table.cmp td { padding: 0; border: 0; white-space: normal; }
+  .article table.cmp th { margin-bottom: 6px; }
+  .article table.cmp td { margin-top: 4px; }
+  .article table.cmp td::before { content: attr(data-l) ": "; color: var(--muted, #67616F); font-weight: 500; }
+}
