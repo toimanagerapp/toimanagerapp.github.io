@@ -363,7 +363,7 @@
         <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline">
           <h3>${esc(c.payer_name)}</h3><span class="meta">${when(c.created_at)}</span></div>
         <div style="margin-top:6px"><span class="badge ${c.plan === 'invite' ? 'gray' : 'ok'}">${c.plan === 'invite' ? 'Приглашение' : 'Приложение'} · ${Number(c.amount || 0).toLocaleString('ru-RU')} сом</span>
-          ${c.prov_active ? '<span class="meta" style="margin-left:6px">уже открыт временно — проверьте платёж</span>' : (c.provisional ? '' : '<span class="meta" style="margin-left:6px">ждёт проверки (по тою был отказ)</span>')}</div>
+          ${c.prov_active ? '<span class="meta" style="margin-left:6px">уже открыт временно — проверьте платёж</span>' : '<span class="meta" style="margin-left:6px">клиент ждёт — знак «Образец» ещё стоит</span>'}</div>
         ${c.phone ? `<div style="margin-top:4px">${esc(c.phone)}</div>` : ''}
         <div class="meta" style="margin-top:6px">№ ${fmtNum(c.num)} · ${esc(c.title)}</div>
         <div class="meta">${c.people} чел.${c.starts_at ? ' · той ' + day(c.starts_at) : ''}</div>
