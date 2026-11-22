@@ -96,7 +96,7 @@
       trialT: 'Пробная версия', trialP: 'На приглашении знак «Образец». Уберите его — и можно отправлять гостям.',
       removeWm: 'Убрать знак', paidT: 'Оплачено', paidP: (d) => `Приглашение без знака до ${d}.`, proP: (d) => `Полная версия приложения до ${d}.`,
       checkT: 'Знак уже снят', checkP: 'Мы проверим платёж в течение дня. Можно отправлять приглашение гостям.',
-      waitT: 'Ждём проверки платежа', waitP: 'Как только проверим (обычно в течение дня), знак исчезнет.',
+      forgotT: 'Уже оплатили?', forgotP: 'Если вы перевели деньги, нажмите «Я оплатил» — без этого мы не узнаем, чей это платёж, и знак останется.', paidShort: 'Я оплатил', waitT: 'Ждём проверки платежа', waitP: 'Как только проверим (обычно в течение дня), знак исчезнет.',
       upgrade: 'Полная версия приложения',
       general: 'Общая ссылка', generalS: 'Для групп, статуса WhatsApp и соцсетей. Гость пишет имя и отвечает — ответ появится у вас.',
       personal: 'Личные ссылки', personalS: 'Каждому гостю — приглашение с его именем: «Урматтуу Асан байке». Вы видите, кто открыл и что ответил.',
@@ -189,7 +189,7 @@
       trialT: 'Сынамык версия', trialP: 'Чакырууда «Үлгү» белгиси бар. Аны алып салыңыз — анан конокторго жөнөтсө болот.',
       removeWm: 'Белгини алып салуу', paidT: 'Төлөндү', paidP: (d) => `Чакыруу белгисиз — ${d} чейин.`, proP: (d) => `Тиркеменин толук версиясы ${d} чейин.`,
       checkT: 'Белги алынды', checkP: 'Төлөмдү бир күндүн ичинде текшеребиз. Чакырууну конокторго жөнөтө берсеңиз болот.',
-      waitT: 'Төлөм текшерилүүдө', waitP: 'Текшергенден кийин (адатта бир күндүн ичинде) белги жоголот.',
+      forgotT: 'Төлөп койдуңузбу?', forgotP: 'Акча которгон болсоңуз, «Төлөдүм» баскычын басыңыз — антпесе кимдин төлөмү экенин билбейбиз жана белги калат.', paidShort: 'Төлөдүм', waitT: 'Төлөм текшерилүүдө', waitP: 'Текшергенден кийин (адатта бир күндүн ичинде) белги жоголот.',
       upgrade: 'Тиркеменин толук версиясы',
       general: 'Жалпы шилтеме', generalS: 'Топторго, WhatsApp статусуна жана соцтармактарга. Конок атын жазып жооп берет — жообу сизге келет.',
       personal: 'Жеке шилтемелер', personalS: 'Ар бир конокко — өз аты жазылган чакыруу: «Урматтуу Асан байке». Ким ачканын жана эмне деп жооп бергенин көрөсүз.',
@@ -947,6 +947,16 @@
       return `<div class="status paid"><div class="ic">${I.check}</div><div><b>${esc(t.paidT)}</b><p>${esc(until)}</p>${up}</div></div>`;
     }
     if (p.pending_claim) return `<div class="status check"><div class="ic">${I.clock}</div><div><b>${esc(t.waitT)}</b><p>${esc(t.waitP)}</p></div></div>`;
+    return trialCard();
+  }
+  // Клиент открывал оплату, но не нажал «Я оплатил» — напоминаем
+  const payStartKey = () => `tm_paystart_${S.toi?.plan?.num || ''}`;
+  function trialCard() {
+    const t = L(), p = S.toi.plan || {};
+    const started = Number(store.get(payStartKey()) || 0);
+    if (started && Date.now() - started < 30 * 864e5) {
+      return `<div class="status check"><div class="ic">${I.clock}</div><div><b>${esc(t.forgotT)}</b><p>${esc(t.forgotP)}</p><div class="btns"><button type="button" class="btn primary sm" data-act="paid">${esc(t.paidShort)}</button><button type="button" class="btn ghost sm" data-act="pay">${esc(t.removeWm)} · ${p.invite_price || 490} ${esc(t.som)}</button></div></div></div>`;
+    }
     return `<div class="status trial"><div class="ic">${I.star}</div><div><b>${esc(t.trialT)}</b><p>${esc(t.trialP)}</p><div class="btns"><button type="button" class="btn primary sm" data-act="pay">${esc(t.removeWm)} · ${p.invite_price || 490} ${esc(t.som)}</button></div></div></div>`;
   }
   function renderSend() {
@@ -972,11 +982,12 @@
     root.querySelectorAll('[data-copy]').forEach((b) => b.addEventListener('click', () => copy(b.dataset.copy)));
     root.querySelectorAll('[data-act="preview"]').forEach((b) => b.addEventListener('click', openPreview));
     root.querySelectorAll('[data-act="pay"]').forEach((b) => b.addEventListener('click', () => paySheet('invite')));
+    root.querySelectorAll('[data-act="paid"]').forEach((b) => b.addEventListener('click', () => paySheet('invite', 'pay')));
     root.querySelector('[data-act="pay-pro"]')?.addEventListener('click', () => paySheet('pro'));
   }
 
   // ---------- Оплата ----------
-  function paySheet(initial) {
+  function paySheet(initial, startStage) {
     const t = L(), p = S.toi.plan || {};
     let plan = APP_SOON ? 'invite' : (p.invite_until || p.card_paid ? 'pro' : initial || 'invite');
     const invPaid = Boolean(p.invite_until);
@@ -984,7 +995,7 @@
     const price = () => (plan === 'invite' ? invPrice : proPrice);
     const num = p.num ? String(p.num).replace(/(\d{3})(\d{3})/, '$1 $2') : '';
     const m = S.user?.user_metadata || {};
-    let stage = 'choose', payer = store.get('tm_payer') || m.full_name || m.name || '';
+    let stage = startStage || 'choose', payer = store.get('tm_payer') || m.full_name || m.name || '';
     const planBtn = (id, title, priceTxt, list, badge) => `<button type="button" class="plan" data-plan="${id}" aria-pressed="${plan === id}">${badge ? `<span class="tag badge">${esc(badge)}</span>` : ''}
       <div class="top2"><b>${esc(title)}</b><span>${priceTxt} <small>${esc(t.som)}</small></span></div><ul>${list.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></button>`;
     const draw = (el) => {
@@ -995,7 +1006,7 @@
           <button type="button" class="btn primary block" data-go style="margin-top:16px">${esc(t.payNext)} · ${price()} ${esc(t.som)}</button>
           <p class="muted" style="font-size:13px;text-align:center;margin-top:12px">${esc(t.payHelp)}</p>`;
         el.querySelectorAll('[data-plan]').forEach((b) => b.addEventListener('click', () => { plan = b.dataset.plan; draw(el); }));
-        el.querySelector('[data-go]').onclick = () => { stage = 'pay'; track('pay_start', { plan, value: price() }); draw(el); };
+        el.querySelector('[data-go]').onclick = () => { stage = 'pay'; store.set(payStartKey(), String(Date.now())); track('pay_start', { plan, value: price() }); draw(el); };
       } else if (stage === 'pay') {
         el.innerHTML = `<button class="x" type="button" data-close aria-label="${esc(t.close)}">×</button><h2>${esc(plan === 'invite' ? t.payInvT : t.payProT)}</h2>
           <div class="pay-amount"><span>${esc(t.payAmount)}</span><b>${price()} ${esc(t.som)}</b><span>${esc(t.payNum(num))}</span></div>
@@ -1018,7 +1029,7 @@
           btn.disabled = true; btn.textContent = t.sending; el.querySelector('#payErr').hidden = true;
           const { data, error } = await sb.rpc('public_pay_claim', { p_num: p.num, p_payer_name: payer.trim(), p_phone: (el.querySelector('#payPhone')?.value || '').trim() || null, p_plan: plan });
           if (error) { el.querySelector('#payErr').textContent = t.payErr; el.querySelector('#payErr').hidden = false; btn.disabled = false; btn.textContent = t.paid; return; }
-          store.set('tm_payer', payer.trim()); store.set('tm_phone', (el.querySelector('#payPhone')?.value || '').trim());
+          store.set(payStartKey(), ''); store.set('tm_payer', payer.trim()); store.set('tm_phone', (el.querySelector('#payPhone')?.value || '').trim());
           track('pay_claim', { plan, value: price(), currency: 'KGS' });
           stage = data?.provisional ? 'ok' : 'wait';
           await refreshPlan(); pvUpdate();
@@ -1081,7 +1092,7 @@
     const meter = pro ? '' : `<div class="kpi" style="grid-column:1 / -1"><span>${esc(t.limitT(people, limit))}</span><div class="meter${people >= limit ? ' full' : ''}"><i style="width:${Math.min(100, (people / limit) * 100)}%"></i></div>
       ${people >= limit ? `<p style="font-size:14px;margin-top:8px">${esc(t.limitFull)} <button type="button" class="link" data-act="pay">${esc(t.removeWm)} · ${p.invite_price || 490} ${esc(t.som)}</button></p>` : ''}</div>`;
     return `<div class="editor-wrap"><div class="panel">${toiHead('guests')}<div class="stack" style="gap:14px;margin-top:16px">
-      ${p.card_paid ? '' : `<div class="status trial"><div class="ic">${I.star}</div><div><b>${esc(t.trialT)}</b><p>${esc(t.trialP)}</p><div class="btns"><button type="button" class="btn primary sm" data-act="pay">${esc(t.removeWm)} · ${p.invite_price || 490} ${esc(t.som)}</button></div></div></div>`}
+      ${p.card_paid || p.pending_claim ? '' : trialCard()}
       <div class="kpis"><div class="kpi"><b>${list.length}</b><span>${esc(t.kGuests)}</span></div><div class="kpi"><b>${people}</b><span>${esc(t.kPeople)}</span></div>
         <div class="kpi"><b>${opened}</b><span>${esc(t.kOpened)}</span></div><div class="kpi"><b>${coming}</b><span>${esc(t.kComing)}</span></div>${meter}</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn primary" data-act="add">${I.plus}${esc(t.gAdd)}</button></div>
@@ -1104,6 +1115,7 @@
     root.querySelectorAll('[data-flt]').forEach((b) => b.addEventListener('click', () => { S.gFilter = b.dataset.flt; renderApp(); }));
     root.querySelector('[data-act="add"]')?.addEventListener('click', () => addSheet());
     root.querySelectorAll('[data-act="pay"]').forEach((b) => b.addEventListener('click', () => paySheet('invite')));
+    root.querySelectorAll('[data-act="paid"]').forEach((b) => b.addEventListener('click', () => paySheet('invite', 'pay')));
     root.querySelector('[data-act="pay-pro"]')?.addEventListener('click', () => paySheet('pro'));
     root.querySelectorAll('[data-send]').forEach((a) => a.addEventListener('click', async () => {
       const g = S.guests.find((x) => x.id === a.dataset.send); if (!g?.inv) return;
