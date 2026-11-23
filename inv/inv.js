@@ -24,7 +24,7 @@
   };
   // Видео-конверты (4 с, 720×1280): кадр-заставка .jpg и ролик .mp4 в /inv/env/. light — светлый конверт, тёмный текст
   // Готовые видео-конверты (остальные добавляются по мере готовности роликов; неизвестный — обычный конверт)
-  const ENVS = { navy: { card: true } };   // ivory: { light: true }, garnet: {}, emerald: {}
+  const ENVS = { navy: { card: true, webp: true } };   // ivory: { light: true }, garnet: {}, emerald: {}
 
   // Пример на компьютере: показываем приглашение «в телефоне» по центру (iframe с той же страницей),
   // фон — размытый кадр конверта/фото пары. ?full=1 — открыть на весь экран. Личные ссылки гостей не трогаем.
@@ -34,7 +34,7 @@
     const th = THEMES[q.get('theme')] ? q.get('theme') : 'ak-altyn';
     const env = ENVS[q.get('env')] ? q.get('env') : null;
     const kind = q.get('kind');
-    const bg = env ? `/inv/env/${env}.jpg` : (!kind || kind === 'kyz_uzatuu' || kind === 'wedding') ? '/inv/demo/0.webp' : '';
+    const bg = env ? (ENVS[env].webp ? `/inv/env/${env}-poster.webp` : `/inv/env/${env}.jpg`) : (!kind || kind === 'kyz_uzatuu' || kind === 'wedding') ? '/inv/demo/0.webp' : '';
     const inner = new URL(location.href); inner.searchParams.set('inframe', '1');
     const full = new URL(location.href); full.searchParams.set('full', '1');
     const create = `/create/${ru ? '' : '?lang=ky'}`;
@@ -494,7 +494,9 @@
     venv.classList.add('playing');
     if (reduce) { videoReveal(); return; }
     vid.play().catch(videoReveal);
-    setTimeout(videoReveal, 6500);   // на случай, если ролик не доиграл
+    // Медленный интернет: если ролик не пошёл за 1,5 с — сразу открываем приглашение, без ожидания
+    setTimeout(() => { if (!revealed && vid.currentTime < 0.05) videoReveal(); }, 1500);
+    setTimeout(videoReveal, 6000);   // на случай, если ролик застрял посередине
   }
   vid.addEventListener('timeupdate', () => { if (opened && vid.duration && vid.currentTime >= vid.duration - 0.55) videoReveal(); });
   vid.addEventListener('ended', videoReveal);
@@ -503,8 +505,9 @@
   function setupVideoEnvelope(id) {
     const e = ENVS[id]; if (!e) return false;
     venv.classList.toggle('light', !!e.light);
-    vid.poster = `/inv/env/${id}.jpg`; vid.src = `/inv/env/${id}.mp4`;
-    venv.style.setProperty('--venv-bg', `url(/inv/env/${id}.jpg)`);
+    const poster = e.webp ? `/inv/env/${id}-poster.webp` : `/inv/env/${id}.jpg`;
+    vid.poster = poster; vid.src = `/inv/env/${id}.mp4`;
+    venv.style.setProperty('--venv-bg', `url(${poster})`);
     // ролик не загрузился до касания — показываем обычный конверт
     vid.addEventListener('error', () => { if (!opened) { venv.hidden = true; $('envelope').classList.remove('gone'); } }, { once: true });
     venv.hidden = false; $('envelope').classList.add('gone');
