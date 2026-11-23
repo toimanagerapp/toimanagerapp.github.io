@@ -479,10 +479,10 @@ body { background: var(--bg); overflow-x: clip; }
 @media (min-width: 980px) { .lbar { display: none; } }
 
 /* --- Мастер на телефоне: меньше служебного, больше места --- */
-.kind-row { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 calc(-1 * max(16px, env(safe-area-inset-left))) 14px; padding: 2px max(16px, env(safe-area-inset-left)); }
+.kind-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; padding: 0; }
 .kind-row::-webkit-scrollbar { display: none; }
 @media (min-width: 700px) { .kind-row { flex-wrap: wrap; margin: 0 0 14px; padding: 0; } }
-.kind-row button { flex: none; min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--surface); font-size: 14.5px; font-weight: 500; cursor: pointer; color: var(--muted); }
+.kind-row button { flex: none; min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--surface); font-size: 14.5px; font-weight: 500; cursor: pointer; color: var(--muted); }
 .kind-row button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
 .seg button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); }
 .bar .in .btn.back-btn { flex: 0 0 52px; padding: 0; }
@@ -501,3 +501,9 @@ body { background: var(--bg); overflow-x: clip; }
 /* Приложение — «скоро»: цена приглушена, без выделения */
 .price-card.soon { opacity: .62; }
 .price-card.soon .tag { background: #EEEFF5; color: #1F2547; }
+
+/* «Кто приглашает» — три равные кнопки в одну строку (текст переносится), а не столбиком */
+.seg.seg3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.seg.seg3 button { min-height: 52px; padding: 6px 8px; font-size: 14px; line-height: 1.25; border-radius: 14px; text-align: center; }
+/* Жених и невеста: на телефоне друг под другом — чтобы подсказка «Например, Азамат» помещалась целиком */
+@media (max-width: 520px) { .grid2.names2 { grid-template-columns: 1fr; } }

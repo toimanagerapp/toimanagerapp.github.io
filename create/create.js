@@ -69,7 +69,7 @@
       next: 'Далее', back: 'Назад', preview: 'Как увидят гости', finish: 'Готово — сохранить', skip: 'Пропустить',
       kindL: 'Вид тоя', whoH: 'Чей это праздник?', whoL: 'Имена появятся на конверте, на печати и в тексте приглашения.',
       groom: 'Жених', bride: 'Невеста', girl: 'Имя невесты', child: 'Имя ребёнка', hero: 'Чей юбилей', memo: 'В память о ком', otherName: 'Чей праздник', otherTitle: 'Название праздника',
-      ph: { groom: 'Азамат', bride: 'Айпери', girl: 'Айпери', child: 'Нурсултан', hero: 'Бакыт Асанович', memo: 'Асан Бакытович', otherTitle: 'Например, «Новоселье»', sign: 'Например, «Семья Асановых»', venue: 'Ресторан «Ала-Тоо»', addr: 'Бишкек, ул. Токтогула, 100', map: 'https://2gis.kg/…' },
+      ph: { groom: 'Например, Азамат', bride: 'Например, Айпери', girl: 'Например, Айпери', child: 'Например, Нурсултан', hero: 'Например, Бакыт Асанович', memo: 'Например, Асан Бакытович', otherTitle: 'Например, «Новоселье»', sign: 'Например, «Семья Асановых»', venue: 'Например, ресторан «Ала-Тоо»', addr: 'Например, Бишкек, ул. Токтогула, 100', map: 'https://2gis.kg/…' },
       fromWhom: 'Кто приглашает', fromG: 'Родители жениха', fromB: 'Родители невесты', fromC: 'Сами молодые',
       sign: 'Подпись внизу', optional: 'необязательно',
       whenH: 'Когда и где?', whenL: 'Гости увидят дату, обратный отсчёт и кнопку «Открыть в 2ГИС».',
@@ -162,7 +162,7 @@
       next: 'Андан ары', back: 'Артка', preview: 'Конок кандай көрөт', finish: 'Даяр — сактоо', skip: 'Өткөрүп жиберүү',
       kindL: 'Тойдун түрү', whoH: 'Кимдин тою?', whoL: 'Аттар конвертте, мөөрдө жана чакыруунун текстинде көрүнөт.',
       groom: 'Күйөө бала', bride: 'Колукту', girl: 'Кыздын аты', child: 'Баланын аты', hero: 'Кимдин мааракеси', memo: 'Кимдин элесине', otherName: 'Кимдин тою', otherTitle: 'Тойдун аталышы',
-      ph: { groom: 'Азамат', bride: 'Айпери', girl: 'Айпери', child: 'Нурсултан', hero: 'Бакыт Асанович', memo: 'Асан Бакытович', otherTitle: 'Мисалы, «Үй той»', sign: 'Мисалы, «Асановдордун үй-бүлөсү»', venue: '«Ала-Тоо» ресторан', addr: 'Бишкек, Токтогул көч., 100', map: 'https://2gis.kg/…' },
+      ph: { groom: 'Мисалы, Азамат', bride: 'Мисалы, Айпери', girl: 'Мисалы, Айпери', child: 'Мисалы, Нурсултан', hero: 'Мисалы, Бакыт Асанович', memo: 'Мисалы, Асан Бакытович', otherTitle: 'Мисалы, «Үй той»', sign: 'Мисалы, «Асановдордун үй-бүлөсү»', venue: 'Мисалы, «Ала-Тоо» ресторан', addr: 'Мисалы, Бишкек, Токтогул көч., 100', map: 'https://2gis.kg/…' },
       fromWhom: 'Ким чакырат', fromG: 'Күйөө баланын ата-энеси', fromB: 'Колуктунун ата-энеси', fromC: 'Жаштардын өздөрү',
       sign: 'Төмөнкү кол тамга', optional: 'милдеттүү эмес',
       whenH: 'Качан жана кайда?', whenL: 'Коноктор күнүн, тойго чейин канча калганын жана «2ГИСте ачуу» баскычын көрүшөт.',
@@ -630,7 +630,7 @@
   };
   const inp = (f, ph, attrs = '') => `<input class="input" data-f="${f}" value="${esc(S.draft[f])}" placeholder="${esc(ph || '')}" ${attrs}>`;
   const sw = (f, title, sub) => `<label class="switch"><span class="t"><b>${esc(title)}</b>${sub ? `<small>${esc(sub)}</small>` : ''}</span><input type="checkbox" data-f="${f}" data-redraw ${S.draft[f] ? 'checked' : ''}><span class="k"></span></label>`;
-  const seg = (f, opts) => `<div class="seg" role="group">${opts.map(([v, t]) => `<button type="button" data-set="${f}" data-v="${esc(v)}" aria-pressed="${S.draft[f] === v}">${esc(t)}</button>`).join('')}</div>`;
+  const seg = (f, opts, cls = '') => `<div class="seg${cls}" role="group">${opts.map(([v, t]) => `<button type="button" data-set="${f}" data-v="${esc(v)}" aria-pressed="${S.draft[f] === v}">${esc(t)}</button>`).join('')}</div>`;
   const KIND_ICON = {};
   function kindTiles(sel) {
     return `<div class="kinds">${KIND_IDS.map((k) => { const [n, s] = L().kinds[k]; return `<button type="button" class="kind" data-kind="${k}" aria-pressed="${sel === k}">${KIND_ICON[k] || ''}<b>${esc(n)}</b>${s ? `<small>${esc(s)}</small>` : ''}</button>`; }).join('')}</div>`;
@@ -642,8 +642,8 @@
     const d = S.draft, t = L(), k = d.kind;
     let names = '';
     if (k === 'wedding') {
-      names = `<div class="grid2 keep">${field(t.groom, inp('name_a', t.ph.groom, 'autocomplete="off" maxlength="40"'))}${field(t.bride, inp('name_b', t.ph.bride, 'autocomplete="off" maxlength="40"'))}</div>
-        ${field(t.fromWhom, seg('from_whom', [['groom_parents', t.fromG], ['bride_parents', t.fromB], ['couple', t.fromC]]))}`;
+      names = `<div class="grid2 names2">${field(t.groom, inp('name_a', t.ph.groom, 'autocomplete="off" maxlength="40"'))}${field(t.bride, inp('name_b', t.ph.bride, 'autocomplete="off" maxlength="40"'))}</div>
+        ${field(t.fromWhom, seg('from_whom', [['groom_parents', t.fromG], ['bride_parents', t.fromB], ['couple', t.fromC]], ' seg3'))}`;
     } else if (k === 'other') {
       names = field(t.otherTitle, inp('title', t.ph.otherTitle, 'maxlength="80"')) + field(t.otherName, inp('name_a', t.ph.hero, 'maxlength="40"'), null, true);
     } else {
@@ -1284,6 +1284,7 @@
   // ---------- Маршруты ----------
   async function route() {
     const h = location.hash.replace(/^#/, '') || '/';
+    const prevView = S.view;
     const m = h.match(/^\/t\/([0-9a-f-]{36})(?:\/(guests|send))?$/i);
     if (m) {
       if (!S.user) { S.view = 'login'; renderApp(); return; }
@@ -1305,6 +1306,7 @@
       S.draft.gallery = S.draft.gallery.filter((p) => !p.startsWith('local:') || blobUrls.has(p));
       if (S.draft.hero_photo?.startsWith('local:') && !blobUrls.has(S.draft.hero_photo)) S.draft.hero_photo = null;
       S.view = 'new'; renderApp();
+      if (prevView !== 'new') scrollTo(0, 0);   // из лендинга — к началу мастера, а не на середину
       if (store.get('tm_pending_save') && S.user) { store.del('tm_pending_save'); createFromDraft(); }
       return;
     }
