@@ -466,11 +466,13 @@
     const e = ENVS[id]; if (!e) return false;
     venv.classList.toggle('light', !!e.light);
     vid.poster = `/inv/env/${id}.jpg`; vid.src = `/inv/env/${id}.mp4`;
+    venv.style.setProperty('--venv-bg', `url(/inv/env/${id}.jpg)`);
     // ролик не загрузился до касания — показываем обычный конверт
     vid.addEventListener('error', () => { if (!opened) { venv.hidden = true; $('envelope').classList.remove('gone'); } }, { once: true });
     venv.hidden = false; $('envelope').classList.add('gone');
     // Первый экран — та же карточка, что в конце ролика
-    if (e.card) {
+    // (только на телефоне/вертикальном экране; на компьютере — обычный порядок: фото, затем имена)
+    if (e.card && matchMedia('(max-aspect-ratio: 3/4)').matches) {
       document.body.classList.add('venv-card');
       document.querySelector('.hero').style.setProperty('--card-img', `url(/inv/env/${id}-card.jpg)`);
       const hp = $('heroPhoto'); hp.classList.add('below'); document.querySelector('.hero').after(hp);

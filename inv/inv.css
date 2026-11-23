@@ -341,8 +341,8 @@ textarea.field { min-height: 110px; resize: vertical; }
 .lang button { border: 0; background: transparent; padding: 6px 12px; border-radius: 999px; font-size: 15px; font-weight: 600; cursor: pointer; color: var(--muted); }
 .lang button[aria-pressed="true"] { background: color-mix(in srgb, var(--gold2) 25%, transparent); color: var(--ink); }
 .demo-bar { position: fixed; left: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 40; display: flex; gap: 2px; padding: 4px;
-  border-radius: 999px; background: rgba(30, 26, 46, .78); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); font-family: system-ui, sans-serif; }
-.demo-bar a { color: #fff; text-decoration: none; font-size: 13px; font-weight: 600; padding: 9px 12px; border-radius: 999px; opacity: .75; }
+  max-width: calc(100% - 100px); overflow-x: auto; scrollbar-width: none; border-radius: 999px; background: rgba(30, 26, 46, .78); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); font-family: system-ui, sans-serif; }
+.demo-bar a { white-space: nowrap; flex: none; color: #fff; text-decoration: none; font-size: 13px; font-weight: 600; padding: 9px 12px; border-radius: 999px; opacity: .75; }
 .demo-bar a[aria-current="true"] { background: rgba(255, 255, 255, .18); opacity: 1; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -383,6 +383,16 @@ body[data-theme="tunku"] .err { color: #F2B8A0; }
 .venv-to::before { content: ''; position: absolute; inset: -40px -24px -30px; z-index: -1; background: radial-gradient(closest-side, rgba(9, 12, 24, .55), transparent); }
 .venv.light .venv-to::before { background: radial-gradient(closest-side, rgba(255, 250, 240, .6), transparent); }
 .venv.playing .venv-to, .venv.playing .venv-hint { opacity: 0; }
+/* Компьютер и планшет в альбомной ориентации: ролик снят вертикально (9:16) — показываем его «экраном телефона» по центру,
+   а по бокам размытый кадр того же конверта. Иначе ролик растягивается на всю ширину и выглядит крупно и мыльно. */
+@media (min-aspect-ratio: 3/4) {
+  .venv { --vw: min(100vw, calc(100svh * 9 / 16)); overflow: hidden; }
+  .venv::before { content: ''; position: absolute; inset: -60px; background: var(--venv-bg, none) center / cover; filter: blur(30px) brightness(.45) saturate(1.1); }
+  .venv.light::before { filter: blur(30px) brightness(.85); }
+  .venv video { left: 50%; width: var(--vw); translate: -50% 0; box-shadow: 0 0 80px rgba(0, 0, 0, .45); }
+  .venv-to { left: 50%; right: auto; width: calc(var(--vw) - 48px); translate: -50% 0; }
+  .venv-to .who { font-size: clamp(28px, calc(var(--vw) * .085), 42px); }
+}
 .venv.done { opacity: 0; pointer-events: none; }
 .venv:focus-visible { outline: 3px solid var(--focus); outline-offset: -6px; }
 
