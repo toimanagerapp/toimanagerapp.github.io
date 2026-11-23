@@ -1384,6 +1384,12 @@
   })();
 })();
 
-// Ссылки «Помощь в чате» открывают окно Jivo
+// Чат Jivo в конструкторе: плавающую кнопку не показываем (она закрывала «Далее» и «Создать»).
+// Чат открывается ссылкой «Помощь в чате» внизу страницы; окно видно, пока открыто или пока пишет оператор.
+document.documentElement.classList.add('jivo-quiet');
+const jivoShow = (on) => document.documentElement.classList.toggle('jivo-on', on);
+window.jivo_onOpen = () => jivoShow(true);
+window.jivo_onClose = () => jivoShow(false);
+window.jivo_onMessageReceived = () => jivoShow(true);
 document.addEventListener('click', (e) => { const a = e.target.closest && e.target.closest('[data-jivo]'); if (!a) return; e.preventDefault();
-  if (window.jivo_api && window.jivo_api.open) window.jivo_api.open(); });
+  if (window.jivo_api && window.jivo_api.open) { jivoShow(true); window.jivo_api.open(); } });
