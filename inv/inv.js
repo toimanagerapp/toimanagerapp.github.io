@@ -43,17 +43,26 @@
     document.body.style.setProperty('--dframe-color', THEMES[th].color);
     if (bg) document.body.style.setProperty('--dframe-bg', `url(${bg})`);
     document.body.innerHTML = `<div class="dframe-bg" aria-hidden="true"></div>
-      <div class="dframe-wrap">
-        <div class="dframe"><iframe src="${inner}" title="${ru ? 'Пример приглашения' : 'Чакыруунун үлгүсү'}" allow="autoplay; fullscreen"></iframe></div>
-        <div class="dframe-bar">
-          <span>${ru ? 'Так гость увидит приглашение на телефоне' : 'Конок чакырууну телефондон ушинтип көрөт'}</span>
-          <a class="dframe-full" href="${full}">${ru ? 'На весь экран' : 'Толук экран'}</a>
-          <a class="dframe-cta" href="${create}">${ru ? 'Создать своё' : 'Өзүңүздүкүн түзүү'}</a>
-        </div>
+      <div class="dframe"><iframe id="dframe" src="${inner}" title="${ru ? 'Пример приглашения' : 'Чакыруунун үлгүсү'}" allow="autoplay; fullscreen"></iframe></div>
+      <div class="dframe-side">
+        <p>${ru ? 'Так гость увидит приглашение на&nbsp;телефоне' : 'Конок чакырууну телефондон ушинтип көрөт'}</p>
+        <a class="dframe-cta" href="${create}">${ru ? 'Создать своё приглашение' : 'Өз чакырууңузду түзүү'}</a>
+        <a class="dframe-full" href="${full}">${ru ? 'Открыть на весь экран' : 'Толук экранда ачуу'}</a>
       </div>`;
+    // колесо мыши и клавиши над размытым фоном листают само приглашение — как обычную страницу
+    const fr = document.getElementById('dframe');
+    const win = () => { try { return fr.contentWindow; } catch { return null; } };
+    addEventListener('wheel', (e) => { const w = win(); if (w) { w.scrollBy({ top: e.deltaY, left: 0 }); } }, { passive: true });
+    addEventListener('keydown', (e) => {
+      const w = win(); if (!w) return;
+      const step = { ArrowDown: 60, ArrowUp: -60, PageDown: innerHeight * .9, PageUp: -innerHeight * .9, ' ': innerHeight * .9 }[e.key];
+      if (step) { e.preventDefault(); w.scrollBy({ top: step, behavior: 'smooth' }); }
+    });
+    fr.addEventListener('load', () => { try { fr.contentWindow.focus(); } catch {} });
     return;
   }
   const INFRAME = window.top !== window;
+  if (INFRAME) document.documentElement.classList.add('inframe');
   // путь в хранилище или (в предпросмотре) готовый адрес картинки — blob:, data:, https:
   const photo = (path) => (/^(blob:|data:|https:|\/inv\/demo\/)/.test(path) ? path : `${SB}/storage/v1/object/public/invite-photos/${path}`);
   const PREVIEW = q.get('preview') === '1';

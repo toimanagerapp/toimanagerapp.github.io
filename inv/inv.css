@@ -465,16 +465,19 @@ body.wm .wm-stamp::before { content: attr(data-t); }
 body.locked .wm-bar { display: none; }
 body.wm .demo-bar { bottom: calc(72px + env(safe-area-inset-bottom)); }
 
-/* Пример на компьютере: приглашение в «телефоне» по центру, вокруг размытый фон */
-body.dframe-page { margin: 0; min-height: 100svh; overflow: hidden; background: var(--dframe-color, #0D1530); font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; }
+/* Пример на компьютере: приглашение колонкой во всю высоту экрана по центру, вокруг размытый фон; без рамки и полосы прокрутки */
+html.inframe { scrollbar-width: none; }
+html.inframe::-webkit-scrollbar, html.inframe body::-webkit-scrollbar { display: none; }
+body.dframe-page { margin: 0; height: 100svh; overflow: hidden; background: var(--dframe-color, #0D1530); font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; }
 .dframe-bg { position: fixed; inset: -60px; background: var(--dframe-bg, none) center / cover, var(--dframe-color, #0D1530);
   filter: blur(34px) brightness(.5) saturate(1.1); }
-.dframe-wrap { position: relative; height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 20px; box-sizing: border-box; }
-.dframe { --h: min(calc(100svh - 96px), 900px); height: var(--h); width: min(calc(var(--h) * 9 / 19), 430px); border-radius: 30px; overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, .28); box-shadow: 0 0 0 6px rgba(255, 255, 255, .06), 0 30px 80px rgba(0, 0, 0, .5); background: #000; }
+.dframe { position: fixed; top: 0; bottom: 0; left: 50%; translate: -50% 0; width: min(100vw, 470px, calc(100svh * .6));
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, .07), 0 0 90px rgba(0, 0, 0, .55); }
 .dframe iframe { display: block; width: 100%; height: 100%; border: 0; }
-.dframe-bar { display: flex; align-items: center; gap: 14px; color: rgba(255, 255, 255, .82); font-size: 14px; }
-.dframe-bar a { color: #fff; text-decoration: none; font-weight: 600; border-radius: 999px; padding: 9px 16px; }
-.dframe-full { border: 1px solid rgba(255, 255, 255, .35); }
-.dframe-full:hover { background: rgba(255, 255, 255, .1); }
-.dframe-cta { background: linear-gradient(180deg, #E2C27F, #C49A4A); color: #1C1608 !important; }
+.dframe-side { position: fixed; left: calc(50% + min(470px, 100svh * .6) / 2 + 40px); bottom: 48px; width: 230px;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 12px; color: rgba(255, 255, 255, .8); font-size: 15px; line-height: 1.45; }
+.dframe-side p { margin: 0 0 4px; }
+.dframe-side a { text-decoration: none; font-weight: 600; font-size: 14px; border-radius: 999px; padding: 11px 18px; }
+.dframe-cta { background: linear-gradient(180deg, #E2C27F, #C49A4A); color: #1C1608; box-shadow: 0 8px 24px rgba(0, 0, 0, .35); }
+.dframe-full { color: rgba(255, 255, 255, .85); padding-left: 4px !important; text-decoration: underline !important; text-underline-offset: 3px; font-weight: 500 !important; }
+@media (max-width: 1100px) { .dframe-side { display: none; } }
