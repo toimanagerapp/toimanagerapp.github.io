@@ -126,7 +126,7 @@
       paid: 'Я оплатил', sending: 'Отправляем…', payErr: 'Не отправилось. Проверьте интернет и попробуйте ещё раз.',
       payOkT: 'Спасибо! Знак снят', payOkP: 'Мы проверим платёж в течение дня. Приглашение уже можно отправлять гостям.',
       payWaitT: 'Заявка принята', payWaitP: 'Проверим платёж в течение дня — после этого знак «Образец» исчезнет. Если оставили номер, напишем вам в WhatsApp.', phoneL: 'WhatsApp для ответа (необязательно)', phoneS: 'Напишем, когда откроем приглашение.',
-      payHelp: 'Вопросы по оплате — WhatsApp 0755 666 999', done: 'Хорошо',
+      payHelp: 'Вопросы по оплате — напишите в чат на сайте (кнопка внизу справа)', done: 'Хорошо',
       notFound: 'Приглашение не найдено или у вас нет доступа.', loadErr: 'Не удалось загрузить. Проверьте интернет и обновите страницу.',
       envShow: 'Показать конверт', envHide: 'Без конверта', close: 'Закрыть', openNew: 'Открыть отдельно',
       sample: 'Асан байке', titleSep: ' — ',
@@ -136,7 +136,7 @@
       days: ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'],
       when: (d, mo, wd, t) => `${d} ${mo}, ${wd}, в ${t}`, noDate: 'Дата не указана',
       opened: (s) => `открыл ${s}`, ago: { now: 'только что', m: (n) => `${n} мин назад`, h: (n) => `${n} ч назад`, d: (n) => `${n} дн назад` },
-      privacy: 'Политика конфиденциальности', help: 'Помощь в WhatsApp',
+      privacy: 'Политика конфиденциальности', help: 'Помощь в чате',
       draftFound: 'У вас есть несохранённый черновик', draftGo: 'Продолжить', draftNew: 'Начать заново',
     },
     ky: {
@@ -219,7 +219,7 @@
       paid: 'Төлөдүм', sending: 'Жөнөтүлүүдө…', payErr: 'Жөнөтүлгөн жок. Интернетти текшерип, кайра аракет кылыңыз.',
       payOkT: 'Рахмат! Белги алынды', payOkP: 'Төлөмдү бир күндүн ичинде текшеребиз. Чакырууну конокторго азыр эле жөнөтө берсеңиз болот.',
       payWaitT: 'Өтүнмө кабыл алынды', payWaitP: 'Төлөмдү бир күндүн ичинде текшеребиз — андан кийин «Үлгү» белгиси жоголот. Номер калтырсаңыз, WhatsApp аркылуу жазабыз.', phoneL: 'Жооп үчүн WhatsApp (милдеттүү эмес)', phoneS: 'Чакыруу ачылганда жазабыз.',
-      payHelp: 'Төлөм боюнча суроолор — WhatsApp 0755 666 999', done: 'Жакшы',
+      payHelp: 'Төлөм боюнча суроолор — сайттагы чатка жазыңыз (оң жактагы ылдыйкы баскыч)', done: 'Жакшы',
       notFound: 'Чакыруу табылган жок же сизде уруксат жок.', loadErr: 'Жүктөлгөн жок. Интернетти текшерип, баракты жаңылаңыз.',
       envShow: 'Конвертти көрсөтүү', envHide: 'Конвертсиз', close: 'Жабуу', openNew: 'Өзүнчө ачуу',
       sample: 'Асан байке', titleSep: ' — ',
@@ -229,7 +229,7 @@
       days: ['жекшемби', 'дүйшөмбү', 'шейшемби', 'шаршемби', 'бейшемби', 'жума', 'ишемби'],
       when: (d, mo, wd, t) => `${d}-${mo}, ${wd}, саат ${t}`, noDate: 'Күнү көрсөтүлгөн эмес',
       opened: (s) => `ачты ${s}`, ago: { now: 'азыр эле', m: (n) => `${n} мүн мурун`, h: (n) => `${n} саат мурун`, d: (n) => `${n} күн мурун` },
-      privacy: 'Купуялык саясаты', help: 'WhatsAppта жардам',
+      privacy: 'Купуялык саясаты', help: 'Чатта жардам',
       draftFound: 'Сакталбаган долбооруңуз бар', draftGo: 'Улантуу', draftNew: 'Башынан баштоо',
     },
   };
@@ -922,7 +922,7 @@
       <div class="lbar" id="lbar"><a class="btn gold block" href="#pick" data-act="to-pick"><span>${esc(t.ctaCreate)}</span><small>${esc(t.ctaFree)}</small></a></div>`;
     return `${mine}${mine ? '' : landing}${foot()}`;
   }
-  const foot = () => `<footer class="foot"><span>© Той Менеджер</span><a href="../privacy/">${esc(L().privacy)}</a><a href="https://wa.me/996755666999" target="_blank" rel="noopener">${esc(L().help)}</a></footer>`;
+  const foot = () => `<footer class="foot"><span>© Той Менеджер</span><a href="../privacy/">${esc(L().privacy)}</a><a href="#" data-jivo>${esc(L().help)}</a></footer>`;
   function toiCard(x) {
     const t = L();
     const when = x.starts_at ? fmtDay(x.starts_at) : t.noDate;
@@ -1383,3 +1383,7 @@
     route();
   })();
 })();
+
+// Ссылки «Помощь в чате» открывают окно Jivo
+document.addEventListener('click', (e) => { const a = e.target.closest && e.target.closest('[data-jivo]'); if (!a) return; e.preventDefault();
+  if (window.jivo_api && window.jivo_api.open) window.jivo_api.open(); });
