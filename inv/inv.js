@@ -25,6 +25,35 @@
   // Видео-конверты (4 с, 720×1280): кадр-заставка .jpg и ролик .mp4 в /inv/env/. light — светлый конверт, тёмный текст
   // Готовые видео-конверты (остальные добавляются по мере готовности роликов; неизвестный — обычный конверт)
   const ENVS = { navy: { card: true } };   // ivory: { light: true }, garnet: {}, emerald: {}
+
+  // Пример на компьютере: показываем приглашение «в телефоне» по центру (iframe с той же страницей),
+  // фон — размытый кадр конверта/фото пары. ?full=1 — открыть на весь экран. Личные ссылки гостей не трогаем.
+  if (!token && q.get('preview') !== '1' && q.get('full') !== '1' && window.top === window
+      && matchMedia('(min-width: 860px) and (min-aspect-ratio: 1/1)').matches) {
+    const ru = q.get('lang') === 'ru';
+    const th = THEMES[q.get('theme')] ? q.get('theme') : 'ak-altyn';
+    const env = ENVS[q.get('env')] ? q.get('env') : null;
+    const kind = q.get('kind');
+    const bg = env ? `/inv/env/${env}.jpg` : (!kind || kind === 'kyz_uzatuu' || kind === 'wedding') ? '/inv/demo/0.webp' : '';
+    const inner = new URL(location.href); inner.searchParams.set('inframe', '1');
+    const full = new URL(location.href); full.searchParams.set('full', '1');
+    const create = `/create/${ru ? '' : '?lang=ky'}`;
+    document.body.className = 'dframe-page';
+    document.body.removeAttribute('data-theme');
+    document.body.style.setProperty('--dframe-color', THEMES[th].color);
+    if (bg) document.body.style.setProperty('--dframe-bg', `url(${bg})`);
+    document.body.innerHTML = `<div class="dframe-bg" aria-hidden="true"></div>
+      <div class="dframe-wrap">
+        <div class="dframe"><iframe src="${inner}" title="${ru ? 'Пример приглашения' : 'Чакыруунун үлгүсү'}" allow="autoplay; fullscreen"></iframe></div>
+        <div class="dframe-bar">
+          <span>${ru ? 'Так гость увидит приглашение на телефоне' : 'Конок чакырууну телефондон ушинтип көрөт'}</span>
+          <a class="dframe-full" href="${full}">${ru ? 'На весь экран' : 'Толук экран'}</a>
+          <a class="dframe-cta" href="${create}">${ru ? 'Создать своё' : 'Өзүңүздүкүн түзүү'}</a>
+        </div>
+      </div>`;
+    return;
+  }
+  const INFRAME = window.top !== window;
   // путь в хранилище или (в предпросмотре) готовый адрес картинки — blob:, data:, https:
   const photo = (path) => (/^(blob:|data:|https:|\/inv\/demo\/)/.test(path) ? path : `${SB}/storage/v1/object/public/invite-photos/${path}`);
   const PREVIEW = q.get('preview') === '1';
@@ -522,7 +551,7 @@
     document.title = `${KIND[C.kind][lang][1]} — ${[C.a, C.b].filter(Boolean).join(' & ')}`;
     if (r.demo && !r.preview) {
       const bar = $('demoBar'); bar.hidden = false;
-      bar.innerHTML = Object.entries(THEMES).map(([k, v]) => `<a href="?theme=${k}${q.get('env') ? `&env=${encodeURIComponent(q.get('env'))}` : ''}${q.get('kind') ? `&kind=${encodeURIComponent(q.get('kind'))}` : ''}${q.get('lang') ? `&lang=${encodeURIComponent(q.get('lang'))}` : ''}" aria-current="${k === theme}">${v.title}</a>`).join('');
+      bar.innerHTML = Object.entries(THEMES).map(([k, v]) => `<a href="?theme=${k}${q.get('env') ? `&env=${encodeURIComponent(q.get('env'))}` : ''}${q.get('kind') ? `&kind=${encodeURIComponent(q.get('kind'))}` : ''}${q.get('lang') ? `&lang=${encodeURIComponent(q.get('lang'))}` : ''}" aria-current="${k === theme}"${INFRAME ? ' target="_top"' : ''}>${v.title}</a>`).join('');
     }
     render();
     hint.textContent = T[lang].envHint;
