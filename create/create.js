@@ -246,7 +246,7 @@
   };
   const CATEGORIES = ['Туугандар', 'Кудалар', 'Тайкелер', 'Достор', 'Кошуналар', 'Классташтар', 'Кесиптештер'];
   // Оформления открытки — те же, что в /inv/inv.js
-  const SCENES_READY = false;   // true — когда пришли настоящие фоны (tools/scenes)
+  const SCENES_READY = true;   // true — когда пришли настоящие фоны (tools/scenes)
   const THEMES = [
     { id: 'ak-altyn', name: 'Ак алтын', bg: 'linear-gradient(150deg,#FBF6EC,#EFE2C9)', ink: '#A9823E' },
     { id: 'ak', name: 'Ак', bg: 'linear-gradient(150deg,#FFFFFF,#F4EBDD)', ink: '#7A1E2C' },
@@ -258,10 +258,26 @@
     { id: 'bermet', name: 'Бермет', bg: 'linear-gradient(150deg,#FFF8F5,#F1DCD6)', ink: '#9A5560' },
     { id: 'asman', name: 'Асман', bg: 'linear-gradient(150deg,#FBFDFF,#DCE6F1)', ink: '#2C5580' },
     { id: 'boz', name: 'Боз', bg: 'linear-gradient(150deg,#F7F6F3,#DFDDD8)', ink: '#3C4044' },
-    // Шаблоны-сцены (картинка на весь экран). Показываются, когда готовы фоны; до этого — по ?scenes=1
-    { id: 'ala-too', name: 'Ала-Тоо', scene: true, bg: 'center/cover url(/inv/scenes/ala-too.webp)', ink: '#F4DFA6' },
-    { id: 'tunku-asman', name: 'Түнкү асман', scene: true, bg: 'center/cover url(/inv/scenes/tunku-asman.webp)', ink: '#F4DFA6' },
-  ].filter((x) => !x.scene || SCENES_READY || new URLSearchParams(location.search).get('scenes') === '1');
+    // Шаблоны-сцены (картинка на весь экран) — список из tools/scenes/scenes.py
+    // SCENES:BEGIN (tools/scenes/scenes.py)
+    { id: 'ala-too', name: 'Ала-Тоо', scene: true, bg: 'center/cover url(/inv/scenes/ala-too-s.webp)', ink: '#7A2E4A' },
+    { id: 'boz-uy', name: 'Боз үй', scene: true, bg: 'center/cover url(/inv/scenes/boz-uy-s.webp)', ink: '#7A2E4A' },
+    { id: 'jibek', name: 'Жибек', scene: true, bg: 'center/cover url(/inv/scenes/jibek-s.webp)', ink: '#A47B32' },
+    { id: 'barhat', name: 'Бархат', scene: true, bg: 'center/cover url(/inv/scenes/barhat-s.webp)', ink: '#F4DFA6' },
+    { id: 'bilerik', name: 'Билерик', scene: true, bg: 'center/cover url(/inv/scenes/bilerik-s.webp)', ink: '#F4DFA6' },
+    { id: 'shokulo', name: 'Шөкүлө', scene: true, bg: 'center/cover url(/inv/scenes/shokulo-s.webp)', ink: '#F4DFA6' },
+    { id: 'jurkan', name: 'Жууркан', scene: true, bg: 'center/cover url(/inv/scenes/jurkan-s.webp)', ink: '#F4DFA6' },
+    { id: 'shyrdak', name: 'Шырдак', scene: true, bg: 'center/cover url(/inv/scenes/shyrdak-s.webp)', ink: '#8E2A20' },
+    { id: 'ak-kalpak', name: 'Ак калпак', scene: true, bg: 'center/cover url(/inv/scenes/ak-kalpak-s.webp)', ink: '#244A73' },
+    { id: 'kok-asman', name: 'Көк асман', scene: true, bg: 'center/cover url(/inv/scenes/kok-asman-s.webp)', ink: '#244A73' },
+    { id: 'beshik', name: 'Бешик', scene: true, bg: 'center/cover url(/inv/scenes/beshik-s.webp)', ink: '#9A5560' },
+    { id: 'ala-jip', name: 'Ала жип', scene: true, bg: 'center/cover url(/inv/scenes/ala-jip-s.webp)', ink: '#7A5A3A' },
+    { id: 'altyn-kuz', name: 'Алтын күз', scene: true, bg: 'center/cover url(/inv/scenes/altyn-kuz-s.webp)', ink: '#8A5A1E' },
+    { id: 'tunku-asman', name: 'Түнкү асман', scene: true, bg: 'center/cover url(/inv/scenes/tunku-asman-s.webp)', ink: '#F4DFA6' },
+    { id: 'tuman', name: 'Туман', scene: true, bg: 'center/cover url(/inv/scenes/tuman-s.webp)', ink: '#45494D' },
+    // SCENES:END
+  ].filter((x) => !x.scene || SCENES_READY || new URLSearchParams(location.search).get('scenes') === '1')
+    .sort((a, b) => (b.scene ? 1 : 0) - (a.scene ? 1 : 0));   // новые шаблоны — первыми
   const DRESS = ['#FFFFFF', '#F1E6D2', '#D9BE8C', '#B48A3E', '#7A1E2C', '#16213F', '#0F3A31', '#C9A7D8', '#F4B8C8', '#1E1E1E'];
 
   // ---------- Состояние ----------

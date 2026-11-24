@@ -383,3 +383,5 @@ a:focus-visible, button:focus-visible, summary:focus-visible, .btn:focus-visible
 .d-tabs button[aria-pressed="true"] { background: #1F2547; border-color: #1F2547; color: #fff; }
 .design[hidden] { display: none; }
 @media (min-width: 900px) { .d-tabs + .designs { grid-template-columns: repeat(auto-fit, minmax(150px, 160px)); justify-content: center; } }
+.design { position: relative; }
+.d-new { position: absolute; z-index: 1; top: 8px; left: 8px; padding: 4px 8px; border-radius: 999px; background: #1F2547; color: #fff; font: 600 11px/1 Inter, system-ui, sans-serif; letter-spacing: .04em; }

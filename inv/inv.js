@@ -21,9 +21,23 @@
     'asman': { title: 'Асман', music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FBFDFF', '#E3ECF4', '#5D8AB8', '#2F5D8A'], color: '#F2F6FA' },
     'kiyiz': { title: 'Кийиз', music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FCF7EE', '#EDE1CE', '#C94A35', '#A3271F'], color: '#F6EEE1' },
     'boz': { title: 'Боз', music: '/inv/music/bakyt-kushu.mp3', swatches: ['#F7F6F3', '#E4E2DE', '#94989C', '#45494D'], color: '#EEEDEA' },
-    // Шаблоны-сцены: картинка на весь экран (/inv/scenes/<id>.webp), обложка вместо конверта
-    'ala-too': { title: 'Ала-Тоо', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FFFCF8', '#EEE3D8', '#D7A86E', '#6E3B5A'], color: '#1E2142' },
-    'tunku-asman': { title: 'Түнкү асман', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#0B1230', '#142048', '#F4DFA6', '#C49A4A'], color: '#060A1E' },
+    // SCENES:BEGIN (tools/scenes/scenes.py)
+    'ala-too': { title: 'Ала-Тоо', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FFFCF8', '#EEE3D8', '#D7A86E', '#6E3B5A'], color: '#F7F1EA' },
+    'boz-uy': { title: 'Боз үй', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FFFCF8', '#EEE3D8', '#D7A86E', '#6E3B5A'], color: '#F7F1EA' },
+    'jibek': { title: 'Жибек', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FFFDF8', '#F4ECDD', '#E3C77E', '#8A6A2C'], color: '#FBF7EF' },
+    'barhat': { title: 'Бархат', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#561727', '#4A1220', '#F6E2A8', '#F4DFA6'], color: '#3A0D18' },
+    'bilerik': { title: 'Билерик', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#14443A', '#113A31', '#F2DA9C', '#F2DA9C'], color: '#0D2B25' },
+    'shokulo': { title: 'Шөкүлө', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#561727', '#4A1220', '#F6E2A8', '#F4DFA6'], color: '#3A0D18' },
+    'jurkan': { title: 'Жууркан', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FFFAF3', '#F0E0CE', '#D86A45', '#A3352A'], color: '#F8EEE3' },
+    'shyrdak': { title: 'Шырдак', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FCF7EE', '#EDE1CE', '#D2563F', '#A3271F'], color: '#F6EEE1' },
+    'ak-kalpak': { title: 'Ак калпак', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FBFDFF', '#E3ECF4', '#6F97C2', '#2F5D8A'], color: '#F2F6FA' },
+    'kok-asman': { title: 'Көк асман', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FBFDFF', '#E3ECF4', '#6F97C2', '#2F5D8A'], color: '#F2F6FA' },
+    'beshik': { title: 'Бешик', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FFFAF8', '#F5E6E1', '#CF9098', '#9A5560'], color: '#FBF3F0' },
+    'ala-jip': { title: 'Ала жип', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FFFCF6', '#EDE3D4', '#C9A57A', '#6B4A2E'], color: '#F7F1E8' },
+    'altyn-kuz': { title: 'Алтын күз', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FFFBF4', '#F2E4CF', '#D9A55A', '#8A5A1E'], color: '#FAF2E6' },
+    'tunku-asman': { title: 'Түнкү асман', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#142048', '#101A3E', '#F4DFA6', '#F4DFA6'], color: '#0B1230' },
+    'tuman': { title: 'Туман', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#F7F6F3', '#E4E2DE', '#7E8286', '#45494D'], color: '#EEEDEA' },
+    // SCENES:END
   };
   // Видео-конверты (4 с, 720×1280): кадр-заставка .jpg и ролик .mp4 в /inv/env/. light — светлый конверт, тёмный текст
   // Готовые видео-конверты (остальные добавляются по мере готовности роликов; неизвестный — обычный конверт)

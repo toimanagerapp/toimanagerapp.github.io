@@ -508,6 +508,6 @@ body { background: var(--bg); overflow-x: clip; }
 /* Жених и невеста: на телефоне друг под другом — чтобы подсказка «Например, Азамат» помещалась целиком */
 @media (max-width: 520px) { .grid2.names2 { grid-template-columns: 1fr; } }
 
-.theme .sw.scene { height: 120px; }
+.theme .sw { height: 120px; }
 .theme .sw.scene span { font-family: 'Great Vibes KG', 'Cormorant Garamond', serif; font-style: normal; text-shadow: 0 1px 8px rgba(0,0,0,.5); }
 @font-face { font-family: 'Great Vibes KG'; font-display: swap; src: url(/inv/fonts/great-vibes-kg.woff2) format('woff2'); }
