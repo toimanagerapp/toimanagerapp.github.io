@@ -982,7 +982,20 @@
       <span class="stats">${st}<span class="pill2">${x.guests} ${esc(t.kGuests)}</span>${x.opened ? `<span class="pill2 acc">${x.opened} ${esc(t.kOpened)}</span>` : ''}${x.coming ? `<span class="pill2 ok">${x.coming} ${esc(t.kComing)}</span>` : ''}</span></a>`;
   }
   let kindFromLink = KIND_IDS.includes(qs.get('kind')) ? qs.get('kind') : null; // с посадочных страниц: /create/?kind=wedding
+  // «Создать своё» из примера оформления: /create/?theme=kyzyl-kiyiz&kind=kyz_uzatuu — начинаем именно с этого оформления
+  let themeFromLink = THEMES.some((x) => x.id === qs.get('theme')) ? qs.get('theme') : null;
   function bindHome(root) {
+    if (themeFromLink) {
+      const th = themeFromLink; themeFromLink = null;
+      const l = loadLocal();
+      if (l) { S.draft = l.d; S.step = l.step || 0; }                       // черновик уже есть — меняем только оформление
+      else { S.draft = newDraft(kindFromLink || 'wedding'); S.step = 0; }
+      kindFromLink = null;
+      S.draft.theme = th; S.draft.theme_chosen = true; S.toi = null; saveLocal();
+      track('create_start', { kind: S.draft.kind, from: 'design', theme: th });
+      location.hash = '#/new'; return;
+    }
+    themeFromLink = null;
     if (kindFromLink && !loadLocal() && !(S.user && S.tois && S.tois.length)) {
       const k = kindFromLink; kindFromLink = null;
       S.draft = newDraft(k); S.step = 0; S.toi = null; saveLocal();

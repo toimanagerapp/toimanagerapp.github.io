@@ -479,7 +479,7 @@ body.dframe-page { margin: 0; height: 100svh; overflow: hidden; background: var(
   display: flex; flex-direction: column; align-items: flex-start; gap: 12px; color: rgba(255, 255, 255, .8); font-size: 15px; line-height: 1.45; }
 .dframe-side p { margin: 0 0 4px; }
 .dframe-side a { text-decoration: none; font-weight: 600; font-size: 14px; border-radius: 999px; padding: 11px 18px; }
-.dframe-cta { background: linear-gradient(180deg, #E2C27F, #C49A4A); color: #1C1608; box-shadow: 0 8px 24px rgba(0, 0, 0, .35); }
+.dframe-cta { background: #7A1E2C; color: #FFF7EE; box-shadow: 0 8px 24px rgba(0, 0, 0, .35); }
 .dframe-full { color: rgba(255, 255, 255, .85); padding-left: 4px !important; text-decoration: underline !important; text-underline-offset: 3px; font-weight: 500 !important; }
 @media (max-width: 1100px) { .dframe-side { display: none; } }
 
@@ -494,7 +494,7 @@ body.dframe-page { margin: 0; height: 100svh; overflow: hidden; background: var(
 .scover-in { position: absolute; z-index: 1; left: var(--sc-left, 24px); right: 24px; top: calc(var(--zone-top, 13svh) + env(safe-area-inset-top));
   display: flex; flex-direction: column; align-items: var(--sc-align, center); text-align: center; text-shadow: var(--sc-shadow); }
 .scover-in > * { width: min(100%, 360px); }
-.scover .caps, body.scene .hero .caps { color: var(--sc-caps, #F4E2B8); letter-spacing: .32em; font-size: 12px; }
+.scover .caps, body.scene .hero .caps { color: var(--sc-caps, #F4E2B8); letter-spacing: .24em; font-size: 12px; font-weight: 700; text-wrap: balance; max-width: 300px; margin-left: auto; margin-right: auto; }
 .sc-names, body.scene .hero .names, body.scene .hero .amp { font-family: 'Great Vibes KG', 'Cormorant', serif; font-weight: 400; font-style: normal; text-transform: none; letter-spacing: 0; }
 .sc-names { font-size: clamp(54px, 16vw, 84px); line-height: 1.12; margin-top: 10px; text-shadow: none;
   background: linear-gradient(180deg, var(--sc-n1), var(--sc-n2) 60%, var(--sc-n3)); -webkit-background-clip: text; background-clip: text; color: transparent; padding: 0 .15em;

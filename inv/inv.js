@@ -67,7 +67,8 @@
     const bg = env ? (ENVS[env].webp ? `/inv/env/${env}-poster.webp` : `/inv/env/${env}.jpg`) : (!kind || kind === 'kyz_uzatuu' || kind === 'wedding') ? '/inv/demo/0.webp' : '';
     const inner = new URL(location.href); inner.searchParams.set('inframe', '1');
     const full = new URL(location.href); full.searchParams.set('full', '1');
-    const create = `/create/${ru ? '' : '?lang=ky'}`;
+    const cq = new URLSearchParams(); if (!ru) cq.set('lang', 'ky'); cq.set('theme', th); if (kind) cq.set('kind', kind);
+    const create = `/create/?${cq.toString().replace(/&/g, '&amp;')}`;
     document.body.className = 'dframe-page';
     document.body.removeAttribute('data-theme');
     document.body.style.setProperty('--dframe-color', THEMES[th].color);
@@ -312,7 +313,12 @@
     const L = T[lang], k = KIND[C.kind];
     document.documentElement.lang = lang;
     document.querySelectorAll('[data-t]').forEach((el) => { const v = L[el.dataset.t]; if (typeof v === 'string') el.textContent = v; });
-    document.querySelectorAll('a[href*="/create/"]').forEach((a) => { const u = new URL(a.href); if (lang === 'ky') u.searchParams.set('lang', 'ky'); else u.searchParams.delete('lang'); a.href = u.toString(); });
+    // ссылки «Создать своё»: язык, а в примере — ещё это же оформление и вид тоя (человек начинает с того, что смотрел)
+    document.querySelectorAll('a[href*="/create/"]').forEach((a) => {
+      const u = new URL(a.href); if (lang === 'ky') u.searchParams.set('lang', 'ky'); else u.searchParams.delete('lang');
+      if (R.demo && !R.preview) { u.searchParams.set('theme', theme); if (C.kind && C.kind !== 'other') u.searchParams.set('kind', C.kind); }
+      a.href = u.toString();
+    });
     document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
     const guest = R.mode === 'personal' ? R.guest : null;
     // конверт
@@ -631,7 +637,7 @@
     document.title = `${KIND[C.kind][lang][1]} — ${[C.a, C.b].filter(Boolean).join(' & ')}`;
     if (r.demo && !r.preview) {
       const bar = $('demoBar'); bar.hidden = false;
-      bar.innerHTML = Object.entries(THEMES).map(([k, v]) => `<a href="?theme=${k}${q.get('env') ? `&env=${encodeURIComponent(q.get('env'))}` : ''}${q.get('kind') ? `&kind=${encodeURIComponent(q.get('kind'))}` : ''}${q.get('lang') ? `&lang=${encodeURIComponent(q.get('lang'))}` : ''}" aria-current="${k === theme}"${INFRAME ? ' target="_top"' : ''}>${v.title}</a>`).join('');
+      bar.innerHTML = Object.entries(THEMES).sort((x, y) => (y[1].scene ? 1 : 0) - (x[1].scene ? 1 : 0)).map(([k, v]) => `<a href="?theme=${k}${q.get('env') ? `&env=${encodeURIComponent(q.get('env'))}` : ''}${q.get('kind') ? `&kind=${encodeURIComponent(q.get('kind'))}` : ''}${q.get('lang') ? `&lang=${encodeURIComponent(q.get('lang'))}` : ''}" aria-current="${k === theme}"${INFRAME ? ' target="_top"' : ''}>${v.title}</a>`).join('');
     }
     render();
     hint.textContent = T[lang].envHint;

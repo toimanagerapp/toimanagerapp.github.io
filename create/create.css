@@ -101,7 +101,7 @@ input[type="date"].input, input[type="time"].input { min-width: 0; }
 .pv-slot { display: none; }
 @media (min-width: 980px) { .pv-slot { display: block; width: var(--pv-w); min-height: 600px; } }
 .pv { position: fixed; top: calc(var(--head-h) + 24px); width: var(--pv-w); z-index: 5; }
-.pv .phone { width: var(--pv-w); height: min(740px, calc(100vh - var(--head-h) - 110px)); border-radius: 44px; padding: 10px; background: #14172A;
+.pv .phone { width: var(--pv-w); height: min(740px, calc(100vh - var(--head-h) - 110px)); border-radius: 44px; padding: 10px; background: #2B1D18;
   box-shadow: 0 30px 60px rgba(60, 30, 20, .22), 0 8px 18px rgba(60, 30, 20, .12); }
 .pv iframe { width: 100%; height: 100%; border: 0; border-radius: 34px; background: #F3EADB; display: block; }
 .pv .pv-tools { display: flex; justify-content: center; gap: 8px; margin-top: 14px; }
@@ -232,7 +232,7 @@ input[type="date"].input, input[type="time"].input { min-width: 0; }
 .landing .ticks span::before { content: "✓"; color: var(--success); font-weight: 600; margin-right: 6px; }
 .landing .demo { display: none; }
 @media (min-width: 980px) { .landing .demo { display: block; } }
-.demo .phone { width: 300px; aspect-ratio: 9 / 18.5; border-radius: 40px; padding: 9px; background: #14172A; box-shadow: 0 30px 60px rgba(60, 30, 20, .22); margin: 0 auto; }
+.demo .phone { width: 300px; aspect-ratio: 9 / 18.5; border-radius: 40px; padding: 9px; background: #2B1D18; box-shadow: 0 30px 60px rgba(60, 30, 20, .22); margin: 0 auto; }
 .demo iframe { width: 100%; height: 100%; border: 0; border-radius: 32px; display: block; background: #F3EADB; }
 .demo p { text-align: center; font-size: 14px; color: var(--muted); margin-top: 12px; }
 .pick-title { font-size: 20px; margin: 8px 0 14px; }
@@ -371,7 +371,7 @@ input[type="date"].input, input[type="time"].input { min-width: 0; }
 
 /* Тост */
 .toast { position: fixed; left: 50%; bottom: calc(96px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 90; max-width: calc(100% - 32px);
-  background: #14172A; color: #fff; padding: 12px 18px; border-radius: 14px; font-size: 15px; font-weight: 500; box-shadow: 0 10px 30px rgba(0, 0, 0, .25); animation: up .25s; }
+  background: #2B1D18; color: #fff; padding: 12px 18px; border-radius: 14px; font-size: 15px; font-weight: 500; box-shadow: 0 10px 30px rgba(0, 0, 0, .25); animation: up .25s; }
 .toast.bad { background: var(--danger); }
 @media (min-width: 980px) { .toast { bottom: 32px; } }
 
@@ -441,7 +441,7 @@ body { background: var(--bg); overflow-x: clip; }
 .hx .ticks { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 16px; margin-top: 18px; font-size: 13.5px; color: rgba(244, 236, 221, .7); }
 .hx .ticks span::before { content: "✓"; color: var(--gold-2); font-weight: 600; margin-right: 6px; }
 .hx-phone { grid-area: phone; position: relative; display: block; width: min(230px, 62vw); aspect-ratio: 9 / 16; margin: 0 auto; border-radius: 26px; overflow: hidden;
-  border: 1px solid rgba(217, 184, 119, .5); box-shadow: 0 30px 70px rgba(0, 0, 0, .5), 0 0 0 7px rgba(255, 255, 255, .04); background: #1B2142; }
+  border: 1px solid rgba(217, 184, 119, .5); box-shadow: 0 30px 70px rgba(0, 0, 0, .5), 0 0 0 7px rgba(255, 255, 255, .04); background: #2B1D18; }
 .hx-phone video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .hx-card { position: absolute; inset: 0; color: #8C6A31; opacity: 0; filter: blur(6px); transition: opacity 1.1s ease, filter 1.1s ease; pointer-events: none; }
 .hx-card.on { opacity: 1; filter: none; }
