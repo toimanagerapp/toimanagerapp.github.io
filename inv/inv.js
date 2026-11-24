@@ -640,14 +640,15 @@
     document.body.dataset.theme = theme;
     document.querySelector('meta[name="theme-color"]').content = THEMES[theme].color;
   }
+  // Одна мелодия для всех оформлений; для кыз узатуу — песня «Ак жол, кызым», для аша (поминки) — спокойная
+  const musicSrc = () => (C.kind === 'memorial' ? '/inv/music/tunku.mp3' : C.kind === 'kyz_uzatuu' ? '/inv/music/ak-jol-kyzym.mp3' : THEMES[theme].music);
   function start(r) {
     R = r; C = withDefaults(r); theme = C.theme; applyTheme();
     let saved = null; try { saved = localStorage.getItem('invLang'); } catch {}
     lang = q.get('lang') === 'ru' || q.get('lang') === 'ky' ? q.get('lang') : saved || r.guest?.lang || C.lang || 'ky';
     if (r.guest && (r.guest.rsvp === 'yes' || r.guest.rsvp === 'no')) { answer = r.guest.rsvp; sent = true; }
     count = r.guest?.rsvp === 'yes' && r.guest.rsvp_count ? r.guest.rsvp_count : r.guest?.party_size || 1;
-    // Одна мелодия для всех оформлений; для аша (поминки) — спокойная
-    if (C.music === 'none') audio.removeAttribute('src'); else audio.src = C.kind === 'memorial' ? '/inv/music/tunku.mp3' : THEMES[theme].music;
+    if (C.music === 'none') audio.removeAttribute('src'); else audio.src = musicSrc();
     audio.volume = 0;
     $('seal').innerHTML = sealSvg(C.initials || '·'); $('seal').disabled = false;
     document.title = `${KIND[C.kind][lang][1]} — ${[C.a, C.b].filter(Boolean).join(' & ')}`;
@@ -722,7 +723,7 @@
       $('gallery').innerHTML = '';
       $('seal').innerHTML = sealSvg(C.initials || '·');
       if (C.music === 'none') { audio.pause(); audio.removeAttribute('src'); $('music').hidden = true; }
-      else if (!audio.getAttribute('src')) { audio.src = C.kind === 'memorial' ? '/inv/music/tunku.mp3' : THEMES[theme].music; $('music').hidden = !opened; }
+      else if (audio.getAttribute('src') !== musicSrc()) { const was = !audio.paused; audio.src = musicSrc(); if (was) audio.play().catch(() => {}); $('music').hidden = !opened; }
       render();
       if (opened) document.querySelectorAll('main .reveal').forEach((el) => el.classList.add('in'));
     });
