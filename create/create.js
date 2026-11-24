@@ -937,13 +937,12 @@
     const local = loadLocal();
     const draftBox = local && !mine ? `<div class="status check" style="margin-top:20px"><div class="ic">${I.clock}</div><div style="flex:1"><b>${esc(t.draftFound)}</b><p>${esc(titleFor(local.d))}</p>
       <div class="btns"><a class="btn primary sm" href="#/new">${esc(t.draftGo)}</a><button type="button" class="btn ghost sm" data-act="drop">${esc(t.draftNew)}</button></div></div></div>` : '';
-    const demoUrl = `../inv/?env=navy&amp;theme=tun&amp;lang=${lang}&amp;utm_source=create&amp;utm_medium=hero`;
+    const demoUrl = `../inv/?theme=shokulo&amp;kind=kyz_uzatuu&amp;lang=${lang}&amp;utm_source=create&amp;utm_medium=hero`;
     const landing = `<section class="hx">
         <div class="hx-in">
           <div class="hx-head"><span class="eyebrow">${esc(t.eyebrow)}</span><h1>${t.h1}</h1></div>
           <a class="hx-phone" href="${demoUrl}" target="_blank" rel="noopener" aria-label="${esc(t.seeDemo)}">
-            <video muted playsinline preload="auto" poster="../inv/env/navy-poster.webp" src="../inv/env/navy.mp4" aria-hidden="true"></video>
-            <span class="hx-card" aria-hidden="true"><span class="t"><small>${esc(t.heroKind)}</small><b>${esc(t.heroNames)}</b></span><span class="d">${esc(t.heroDate)}</span></span>
+            <img src="/img/themes/${lang === 'ky' ? 'ky' : 'ru'}_shokulo.webp" alt="" width="390" height="780" fetchpriority="high">
           </a>
           <div class="hx-body">
             <p class="lead">${esc(t.heroLead)}</p>

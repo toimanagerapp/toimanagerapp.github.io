@@ -10,16 +10,16 @@
 /* Той Менеджер — общий стиль сайта. Правила: DESIGN.md. Слоновая кость, полночный синий, золото; заголовки Cormorant, текст и цифры Inter */
 :root {
   /* единые правила: см. DESIGN.md в корне репозитория */
-  --bg: #FAF7F2;
+  --bg: #F8F2E8;
   --surface: #FFFFFF;
-  --line: #ECE5D9;
+  --line: #E9DCC8;
   --line-2: #DDD3C2;
   --tint: #F3EFE7;
-  --ink: #1B1E2E;
-  --muted: #67616F;
-  --accent: #1F2547;
-  --accent-dark: #151935;
-  --accent-soft: #EEEFF5;
+  --ink: #2B1D18;
+  --muted: #6E5D52;
+  --accent: #7A1E2C;
+  --accent-dark: #5E1520;
+  --accent-soft: #F6E6E2;
   --gold: #A9843F;
   --gold-2: #D9B877;
   --gold-text: #8A6A2C;
@@ -29,12 +29,12 @@
   --success-soft: #E5F4EC;
   --warn: #7A4A00;
   --danger: #A3243A;
-  --hero: linear-gradient(160deg, #262E5E 0%, #181C38 100%);
+  --hero: linear-gradient(160deg, #5A1A26 0%, #2B0C12 100%);
   --hero-soft: linear-gradient(150deg, #FBF7EF 0%, #F3ECDF 100%);
   --serif: 'Cormorant Garamond', Georgia, serif;
   --radius: 24px;
-  --shadow: 0 1px 2px rgba(20, 22, 40, .04), 0 8px 22px rgba(20, 22, 40, .05);
-  --shadow-2: 0 14px 32px rgba(20, 22, 40, .11);
+  --shadow: 0 1px 2px rgba(60, 30, 20, .04), 0 8px 22px rgba(60, 30, 20, .05);
+  --shadow-2: 0 14px 32px rgba(60, 30, 20, .11);
   --success-text: #17653F;
   /* шкала: размеры текста, отступы, скругления */
   --fs-12: 12px; --fs-14: 14px; --fs-16: 16px; --fs-18: 18px; --fs-20: 20px; --fs-24: 24px; --fs-32: 32px; --fs-44: 44px; --fs-56: 56px;
@@ -83,7 +83,7 @@ p { margin: 0; }
   background: var(--surface); color: var(--ink); text-decoration: none; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit; }
 .btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 52px; border-radius: var(--r-md);
   border: 0; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; text-decoration: none; }
-.btn-primary { background: var(--accent); color: #fff; box-shadow: 0 4px 12px rgba(31, 37, 71, 0.22); }
+.btn-primary { background: var(--accent); color: #fff; box-shadow: 0 4px 12px rgba(122, 30, 44, 0.22); }
 .btn-primary:hover { background: var(--accent-dark); }
 .btn-secondary { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
 .btn:disabled { opacity: 0.55; cursor: default; }
@@ -104,7 +104,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible, .btn:focus-visible
 .promo { display: flex; gap: 14px; align-items: center; text-decoration: none; color: var(--ink); }
 .promo img { width: 48px; height: 48px; border-radius: var(--r-md); flex: none; }
 .err { color: var(--accent-dark); font-size: 14px; }
-.skeleton { height: 18px; border-radius: 9px; background: linear-gradient(90deg, #ECE5D9, #FCFAF6, #ECE5D9); background-size: 200% 100%;
+.skeleton { height: 18px; border-radius: 9px; background: linear-gradient(90deg, #E9DCC8, #FCFAF6, #E9DCC8); background-size: 200% 100%;
   animation: sk 1.2s linear infinite; }
 @keyframes sk { to { background-position: -200% 0; } }
 footer { margin-top: 28px; font-size: 14px; color: var(--muted); text-align: center; }
@@ -142,3 +142,6 @@ b, strong { font-weight: 600; }
 html { overflow-x: clip; }
 /* В кнопке-флексе пробел в начале вложенного span пропадает — даём отступ явно */
 .nav .cta-l { margin-left: .3em; }
+/* 25.11: национальный стиль — лёгкая текстура войлока на фоне всех страниц */
+body::before { content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .45 0 0 0 0 .35 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); }

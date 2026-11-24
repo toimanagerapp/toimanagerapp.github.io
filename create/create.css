@@ -6,9 +6,9 @@
 @font-face { font-family: 'Cormorant Garamond'; font-style: normal; font-weight: 500; font-display: swap; src: url(../inv/fonts/cormorant-garamond-cyrillic-ext-500-normal.woff2) format('woff2'); unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
 @font-face { font-family: 'Cormorant Garamond'; font-style: normal; font-weight: 500; font-display: swap; src: url(../inv/fonts/cormorant-garamond-latin-500-normal.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 /* Палитра конструктора: слоновая кость, полночный синий и золото — как в самих приглашениях */
-:root { --bg: #FAF7F2; --surface: #FFFFFF; --line: #ECE5D9; --line-2: #DDD3C2; --ink: #1B1E2E; --muted: #67616F; --accent: #1F2547; --accent-dark: #151935; --accent-soft: #EEEFF5;
+:root { --bg: #F8F2E8; --surface: #FFFFFF; --line: #E9DCC8; --line-2: #DDD3C2; --ink: #2B1D18; --muted: #6E5D52; --accent: #7A1E2C; --accent-dark: #5E1520; --accent-soft: #F6E6E2;
   --gold: #A9843F; --gold-2: #D9B877; --gold-soft: #F7F0E2; --tint: #F3EFE7; --tint-2: #FCFAF6; --ring: rgba(185, 147, 80, .24);
-  --shadow: 0 1px 2px rgba(20, 22, 40, .04), 0 8px 22px rgba(20, 22, 40, .05); --shadow-2: 0 14px 32px rgba(20, 22, 40, .11);
+  --shadow: 0 1px 2px rgba(60, 30, 20, .04), 0 8px 22px rgba(60, 30, 20, .05); --shadow-2: 0 14px 32px rgba(60, 30, 20, .11);
   --serif: 'Cormorant Garamond', 'Prata', Georgia, serif; }
 :root { --pv-w: 360px; --bar-h: 76px; --head-h: 60px; --danger: #B3263F; --danger-soft: #FBE9EC; --warn-soft: #FEF3DC; }
 html { scroll-padding-top: calc(var(--head-h) + 16px); }
@@ -46,7 +46,7 @@ button { font: inherit; color: inherit; }
 .btn { display: inline-flex; width: auto; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 0 22px; border-radius: 14px; border: 1px solid transparent;
   font-size: 16px; font-weight: 600; cursor: pointer; text-decoration: none; white-space: nowrap; transition: background .15s, transform .1s, border-color .15s; }
 .btn:active { transform: scale(.98); }
-.btn.primary { background: var(--accent); color: #fff; box-shadow: 0 6px 16px rgba(31, 37, 71, .22); }
+.btn.primary { background: var(--accent); color: #fff; box-shadow: 0 6px 16px rgba(122, 30, 44, .22); }
 .btn.primary:hover { background: var(--accent-dark); }
 .btn.ghost { background: var(--surface); border-color: var(--line); color: var(--ink); }
 .btn.ghost:hover { border-color: var(--line-2); background: var(--tint-2); }
@@ -102,12 +102,12 @@ input[type="date"].input, input[type="time"].input { min-width: 0; }
 @media (min-width: 980px) { .pv-slot { display: block; width: var(--pv-w); min-height: 600px; } }
 .pv { position: fixed; top: calc(var(--head-h) + 24px); width: var(--pv-w); z-index: 5; }
 .pv .phone { width: var(--pv-w); height: min(740px, calc(100vh - var(--head-h) - 110px)); border-radius: 44px; padding: 10px; background: #14172A;
-  box-shadow: 0 30px 60px rgba(20, 22, 40, .22), 0 8px 18px rgba(20, 22, 40, .12); }
+  box-shadow: 0 30px 60px rgba(60, 30, 20, .22), 0 8px 18px rgba(60, 30, 20, .12); }
 .pv iframe { width: 100%; height: 100%; border: 0; border-radius: 34px; background: #F3EADB; display: block; }
 .pv .pv-tools { display: flex; justify-content: center; gap: 8px; margin-top: 14px; }
 .pv .pv-head { display: none; }
 @media (max-width: 979px) {
-  .pv { position: fixed; inset: 0; width: auto; z-index: 60; background: #0F1226; padding: env(safe-area-inset-top) 0 0; display: flex; flex-direction: column;
+  .pv { position: fixed; inset: 0; width: auto; z-index: 60; background: #1E070C; padding: env(safe-area-inset-top) 0 0; display: flex; flex-direction: column;
     transform: translateY(100%); visibility: hidden; transition: transform .3s cubic-bezier(.2, .8, .2, 1), visibility 0s .3s; }
   .pv.open { transform: none; visibility: visible; transition: transform .3s cubic-bezier(.2, .8, .2, 1); }
   .pv .pv-head { display: flex; align-items: center; gap: 8px; height: 56px; padding: 0 12px 0 16px; color: #fff; }
@@ -232,7 +232,7 @@ input[type="date"].input, input[type="time"].input { min-width: 0; }
 .landing .ticks span::before { content: "✓"; color: var(--success); font-weight: 600; margin-right: 6px; }
 .landing .demo { display: none; }
 @media (min-width: 980px) { .landing .demo { display: block; } }
-.demo .phone { width: 300px; aspect-ratio: 9 / 18.5; border-radius: 40px; padding: 9px; background: #14172A; box-shadow: 0 30px 60px rgba(20, 22, 40, .22); margin: 0 auto; }
+.demo .phone { width: 300px; aspect-ratio: 9 / 18.5; border-radius: 40px; padding: 9px; background: #14172A; box-shadow: 0 30px 60px rgba(60, 30, 20, .22); margin: 0 auto; }
 .demo iframe { width: 100%; height: 100%; border: 0; border-radius: 32px; display: block; background: #F3EADB; }
 .demo p { text-align: center; font-size: 14px; color: var(--muted); margin-top: 12px; }
 .pick-title { font-size: 20px; margin: 8px 0 14px; }
@@ -278,7 +278,7 @@ input[type="date"].input, input[type="time"].input { min-width: 0; }
 .tabs { display: flex; gap: 4px; padding: 4px; border-radius: 14px; background: var(--tint); margin: 12px 0 4px; max-width: 600px; }
 .tabs a { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; border-radius: 11px; text-decoration: none; color: var(--muted);
   font-size: 15px; font-weight: 600; white-space: nowrap; }
-.tabs a[aria-current="page"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(20, 22, 40, .1); }
+.tabs a[aria-current="page"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(60, 30, 20, .1); }
 .tabs a .n { font-size: 12px; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: var(--accent); color: #fff; display: inline-grid; place-items: center; }
 
 /* Статус тарифа */
@@ -397,8 +397,8 @@ body { background: var(--bg); overflow-x: clip; }
 .sheet h2 { font-size: 28px; line-height: 1.1; }
 .pick-title { font-size: 26px; }
 .sec-title { font-size: clamp(30px, 7.4vw, 40px); line-height: 1.05; margin: 0 0 16px; }
-.btn.primary { box-shadow: 0 8px 20px rgba(31, 37, 71, .22); }
-.btn.gold { background: linear-gradient(180deg, #E6CB91 0%, #C9A35E 100%); color: #1B1E2E; border-color: #B8924F; box-shadow: 0 10px 26px rgba(201, 163, 94, .3), inset 0 1px 0 rgba(255, 255, 255, .55); }
+.btn.primary { box-shadow: 0 8px 20px rgba(122, 30, 44, .22); }
+.btn.gold { background: linear-gradient(180deg, #E6CB91 0%, #C9A35E 100%); color: #2B1D18; border-color: #B8924F; box-shadow: 0 10px 26px rgba(201, 163, 94, .3), inset 0 1px 0 rgba(255, 255, 255, .55); }
 .btn.gold:hover { background: linear-gradient(180deg, #EBD29B 0%, #CFA964 100%); }
 .btn.gold small { font-weight: 500; opacity: .72; font-size: 12.5px; }
 .lbar .btn.gold { flex-direction: column; gap: 0; line-height: 1.2; min-height: 56px; }
@@ -426,7 +426,7 @@ body { background: var(--bg); overflow-x: clip; }
 
 /* --- Первый экран: живой видео-конверт --- */
 .hx { margin: 0 calc(50% - 50vw); padding: 30px max(20px, env(safe-area-inset-left)) 40px; color: #F4ECDD; position: relative; overflow: hidden;
-  background: radial-gradient(120% 70% at 50% 0%, #2A3266 0%, #181C38 52%, #0F1226 100%); border-bottom: 1px solid rgba(217, 184, 119, .35); }
+  background: radial-gradient(120% 70% at 50% 0%, #5A1A26 0%, #2B0C12 52%, #1E070C 100%); border-bottom: 1px solid rgba(217, 184, 119, .35); }
 .hx::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5;
   background: radial-gradient(40% 30% at 50% 46%, rgba(217, 184, 119, .16), transparent 70%); }
 .hx-in { position: relative; max-width: 1180px; margin: 0 auto; display: grid; gap: 22px; grid-template-areas: "head" "phone" "body"; }
@@ -497,10 +497,10 @@ body { background: var(--bg); overflow-x: clip; }
 @media (max-width: 979px) { .steps-top .link { display: none; } }
 @media (max-width: 699px) { .chips { display: none; } .steps-top { padding-top: 18px; } }
 @media (max-width: 420px) { .pv .pv-head b { display: none; } .pv .pv-head { justify-content: flex-end; } }
-.pv .pv-head { background: #0F1226; }
+.pv .pv-head { background: #1E070C; }
 /* Приложение — «скоро»: цена приглушена, без выделения */
 .price-card.soon { opacity: .62; }
-.price-card.soon .tag { background: #EEEFF5; color: #1F2547; }
+.price-card.soon .tag { background: #F6E6E2; color: #7A1E2C; }
 
 /* «Кто приглашает» — три равные кнопки в одну строку (текст переносится), а не столбиком */
 .seg.seg3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
@@ -516,6 +516,19 @@ body { background: var(--bg); overflow-x: clip; }
 .themes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 @media (min-width: 560px) { .themes { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .theme .cover { display: block; width: 100%; aspect-ratio: 9 / 16; object-position: center 30%; object-fit: cover; border-radius: 12px; background: #EEE6DA; }
-.hint2 { margin: -4px 0 12px; font-size: 13px; color: #67616F; line-height: 1.45; }
-.themes-more { margin: 18px 0 10px; font: 600 13px/1.3 Inter, system-ui, sans-serif; color: #67616F; }
+.hint2 { margin: -4px 0 12px; font-size: 13px; color: #6E5D52; line-height: 1.45; }
+.themes-more { margin: 18px 0 10px; font: 600 13px/1.3 Inter, system-ui, sans-serif; color: #6E5D52; }
 .themes-all { margin-top: 14px; }
+
+/* 25.11: первый экран конструктора — светлый, как главная; в телефоне — обложка нового оформления */
+.hx { color: #2B1D18; background: radial-gradient(60% 50% at 80% 10%, rgba(217, 184, 119, .25), transparent 70%), transparent; border-bottom: 1px solid #E5D6C1; }
+.hx::before { display: none; }
+.hx h1 { color: #2B1D18; }
+.hx .eyebrow { color: #A9843F; }
+.hx .lead { color: #6E5D52; }
+.hx .ticks { color: #6E5D52; }
+.hx .btn.gold { background: #7A1E2C; color: #FFF7EE; box-shadow: 0 10px 24px rgba(122, 30, 44, .22); border-color: #7A1E2C; }
+.hx .btn.ghost-light { color: #7A1E2C; border-color: rgba(122, 30, 44, .35); background: transparent; }
+.hx-phone { border: 6px solid #fff; box-shadow: 0 30px 60px rgba(60, 30, 20, .22); aspect-ratio: 1 / 2; }
+.hx-phone img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.lbar .btn.gold { background: #7A1E2C; color: #FFF7EE; border-color: #7A1E2C; }
