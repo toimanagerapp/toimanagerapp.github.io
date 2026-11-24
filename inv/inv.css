@@ -697,4 +697,145 @@ body[data-theme="tuman"] {
   --sc-shadow: 0 1px 14px rgba(255, 255, 255, .55); --sc-veil: rgba(255,255,255,.15); --sc-align: center;
 }
 body[data-theme="tuman"] :is(.h-script.gold, .greet.script.gold) { background: none; -webkit-background-clip: initial; background-clip: initial; color: var(--accent); }
+body[data-theme="kyzyl-kiyiz"] {
+  --bg: #3A0D18; --bg2: #4A1220; --paper: #561727; --ink: #F5E8D8; --muted: #D4B9AE; --focus: #F4DFA6;
+  --gold1: #C9A04F; --gold2: #F6E2A8; --gold3: #DDB565; --line: rgba(201, 160, 79, 0.26);
+  --env1: #3A0D18; --env2: #4A1220; --env3: #4A1220; --env-ink: #F4DFA6; --wax1: #F2D99C; --wax2: #B48635; --wax-ink: #3A0D18;
+  --btn: linear-gradient(135deg, #BC9040, #F2D99C 55%, #B48635); --btn-ink: #3A0D18;
+  --card: rgba(86, 23, 39, 0.72); --shadow: 0 18px 40px rgba(0, 0, 0, 0.3);
+  --accent: #F4DFA6; --f-head: 'Cormorant SC';
+  --zone-top: 30svh; --sc-ink: #FBEBD6; --sc-caps: #EBCB8E; --sc-n1: #FFF0C8; --sc-n2: #E8C77F; --sc-n3: #C99A48;
+  --sc-shadow: 0 2px 18px rgba(0, 0, 0, .45); --sc-veil: rgba(0,0,0,0); --sc-align: center;
+}
+body[data-theme="altyn-jibek"] {
+  --bg: #FBF7EF; --bg2: #F4ECDD; --paper: #FFFDF8; --ink: #3B2F22; --muted: #6F5E49; --focus: #8A6A2C;
+  --gold1: #9C7531; --gold2: #E3C77E; --gold3: #B48A3E; --line: rgba(156, 117, 49, 0.26);
+  --env1: #FBF7EF; --env2: #F4ECDD; --env3: #F4ECDD; --env-ink: #8A6A2C; --wax1: #D9B867; --wax2: #A47B32; --wax-ink: #FFFDF6;
+  --btn: linear-gradient(135deg, #B38A3D, #D9B867 55%, #A47B32); --btn-ink: #FFFDF6;
+  --card: rgba(255, 253, 248, 0.9); --shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+  --accent: #8A6A2C; --f-head: 'Cormorant SC';
+  --zone-top: 22svh; --sc-ink: #4A3A22; --sc-caps: #8E2A20; --sc-n1: #C9A25A; --sc-n2: #A47B32; --sc-n3: #7E5A1E;
+  --sc-shadow: 0 1px 14px rgba(255, 255, 255, .55); --sc-veil: rgba(0,0,0,0); --sc-align: center;
+}
+body[data-theme="altyn-jibek"] :is(.h-script.gold, .greet.script.gold) { background: none; -webkit-background-clip: initial; background-clip: initial; color: var(--accent); }
+body[data-theme="nuska"] {
+  --bg: #0D2B25; --bg2: #113A31; --paper: #14443A; --ink: #F1E8D6; --muted: #B5C4B8; --focus: #F2DA9C;
+  --gold1: #C49A4A; --gold2: #F2DA9C; --gold3: #D0A957; --line: rgba(196, 154, 74, 0.26);
+  --env1: #0D2B25; --env2: #113A31; --env3: #113A31; --env-ink: #F2DA9C; --wax1: #EED394; --wax2: #B38633; --wax-ink: #0D2B25;
+  --btn: linear-gradient(135deg, #B88C3C, #EED394 55%, #B38633); --btn-ink: #0D2B25;
+  --card: rgba(20, 68, 58, 0.72); --shadow: 0 18px 40px rgba(0, 0, 0, 0.3);
+  --accent: #F2DA9C; --f-head: 'Cormorant SC';
+  --zone-top: 24svh; --sc-ink: #F4EAD3; --sc-caps: #E2C68A; --sc-n1: #FFF0C8; --sc-n2: #E8C77F; --sc-n3: #C99A48;
+  --sc-shadow: 0 2px 18px rgba(0, 0, 0, .45); --sc-veil: rgba(0,0,0,0); --sc-align: center; --sc-size: 100% 100%;
+}
+body[data-theme="tunduk"] {
+  --bg: #F6EEE1; --bg2: #EDE1CE; --paper: #FCF7EE; --ink: #3A231C; --muted: #6E5446; --focus: #A3271F;
+  --gold1: #A3271F; --gold2: #D2563F; --gold3: #B33A2A; --line: rgba(163, 39, 31, 0.26);
+  --env1: #F6EEE1; --env2: #EDE1CE; --env3: #EDE1CE; --env-ink: #A3271F; --wax1: #C94A35; --wax2: #8F2019; --wax-ink: #FCF7EE;
+  --btn: linear-gradient(135deg, #A3271F, #C94A35 55%, #8F2019); --btn-ink: #FCF7EE;
+  --card: rgba(252, 247, 238, 0.9); --shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+  --accent: #A3271F; --f-head: 'Cormorant SC';
+  --zone-top: 22svh; --sc-ink: #4A1E18; --sc-caps: #8E2A20; --sc-n1: #B33A2A; --sc-n2: #8E2A20; --sc-n3: #5E1A14;
+  --sc-shadow: 0 1px 14px rgba(255, 255, 255, .55); --sc-veil: rgba(0,0,0,0); --sc-align: center;
+}
+body[data-theme="tunduk"] :is(.h-script.gold, .greet.script.gold) { background: none; -webkit-background-clip: initial; background-clip: initial; color: var(--accent); }
+body[data-theme="tasma"] {
+  --bg: #F6EEE1; --bg2: #EDE1CE; --paper: #FCF7EE; --ink: #3A231C; --muted: #6E5446; --focus: #A3271F;
+  --gold1: #A3271F; --gold2: #D2563F; --gold3: #B33A2A; --line: rgba(163, 39, 31, 0.26);
+  --env1: #F6EEE1; --env2: #EDE1CE; --env3: #EDE1CE; --env-ink: #A3271F; --wax1: #C94A35; --wax2: #8F2019; --wax-ink: #FCF7EE;
+  --btn: linear-gradient(135deg, #A3271F, #C94A35 55%, #8F2019); --btn-ink: #FCF7EE;
+  --card: rgba(252, 247, 238, 0.9); --shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+  --accent: #A3271F; --f-head: 'Cormorant SC';
+  --zone-top: 25svh; --sc-ink: #4A1E18; --sc-caps: #8E2A20; --sc-n1: #B33A2A; --sc-n2: #8E2A20; --sc-n3: #5E1A14;
+  --sc-shadow: 0 1px 14px rgba(255, 255, 255, .55); --sc-veil: rgba(0,0,0,0); --sc-align: center;
+}
+body[data-theme="tasma"] :is(.h-script.gold, .greet.script.gold) { background: none; -webkit-background-clip: initial; background-clip: initial; color: var(--accent); }
+body[data-theme="kemer"] {
+  --bg: #F6EEE1; --bg2: #EDE1CE; --paper: #FCF7EE; --ink: #3A231C; --muted: #6E5446; --focus: #A3271F;
+  --gold1: #A3271F; --gold2: #D2563F; --gold3: #B33A2A; --line: rgba(163, 39, 31, 0.26);
+  --env1: #F6EEE1; --env2: #EDE1CE; --env3: #EDE1CE; --env-ink: #A3271F; --wax1: #C94A35; --wax2: #8F2019; --wax-ink: #FCF7EE;
+  --btn: linear-gradient(135deg, #A3271F, #C94A35 55%, #8F2019); --btn-ink: #FCF7EE;
+  --card: rgba(252, 247, 238, 0.9); --shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+  --accent: #A3271F; --f-head: 'Cormorant SC';
+  --zone-top: 30svh; --sc-ink: #4A1E18; --sc-caps: #8E2A20; --sc-n1: #B33A2A; --sc-n2: #8E2A20; --sc-n3: #5E1A14;
+  --sc-shadow: 0 1px 14px rgba(255, 255, 255, .55); --sc-veil: rgba(0,0,0,0); --sc-align: center;
+}
+body[data-theme="kemer"] :is(.h-script.gold, .greet.script.gold) { background: none; -webkit-background-clip: initial; background-clip: initial; color: var(--accent); }
+body[data-theme="sep"] {
+  --bg: #F6F1E8; --bg2: #ECE3D4; --paper: #FFFCF6; --ink: #1E2E32; --muted: #5E6A6C; --focus: #1F5560;
+  --gold1: #1F5560; --gold2: #7FA8AE; --gold3: #2E7180; --line: rgba(31, 85, 96, 0.26);
+  --env1: #F6F1E8; --env2: #ECE3D4; --env3: #ECE3D4; --env-ink: #1F5560; --wax1: #2E7180; --wax2: #143A42; --wax-ink: #FFFCF6;
+  --btn: linear-gradient(135deg, #1F5560, #2E7180 55%, #143A42); --btn-ink: #FFFCF6;
+  --card: rgba(255, 252, 246, 0.9); --shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+  --accent: #1F5560; --f-head: 'Cormorant SC';
+  --zone-top: 20svh; --sc-ink: #173D45; --sc-caps: #1F5560; --sc-n1: #2E7180; --sc-n2: #1F5560; --sc-n3: #143A42;
+  --sc-shadow: 0 1px 14px rgba(255, 255, 255, .55); --sc-veil: rgba(0,0,0,0); --sc-align: center;
+}
+body[data-theme="sep"] :is(.h-script.gold, .greet.script.gold) { background: none; -webkit-background-clip: initial; background-clip: initial; color: var(--accent); }
+body[data-theme="tor"] {
+  --bg: #F6EEE1; --bg2: #EDE1CE; --paper: #FCF7EE; --ink: #3A231C; --muted: #6E5446; --focus: #A3271F;
+  --gold1: #A3271F; --gold2: #D2563F; --gold3: #B33A2A; --line: rgba(163, 39, 31, 0.26);
+  --env1: #F6EEE1; --env2: #EDE1CE; --env3: #EDE1CE; --env-ink: #A3271F; --wax1: #C94A35; --wax2: #8F2019; --wax-ink: #FCF7EE;
+  --btn: linear-gradient(135deg, #A3271F, #C94A35 55%, #8F2019); --btn-ink: #FCF7EE;
+  --card: rgba(252, 247, 238, 0.9); --shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+  --accent: #A3271F; --f-head: 'Cormorant SC';
+  --zone-top: 24svh; --sc-ink: #4A1E18; --sc-caps: #8E2A20; --sc-n1: #B33A2A; --sc-n2: #8E2A20; --sc-n3: #5E1A14;
+  --sc-shadow: 0 1px 14px rgba(255, 255, 255, .55); --sc-veil: rgba(0,0,0,0); --sc-align: center; --sc-left: 14%;
+}
+body[data-theme="tor"] :is(.h-script.gold, .greet.script.gold) { background: none; -webkit-background-clip: initial; background-clip: initial; color: var(--accent); }
+body[data-theme="dastorkon"] {
+  --bg: #FAF2E6; --bg2: #F2E4CF; --paper: #FFFBF4; --ink: #3E2A14; --muted: #735E46; --focus: #8A5A1E;
+  --gold1: #8A5A1E; --gold2: #D9A55A; --gold3: #A8702A; --line: rgba(138, 90, 30, 0.26);
+  --env1: #FAF2E6; --env2: #F2E4CF; --env3: #F2E4CF; --env-ink: #8A5A1E; --wax1: #B57A32; --wax2: #6E4614; --wax-ink: #FFFBF4;
+  --btn: linear-gradient(135deg, #8A5A1E, #B57A32 55%, #6E4614); --btn-ink: #FFFBF4;
+  --card: rgba(255, 251, 244, 0.9); --shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+  --accent: #8A5A1E; --f-head: 'Cormorant SC';
+  --zone-top: 16svh; --sc-ink: #4A2A10; --sc-caps: #8E2A20; --sc-n1: #A8702A; --sc-n2: #8A5A1E; --sc-n3: #5E3A10;
+  --sc-shadow: 0 1px 14px rgba(255, 255, 255, .55); --sc-veil: rgba(0,0,0,0); --sc-align: center;
+}
+body[data-theme="dastorkon"] :is(.h-script.gold, .greet.script.gold) { background: none; -webkit-background-clip: initial; background-clip: initial; color: var(--accent); }
+body[data-theme="tan"] {
+  --bg: #F7F1EA; --bg2: #EEE3D8; --paper: #FFFCF8; --ink: #3A2A38; --muted: #6D5C68; --focus: #6E3B5A;
+  --gold1: #8E5E3A; --gold2: #D7A86E; --gold3: #A8743F; --line: rgba(142, 94, 58, 0.26);
+  --env1: #F7F1EA; --env2: #EEE3D8; --env3: #EEE3D8; --env-ink: #6E3B5A; --wax1: #8D4A6C; --wax2: #4E2239; --wax-ink: #FFF7EE;
+  --btn: linear-gradient(135deg, #5E2C47, #8D4A6C 55%, #4E2239); --btn-ink: #FFF7EE;
+  --card: rgba(255, 252, 248, 0.9); --shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+  --accent: #6E3B5A; --f-head: 'Cormorant SC';
+  --zone-top: 13svh; --sc-ink: #3A2A38; --sc-caps: #6E3B5A; --sc-n1: #9A4E68; --sc-n2: #7A2E4A; --sc-n3: #5A1E36;
+  --sc-shadow: 0 1px 14px rgba(255, 255, 255, .55); --sc-veil: rgba(255,240,230,.25); --sc-align: center; --sc-size: 100% 100%;
+}
+body[data-theme="tan"] :is(.h-script.gold, .greet.script.gold) { background: none; -webkit-background-clip: initial; background-clip: initial; color: var(--accent); }
+body[data-theme="kuzgu-jailoo"] {
+  --bg: #FAF2E6; --bg2: #F2E4CF; --paper: #FFFBF4; --ink: #3E2A14; --muted: #735E46; --focus: #8A5A1E;
+  --gold1: #8A5A1E; --gold2: #D9A55A; --gold3: #A8702A; --line: rgba(138, 90, 30, 0.26);
+  --env1: #FAF2E6; --env2: #F2E4CF; --env3: #F2E4CF; --env-ink: #8A5A1E; --wax1: #B57A32; --wax2: #6E4614; --wax-ink: #FFFBF4;
+  --btn: linear-gradient(135deg, #8A5A1E, #B57A32 55%, #6E4614); --btn-ink: #FFFBF4;
+  --card: rgba(255, 251, 244, 0.9); --shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+  --accent: #8A5A1E; --f-head: 'Cormorant SC';
+  --zone-top: 14svh; --sc-ink: #4A2A10; --sc-caps: #7A2E20; --sc-n1: #A8702A; --sc-n2: #8A5A1E; --sc-n3: #5E3A10;
+  --sc-shadow: 0 1px 14px rgba(255, 255, 255, .55); --sc-veil: rgba(0,0,0,0); --sc-align: center; --sc-size: 100% 100%;
+}
+body[data-theme="kuzgu-jailoo"] :is(.h-script.gold, .greet.script.gold) { background: none; -webkit-background-clip: initial; background-clip: initial; color: var(--accent); }
+body[data-theme="jaz"] {
+  --bg: #F3F5EF; --bg2: #E6EBE0; --paper: #FCFDFA; --ink: #22302C; --muted: #5E6B66; --focus: #2E5E57;
+  --gold1: #2E5E57; --gold2: #8FB3A8; --gold3: #3E7A70; --line: rgba(46, 94, 87, 0.26);
+  --env1: #F3F5EF; --env2: #E6EBE0; --env3: #E6EBE0; --env-ink: #2E5E57; --wax1: #3E7A70; --wax2: #1E403B; --wax-ink: #FCFDFA;
+  --btn: linear-gradient(135deg, #2E5E57, #3E7A70 55%, #1E403B); --btn-ink: #FCFDFA;
+  --card: rgba(252, 253, 250, 0.9); --shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+  --accent: #2E5E57; --f-head: 'Cormorant SC';
+  --zone-top: 14svh; --sc-ink: #1F3E3A; --sc-caps: #2E5E57; --sc-n1: #3E7A70; --sc-n2: #2E5E57; --sc-n3: #1E403B;
+  --sc-shadow: 0 1px 14px rgba(255, 255, 255, .55); --sc-veil: rgba(255,255,255,.15); --sc-align: center; --sc-size: 100% 100%;
+}
+body[data-theme="jaz"] :is(.h-script.gold, .greet.script.gold) { background: none; -webkit-background-clip: initial; background-clip: initial; color: var(--accent); }
+body[data-theme="kysh"] {
+  --bg: #F3F4F8; --bg2: #E6E8EF; --paper: #FCFCFE; --ink: #22263A; --muted: #5E6276; --focus: #8A1E2C;
+  --gold1: #8A1E2C; --gold2: #C9707C; --gold3: #A8324A; --line: rgba(138, 30, 44, 0.26);
+  --env1: #F3F4F8; --env2: #E6E8EF; --env3: #E6E8EF; --env-ink: #8A1E2C; --wax1: #A8324A; --wax2: #6E1622; --wax-ink: #FCFCFE;
+  --btn: linear-gradient(135deg, #8A1E2C, #A8324A 55%, #6E1622); --btn-ink: #FCFCFE;
+  --card: rgba(252, 252, 254, 0.9); --shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+  --accent: #8A1E2C; --f-head: 'Cormorant SC';
+  --zone-top: 14svh; --sc-ink: #2A2F45; --sc-caps: #8A1E2C; --sc-n1: #A8324A; --sc-n2: #8A1E2C; --sc-n3: #5E1420;
+  --sc-shadow: 0 1px 14px rgba(255, 255, 255, .55); --sc-veil: rgba(255,255,255,.15); --sc-align: center; --sc-size: 100% 100%;
+}
+body[data-theme="kysh"] :is(.h-script.gold, .greet.script.gold) { background: none; -webkit-background-clip: initial; background-clip: initial; color: var(--accent); }
 /* SCENES:END */

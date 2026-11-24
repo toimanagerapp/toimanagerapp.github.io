@@ -37,6 +37,19 @@
     'altyn-kuz': { title: 'Алтын күз', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FFFBF4', '#F2E4CF', '#D9A55A', '#8A5A1E'], color: '#FAF2E6' },
     'tunku-asman': { title: 'Түнкү асман', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#142048', '#101A3E', '#F4DFA6', '#F4DFA6'], color: '#0B1230' },
     'tuman': { title: 'Туман', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#F7F6F3', '#E4E2DE', '#7E8286', '#45494D'], color: '#EEEDEA' },
+    'kyzyl-kiyiz': { title: 'Кызыл кийиз', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#561727', '#4A1220', '#F6E2A8', '#F4DFA6'], color: '#3A0D18' },
+    'altyn-jibek': { title: 'Алтын жибек', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FFFDF8', '#F4ECDD', '#E3C77E', '#8A6A2C'], color: '#FBF7EF' },
+    'nuska': { title: 'Нуска', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#14443A', '#113A31', '#F2DA9C', '#F2DA9C'], color: '#0D2B25' },
+    'tunduk': { title: 'Түндүк', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FCF7EE', '#EDE1CE', '#D2563F', '#A3271F'], color: '#F6EEE1' },
+    'tasma': { title: 'Тасма', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FCF7EE', '#EDE1CE', '#D2563F', '#A3271F'], color: '#F6EEE1' },
+    'kemer': { title: 'Кемер', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FCF7EE', '#EDE1CE', '#D2563F', '#A3271F'], color: '#F6EEE1' },
+    'sep': { title: 'Сеп', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FFFCF6', '#ECE3D4', '#7FA8AE', '#1F5560'], color: '#F6F1E8' },
+    'tor': { title: 'Төр', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FCF7EE', '#EDE1CE', '#D2563F', '#A3271F'], color: '#F6EEE1' },
+    'dastorkon': { title: 'Дасторкон', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FFFBF4', '#F2E4CF', '#D9A55A', '#8A5A1E'], color: '#FAF2E6' },
+    'tan': { title: 'Таң', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FFFCF8', '#EEE3D8', '#D7A86E', '#6E3B5A'], color: '#F7F1EA' },
+    'kuzgu-jailoo': { title: 'Күзгү жайлоо', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FFFBF4', '#F2E4CF', '#D9A55A', '#8A5A1E'], color: '#FAF2E6' },
+    'jaz': { title: 'Жаз', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FCFDFA', '#E6EBE0', '#8FB3A8', '#2E5E57'], color: '#F3F5EF' },
+    'kysh': { title: 'Кыш', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FCFCFE', '#E6E8EF', '#C9707C', '#8A1E2C'], color: '#F3F4F8' },
     // SCENES:END
   };
   // Видео-конверты (4 с, 720×1280): кадр-заставка .jpg и ролик .mp4 в /inv/env/. light — светлый конверт, тёмный текст
@@ -516,11 +529,8 @@
     const on = !!THEMES[theme]?.scene;
     document.body.classList.toggle('scene', on);
     const hp = $('heroPhoto');
-    if (!on) {
-      scover.hidden = true;
-      if (hp.classList.contains('below') && !document.body.classList.contains('venv-card')) { hp.classList.remove('below'); $('wmStamp').after(hp); }
-      return false;
-    }
+    if (!on) { scover.hidden = true; applyCardMode(); return false; }
+    document.body.classList.remove('venv-card');
     document.body.style.setProperty('--scene', `url(/inv/scenes/${theme}.webp)`); if (!hp.classList.contains('below')) { hp.classList.add('below'); document.querySelector('.hero').after(hp); }
     if (!opened) { scover.hidden = false; $('envelope').classList.add('gone'); venv.hidden = true; }
     return true;
@@ -563,12 +573,20 @@
     venv.hidden = false; $('envelope').classList.add('gone');
     // Первый экран — та же карточка, что в конце ролика
     // (только на телефоне/вертикальном экране; на компьютере — обычный порядок: фото, затем имена)
-    if (e.card && matchMedia('(max-aspect-ratio: 3/4)').matches) {
-      document.body.classList.add('venv-card');
-      document.querySelector('.hero').style.setProperty('--card-img', `url(/inv/env/${id}-card.jpg)`);
-      const hp = $('heroPhoto'); hp.classList.add('below'); document.querySelector('.hero').after(hp);
-    }
+    applyCardMode();
     return true;
+  }
+  // Карточка видео-конверта как первый экран — только с оформлением «Түн» (под него снят ролик).
+  // С другими оформлениями первый экран — само оформление, иначе смена цветов в предпросмотре «не видна».
+  const CARD_THEMES = ['tun'];
+  function applyCardMode() {
+    const e = ENVS[C?.envelope], hero = document.querySelector('.hero'), hp = $('heroPhoto');
+    const on = !!(e && e.card && CARD_THEMES.includes(theme) && !THEMES[theme]?.scene && matchMedia('(max-aspect-ratio: 3/4)').matches);
+    document.body.classList.toggle('venv-card', on);
+    if (on) {
+      hero.style.setProperty('--card-img', `url(/inv/env/${C.envelope}-card.jpg)`);
+      if (!hp.classList.contains('below')) { hp.classList.add('below'); hero.after(hp); }
+    } else if (!THEMES[theme]?.scene && hp.classList.contains('below')) { hp.classList.remove('below'); $('wmStamp').after(hp); }
   }
 
   // ---------- Галерея: просмотр на весь экран, листание свайпом ----------

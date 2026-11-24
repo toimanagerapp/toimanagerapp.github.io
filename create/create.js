@@ -80,7 +80,7 @@
       heroPh: 'Главное фото', heroAdd: 'Добавить главное фото', heroHint: 'Лучше вертикальное, где хорошо видны лица', change: 'Заменить', remove: 'Убрать',
       gallery: 'Галерея', galleryHint: (n) => `До 10 фото · добавлено ${n}`, uploading: 'Загружаем…', photoErr: 'Не удалось загрузить фото. Попробуйте другое.',
       designH: 'Оформление', designL: 'Выберите цвета, конверт и музыку. Всё сразу видно в предпросмотре.',
-      theme: 'Цвета', envelope: 'Конверт', envClassic: 'С восковой печатью', envClassicS: 'Гость ломает печать', envNavy: 'Видео-конверт «Түн»', envNavyS: 'Конверт раскрывается сам',
+      theme: 'Оформление', themeHint: 'Сначала — подходящие к вашему тою. Нажмите на любое — образец «Как увидят гости» сразу обновится. Сменить можно в любой момент, даже после отправки.', themesOther: 'Другие оформления', themesAll: (n) => `Все оформления (ещё ${n})`, envelope: 'Конверт', envClassic: 'С восковой печатью', envClassicS: 'Гость ломает печать', envNavy: 'Видео-конверт «Түн»', envNavyS: 'Конверт раскрывается сам',
       music: 'Музыка', musicS: 'Мелодия «Бакыт кушу» играет, когда гость открывает конверт', lang: 'Язык приглашения', langS: 'Гость может переключить язык сам',
       text: 'Текст приглашения', textAuto: 'Готовый текст (с вашими именами):', textOwn: 'Написать свой текст', textUseAuto: 'Вернуть готовый текст', textOwnPh: 'Ваш текст приглашения',
       detH: 'Детали', detL: 'Включите то, что нужно. Всё можно поменять и после отправки — гости увидят изменения по той же ссылке.',
@@ -173,7 +173,7 @@
       heroPh: 'Негизги сүрөт', heroAdd: 'Негизги сүрөт кошуу', heroHint: 'Тик сүрөт жакшы, жүздөр даана көрүнсүн', change: 'Алмаштыруу', remove: 'Алып салуу',
       gallery: 'Галерея', galleryHint: (n) => `10 сүрөткө чейин · кошулду ${n}`, uploading: 'Жүктөлүүдө…', photoErr: 'Сүрөт жүктөлгөн жок. Башкасын сынап көрүңүз.',
       designH: 'Жасалгасы', designL: 'Түсүн, конвертти жана музыканы тандаңыз. Баары дароо көрүнөт.',
-      theme: 'Түстөр', envelope: 'Конверт', envClassic: 'Мөөр басылган', envClassicS: 'Конок мөөрдү сындырат', envNavy: '«Түн» видео-конверти', envNavyS: 'Конверт өзү ачылат',
+      theme: 'Көрүнүш', themeHint: 'Адегенде — тоюңузга ылайыктуулары. Каалаганын басыңыз — үлгү дароо жаңырат. Каалаган убакта, жөнөткөндөн кийин деле алмаштырсаңыз болот.', themesOther: 'Башка көрүнүштөр', themesAll: (n) => `Бардык көрүнүштөр (дагы ${n})`, envelope: 'Конверт', envClassic: 'Мөөр басылган', envClassicS: 'Конок мөөрдү сындырат', envNavy: '«Түн» видео-конверти', envNavyS: 'Конверт өзү ачылат',
       music: 'Музыка', musicS: 'Конок конвертти ачканда «Бакыт кушу» обону ойнойт', lang: 'Чакыруунун тили', langS: 'Конок тилди өзү алмаштыра алат',
       text: 'Чакыруунун тексти', textAuto: 'Даяр текст (аттарыңыз менен):', textOwn: 'Өз текстимди жазам', textUseAuto: 'Даяр текстке кайтуу', textOwnPh: 'Чакыруунун тексти',
       detH: 'Кошумча', detL: 'Керектүүсүн күйгүзүңүз. Жөнөткөндөн кийин да өзгөртсө болот — коноктор ошол эле шилтемеден көрүшөт.',
@@ -248,33 +248,46 @@
   // Оформления открытки — те же, что в /inv/inv.js
   const SCENES_READY = true;   // true — когда пришли настоящие фоны (tools/scenes)
   const THEMES = [
-    { id: 'ak-altyn', name: 'Ак алтын', bg: 'linear-gradient(150deg,#FBF6EC,#EFE2C9)', ink: '#A9823E' },
-    { id: 'ak', name: 'Ак', bg: 'linear-gradient(150deg,#FFFFFF,#F4EBDD)', ink: '#7A1E2C' },
-    { id: 'tun', name: 'Түн', bg: 'linear-gradient(150deg,#1C2A52,#0D1530)', ink: '#E6CF9A' },
-    { id: 'tunku', name: 'Түнкү', bg: 'linear-gradient(150deg,#1D4A40,#0F2A25)', ink: '#E9D7AE' },
-    { id: 'anar', name: 'Анар', bg: 'linear-gradient(150deg,#6B1A2C,#3A0D18)', ink: '#EFD9A8' },
-    { id: 'jashyl', name: 'Жашыл', bg: 'linear-gradient(150deg,#164A3F,#0D2B25)', ink: '#E7D3A2' },
-    { id: 'kiyiz', name: 'Кийиз', bg: 'linear-gradient(150deg,#FBF4E8,#EADCC4)', ink: '#A3271F' },
-    { id: 'bermet', name: 'Бермет', bg: 'linear-gradient(150deg,#FFF8F5,#F1DCD6)', ink: '#9A5560' },
-    { id: 'asman', name: 'Асман', bg: 'linear-gradient(150deg,#FBFDFF,#DCE6F1)', ink: '#2C5580' },
-    { id: 'boz', name: 'Боз', bg: 'linear-gradient(150deg,#F7F6F3,#DFDDD8)', ink: '#3C4044' },
+    { id: 'ak-altyn', k: 'wedding nikah', name: 'Ак алтын', bg: 'linear-gradient(150deg,#FBF6EC,#EFE2C9)', ink: '#A9823E' },
+    { id: 'ak', k: 'wedding nikah', name: 'Ак', bg: 'linear-gradient(150deg,#FFFFFF,#F4EBDD)', ink: '#7A1E2C' },
+    { id: 'tun', k: 'wedding', name: 'Түн', bg: 'linear-gradient(150deg,#1C2A52,#0D1530)', ink: '#E6CF9A' },
+    { id: 'tunku', k: 'jubilee', name: 'Түнкү', bg: 'linear-gradient(150deg,#1D4A40,#0F2A25)', ink: '#E9D7AE' },
+    { id: 'anar', k: 'wedding jubilee', name: 'Анар', bg: 'linear-gradient(150deg,#6B1A2C,#3A0D18)', ink: '#EFD9A8' },
+    { id: 'jashyl', k: 'kyz_uzatuu', name: 'Жашыл', bg: 'linear-gradient(150deg,#164A3F,#0D2B25)', ink: '#E7D3A2' },
+    { id: 'kiyiz', k: 'kyz_uzatuu jubilee', name: 'Кийиз', bg: 'linear-gradient(150deg,#FBF4E8,#EADCC4)', ink: '#A3271F' },
+    { id: 'bermet', k: 'beshik kyz_uzatuu', name: 'Бермет', bg: 'linear-gradient(150deg,#FFF8F5,#F1DCD6)', ink: '#9A5560' },
+    { id: 'asman', k: 'sunnot birthday', name: 'Асман', bg: 'linear-gradient(150deg,#FBFDFF,#DCE6F1)', ink: '#2C5580' },
+    { id: 'boz', k: 'memorial', name: 'Боз', bg: 'linear-gradient(150deg,#F7F6F3,#DFDDD8)', ink: '#3C4044' },
     // Шаблоны-сцены (картинка на весь экран) — список из tools/scenes/scenes.py
     // SCENES:BEGIN (tools/scenes/scenes.py)
-    { id: 'ala-too', name: 'Ала-Тоо', scene: true, bg: 'center/cover url(/inv/scenes/ala-too-s.webp)', ink: '#7A2E4A' },
-    { id: 'boz-uy', name: 'Боз үй', scene: true, bg: 'center/cover url(/inv/scenes/boz-uy-s.webp)', ink: '#7A2E4A' },
-    { id: 'jibek', name: 'Жибек', scene: true, bg: 'center/cover url(/inv/scenes/jibek-s.webp)', ink: '#A47B32' },
-    { id: 'barhat', name: 'Бархат', scene: true, bg: 'center/cover url(/inv/scenes/barhat-s.webp)', ink: '#F4DFA6' },
-    { id: 'bilerik', name: 'Билерик', scene: true, bg: 'center/cover url(/inv/scenes/bilerik-s.webp)', ink: '#F4DFA6' },
-    { id: 'shokulo', name: 'Шөкүлө', scene: true, bg: 'center/cover url(/inv/scenes/shokulo-s.webp)', ink: '#F4DFA6' },
-    { id: 'jurkan', name: 'Жууркан', scene: true, bg: 'center/cover url(/inv/scenes/jurkan-s.webp)', ink: '#F4DFA6' },
-    { id: 'shyrdak', name: 'Шырдак', scene: true, bg: 'center/cover url(/inv/scenes/shyrdak-s.webp)', ink: '#8E2A20' },
-    { id: 'ak-kalpak', name: 'Ак калпак', scene: true, bg: 'center/cover url(/inv/scenes/ak-kalpak-s.webp)', ink: '#244A73' },
-    { id: 'kok-asman', name: 'Көк асман', scene: true, bg: 'center/cover url(/inv/scenes/kok-asman-s.webp)', ink: '#244A73' },
-    { id: 'beshik', name: 'Бешик', scene: true, bg: 'center/cover url(/inv/scenes/beshik-s.webp)', ink: '#9A5560' },
-    { id: 'ala-jip', name: 'Ала жип', scene: true, bg: 'center/cover url(/inv/scenes/ala-jip-s.webp)', ink: '#7A5A3A' },
-    { id: 'altyn-kuz', name: 'Алтын күз', scene: true, bg: 'center/cover url(/inv/scenes/altyn-kuz-s.webp)', ink: '#8A5A1E' },
-    { id: 'tunku-asman', name: 'Түнкү асман', scene: true, bg: 'center/cover url(/inv/scenes/tunku-asman-s.webp)', ink: '#F4DFA6' },
-    { id: 'tuman', name: 'Туман', scene: true, bg: 'center/cover url(/inv/scenes/tuman-s.webp)', ink: '#45494D' },
+    { id: 'ala-too', name: 'Ала-Тоо', scene: true, k: 'wedding kyz_uzatuu', bg: 'center/cover url(/inv/scenes/ala-too-s.webp)', ink: '#7A2E4A' },
+    { id: 'boz-uy', name: 'Боз үй', scene: true, k: 'wedding nikah jubilee', bg: 'center/cover url(/inv/scenes/boz-uy-s.webp)', ink: '#7A2E4A' },
+    { id: 'jibek', name: 'Жибек', scene: true, k: 'wedding nikah', bg: 'center/cover url(/inv/scenes/jibek-s.webp)', ink: '#A47B32' },
+    { id: 'barhat', name: 'Бархат', scene: true, k: 'wedding jubilee', bg: 'center/cover url(/inv/scenes/barhat-s.webp)', ink: '#F4DFA6' },
+    { id: 'bilerik', name: 'Билерик', scene: true, k: 'wedding nikah', bg: 'center/cover url(/inv/scenes/bilerik-s.webp)', ink: '#F4DFA6' },
+    { id: 'shokulo', name: 'Шөкүлө', scene: true, k: 'kyz_uzatuu', bg: 'center/cover url(/inv/scenes/shokulo-s.webp)', ink: '#F4DFA6' },
+    { id: 'jurkan', name: 'Жууркан', scene: true, k: 'kyz_uzatuu', bg: 'center/cover url(/inv/scenes/jurkan-s.webp)', ink: '#F4DFA6' },
+    { id: 'shyrdak', name: 'Шырдак', scene: true, k: 'kyz_uzatuu jubilee', bg: 'center/cover url(/inv/scenes/shyrdak-s.webp)', ink: '#8E2A20' },
+    { id: 'ak-kalpak', name: 'Ак калпак', scene: true, k: 'sunnot', bg: 'center/cover url(/inv/scenes/ak-kalpak-s.webp)', ink: '#244A73' },
+    { id: 'kok-asman', name: 'Көк асман', scene: true, k: 'sunnot birthday', bg: 'center/cover url(/inv/scenes/kok-asman-s.webp)', ink: '#244A73' },
+    { id: 'beshik', name: 'Бешик', scene: true, k: 'beshik', bg: 'center/cover url(/inv/scenes/beshik-s.webp)', ink: '#9A5560' },
+    { id: 'ala-jip', name: 'Ала жип', scene: true, k: 'beshik', bg: 'center/cover url(/inv/scenes/ala-jip-s.webp)', ink: '#7A5A3A' },
+    { id: 'altyn-kuz', name: 'Алтын күз', scene: true, k: 'jubilee birthday', bg: 'center/cover url(/inv/scenes/altyn-kuz-s.webp)', ink: '#8A5A1E' },
+    { id: 'tunku-asman', name: 'Түнкү асман', scene: true, k: 'jubilee birthday', bg: 'center/cover url(/inv/scenes/tunku-asman-s.webp)', ink: '#F4DFA6' },
+    { id: 'tuman', name: 'Туман', scene: true, k: 'memorial', bg: 'center/cover url(/inv/scenes/tuman-s.webp)', ink: '#45494D' },
+    { id: 'kyzyl-kiyiz', name: 'Кызыл кийиз', scene: true, k: 'kyz_uzatuu wedding jubilee', bg: 'center/cover url(/inv/scenes/kyzyl-kiyiz-s.webp)', ink: '#F4DFA6' },
+    { id: 'altyn-jibek', name: 'Алтын жибек', scene: true, k: 'wedding nikah', bg: 'center/cover url(/inv/scenes/altyn-jibek-s.webp)', ink: '#A47B32' },
+    { id: 'nuska', name: 'Нуска', scene: true, k: 'wedding jubilee', bg: 'center/cover url(/inv/scenes/nuska-s.webp)', ink: '#F4DFA6' },
+    { id: 'tunduk', name: 'Түндүк', scene: true, k: 'wedding kyz_uzatuu', bg: 'center/cover url(/inv/scenes/tunduk-s.webp)', ink: '#8E2A20' },
+    { id: 'tasma', name: 'Тасма', scene: true, k: 'kyz_uzatuu wedding', bg: 'center/cover url(/inv/scenes/tasma-s.webp)', ink: '#8E2A20' },
+    { id: 'kemer', name: 'Кемер', scene: true, k: 'kyz_uzatuu wedding', bg: 'center/cover url(/inv/scenes/kemer-s.webp)', ink: '#8E2A20' },
+    { id: 'sep', name: 'Сеп', scene: true, k: 'kyz_uzatuu', bg: 'center/cover url(/inv/scenes/sep-s.webp)', ink: '#1F5560' },
+    { id: 'tor', name: 'Төр', scene: true, k: 'wedding kyz_uzatuu jubilee', bg: 'center/cover url(/inv/scenes/tor-s.webp)', ink: '#8E2A20' },
+    { id: 'dastorkon', name: 'Дасторкон', scene: true, k: 'jubilee wedding kyz_uzatuu', bg: 'center/cover url(/inv/scenes/dastorkon-s.webp)', ink: '#8A5A1E' },
+    { id: 'tan', name: 'Таң', scene: true, k: 'wedding jubilee', bg: 'center/cover url(/inv/scenes/tan-s.webp)', ink: '#7A2E4A' },
+    { id: 'kuzgu-jailoo', name: 'Күзгү жайлоо', scene: true, k: 'jubilee birthday', bg: 'center/cover url(/inv/scenes/kuzgu-jailoo-s.webp)', ink: '#8A5A1E' },
+    { id: 'jaz', name: 'Жаз', scene: true, k: 'wedding kyz_uzatuu beshik', bg: 'center/cover url(/inv/scenes/jaz-s.webp)', ink: '#2E5E57' },
+    { id: 'kysh', name: 'Кыш', scene: true, k: 'wedding jubilee', bg: 'center/cover url(/inv/scenes/kysh-s.webp)', ink: '#8A1E2C' },
     // SCENES:END
   ].filter((x) => !x.scene || SCENES_READY || new URLSearchParams(location.search).get('scenes') === '1')
     .sort((a, b) => (b.scene ? 1 : 0) - (a.scene ? 1 : 0));   // новые шаблоны — первыми
@@ -706,7 +719,16 @@
   }
   function stepDesign() {
     const d = S.draft, t = L();
-    const themes = THEMES.map((x) => `<button type="button" class="theme" data-set="theme" data-v="${x.id}" aria-pressed="${d.theme === x.id}"><div class="sw${x.scene ? ' scene' : ''}" style="background:${x.bg}"><span style="color:${x.ink}">${esc((initialsOf(d) || 'А · А').replace(/ /g, ''))}</span></div><b>${esc(x.name)}</b></button>`).join('');
+    // Обложки как в каталоге: сначала подходящие к виду тоя, остальные — по кнопке «Все оформления»
+    const tag = { tushoo: 'beshik', other: '' }[d.kind] ?? d.kind;
+    const fits = (x) => !tag || (' ' + x.k + ' ').includes(' ' + tag + ' ');
+    const card = (x) => `<button type="button" class="theme" data-set="theme" data-v="${x.id}" aria-pressed="${d.theme === x.id}"><img class="cover" src="/img/themes/${lang === 'ky' ? 'ky' : 'ru'}_${x.id}.webp" alt="" loading="lazy" width="195" height="390"><b>${esc(x.name)}</b></button>`;
+    const mine = THEMES.filter(fits), rest = THEMES.filter((x) => !fits(x));
+    if (rest.some((x) => x.id === d.theme)) S.allThemes = true;
+    const themes = `<div class="themes">${mine.map(card).join('')}</div>` + (rest.length ? (S.allThemes
+      ? `<h4 class="themes-more">${esc(t.themesOther)}</h4><div class="themes">${rest.map(card).join('')}</div>`
+      : `<button type="button" class="link themes-all" data-act="allthemes">${esc(t.themesAll(rest.length))}</button>`) : '');
+    const isScene = THEMES.find((x) => x.id === d.theme)?.scene;
     const envs = [['classic', t.envClassic, t.envClassicS, '../inv/env/classic.jpg'], ['navy', t.envNavy, t.envNavyS, '../inv/env/navy.jpg']]
       .map(([id, n, s, img]) => `<button type="button" class="env" data-set="envelope" data-v="${id}" aria-pressed="${d.envelope === id}"><img src="${img}" alt="" loading="lazy"><b>${esc(n)}</b><small>${esc(s)}</small></button>`).join('');
     const own = d.own_text, lk = d.lang;
@@ -716,8 +738,8 @@
       : `<div class="field"><span>${esc(t.text)}</span><small style="margin:0 0 8px">${esc(t.textAuto)}</small><div class="auto-text" id="autoText">${esc(autoText(d, lk))}</div></div>
          <button type="button" class="link" data-act="owntext">${esc(t.textOwn)}</button>`;
     return `<h1>${esc(t.designH)}</h1><p class="lead2">${esc(t.designL)}</p>
-      <div class="group"><h3>${esc(t.theme)}</h3><div class="themes">${themes}</div></div>
-      <div class="group"><h3>${esc(t.envelope)}</h3><div class="envs">${envs}</div></div>
+      <div class="group"><h3>${esc(t.theme)}</h3><p class="hint2">${esc(t.themeHint)}</p>${themes}</div>
+      ${isScene ? '' : `<div class="group"><h3>${esc(t.envelope)}</h3><div class="envs">${envs}</div></div>`}
       <div class="group stack">
         ${field(t.lang, seg('lang', [['ky', 'Кыргызча'], ['ru', 'Русский']]), t.langS)}
         <div class="divider"></div>
@@ -865,6 +887,7 @@
     if (a === 'back') goStep(S.step - 1);
     if (a === 'preview') openPreview();
     if (a === 'owntext') { d.own_text = true; const k = d.lang === 'ky' ? 'text_ky' : 'text_ru'; if (!d[k]) d[k] = autoText(d, d.lang); changed(); redrawStep(); }
+    if (a === 'allthemes') { S.allThemes = true; redrawStep(); return; }
     if (a === 'autotext') { d.own_text = false; d.text_ky = ''; d.text_ru = ''; changed(); redrawStep(); }
     if (a === 'addrow') { if (d.program.length < 12) d.program.push({ time: '', text: '' }); changed(); redrawStep(); setTimeout(() => document.querySelector(`[data-prog="${d.program.length - 1}"]`)?.focus(), 30); }
     if (a === 'finish') finish();
