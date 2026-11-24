@@ -101,10 +101,26 @@
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const pad = (n) => String(n).padStart(2, '0');
   const bk = (iso) => new Date(Date.parse(iso) + 6 * 3600e3);   // время по Бишкеку в полях UTC
-  async function rpc(name, body) {
-    const r = await fetch(`${SB}/rest/v1/rpc/${name}`, { method: 'POST', headers: { apikey: KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  async function parse(r) {
     if (!r.ok) { const e = new Error(await r.text()); e.status = r.status; throw e; }
     const t = await r.text(); return t ? JSON.parse(t) : null;
+  }
+  async function rpc(name, body) {
+    return parse(await fetch(`${SB}/rest/v1/rpc/${name}`, { method: 'POST', headers: { apikey: KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(body) }));
+  }
+  // Экран загрузки (index.html, html.tm-wait) убираем, когда первый экран готов: данные пришли,
+  // картинка первого экрана и шрифты загрузились (но не дольше 2,5 с — дальше показываем как есть).
+  const HTML = document.documentElement;
+  function unwait() {
+    if (!HTML.classList.contains('tm-wait')) return;
+    HTML.classList.add('tm-fade'); HTML.classList.remove('tm-wait');
+    setTimeout(() => HTML.classList.remove('tm-fade'), 450);
+  }
+  function unwaitWhenReady(img) {
+    if (!HTML.classList.contains('tm-wait')) return;
+    const pic = img ? new Promise((ok) => { const i = new Image(); i.onload = i.onerror = ok; i.src = img; }) : null;
+    const fonts = document.fonts?.ready || null;
+    Promise.race([Promise.all([pic, fonts]), new Promise((ok) => setTimeout(ok, 2500))]).then(unwait);
   }
 
   // ---------- Кыргызские падежи: Айпери → Айперинин / Айперини, Азамат → Азаматтын / Азаматты ----------
@@ -641,9 +657,12 @@
     }
     render();
     hint.textContent = T[lang].envHint;
-    if (!setupScene() && C.envelope && C.envelope !== 'classic') setupVideoEnvelope(C.envelope);
+    const scene = setupScene();
+    const video = !scene && C.envelope && C.envelope !== 'classic' && setupVideoEnvelope(C.envelope);
+    unwaitWhenReady(scene ? `/inv/scenes/${theme}.webp` : video ? vid.poster : null);
   }
   function fail(net) {
+    unwait();
     const L = T[lang];
     $('envelope').classList.add('gone'); document.body.classList.remove('locked');
     $('oopsTitle').textContent = L.oopsTitle; $('oopsText').textContent = net ? L.oopsNet : L.oopsText; $('oops').hidden = false;
@@ -667,7 +686,7 @@
     event: { title: o.event_title, starts_at: o.starts_at, venue_name: o.venue_name, venue_address: o.venue_address },
     guest: { name: o.guest_name, party_size: o.party_size, lang: null, rsvp: o.rsvp, rsvp_count: o.rsvp_count },
   } : null));
-  rpc('public_card', { p_token: token })
+  (window.__tmCard ? window.__tmCard.then(parse) : rpc('public_card', { p_token: token }))
     .catch((e) => (e.status === 404 ? legacy().then((r) => { if (r) r.legacy = true; return r; }) : Promise.reject(e)))
     .then((r) => {
       if (!r) { fail(false); return; }

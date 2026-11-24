@@ -120,7 +120,7 @@
       payInvT: 'Онлайн-приглашение', payProT: 'Приложение', payUp: 'доплата',
       payInvL: ['Приглашение без знака «Образец»', 'Личные ссылки и «кто открыл»', 'Гости без ограничений', 'Только для этого тоя · на год, не меньше 3 месяцев после тоя'],
       payProL: ['Всё из онлайн-приглашения', 'Полная версия приложения для тоя', '«У входа», конверты, бюджет, подарки'],
-      payNext: 'Перейти к оплате', payAmount: 'К оплате', payNum: (n) => `Номер тоя для комментария: ${n}`,
+      payNext: 'Перейти к оплате', payAmount: 'К оплате',
       payStep1: 'Нажмите «Оплатить» — откроется приложение банка (MBank или любой банк Кыргызстана). С компьютера — отсканируйте QR телефоном.',
       payStep2: (p) => `Сумма ${p} сом уже указана — проверьте её и нажмите «Перевести».`, payStep3: 'Вернитесь сюда и нажмите «Я оплатил».',
       payBtn: 'Оплатить в приложении банка', payer: 'Имя отправителя — как в банке', payerS: 'Например, «Айбек Т.» — так мы найдём ваш платёж.',
@@ -214,7 +214,7 @@
       payInvT: 'Онлайн чакыруу', payProT: 'Тиркеме', payUp: 'кошумча төлөм',
       payInvL: ['«Үлгү» белгисиз чакыруу', 'Жеке шилтемелер жана «ким ачты»', 'Коноктор чексиз', 'Ушул той үчүн гана · бир жылга, тойдон кийин 3 айдан кем эмес'],
       payProL: ['Онлайн чакыруунун баары', 'Тиркеменин толук версиясы', '«Кире бериш», конверттер, бюджет, белектер'],
-      payNext: 'Төлөөгө өтүү', payAmount: 'Төлөө', payNum: (n) => `Комментарий үчүн тойдун номери: ${n}`,
+      payNext: 'Төлөөгө өтүү', payAmount: 'Төлөө',
       payStep1: '«Төлөө» баскычын басыңыз — банк тиркемеси ачылат (MBank же Кыргызстандагы башка банк). Компьютерден болсо — QRди телефон менен сканерлеңиз.',
       payStep2: (p) => `${p} сом сумма жазылып турат — текшерип, которууну ырастаңыз.`, payStep3: 'Бул жакка кайтып, «Төлөдүм» баскычын басыңыз.',
       payBtn: 'Банк тиркемесинде төлөө', payer: 'Жөнөтүүчүнүн аты — банктагыдай', payerS: 'Мисалы, «Айбек Т.» — ушундай төлөмүңүздү табабыз.',
@@ -1142,7 +1142,6 @@
     const invPaid = Boolean(p.invite_until);
     const proPrice = p.pro_price || (invPaid ? 500 : 990), invPrice = p.invite_price || 490;
     const price = () => (plan === 'invite' ? invPrice : proPrice);
-    const num = p.num ? String(p.num).replace(/(\d{3})(\d{3})/, '$1 $2') : '';
     const m = S.user?.user_metadata || {};
     let stage = startStage || 'choose', payer = store.get('tm_payer') || m.full_name || m.name || '';
     const planBtn = (id, title, priceTxt, list, badge) => `<button type="button" class="plan" data-plan="${id}" aria-pressed="${plan === id}">${badge ? `<span class="tag badge">${esc(badge)}</span>` : ''}
@@ -1158,7 +1157,7 @@
         el.querySelector('[data-go]').onclick = () => { stage = 'pay'; store.set(payStartKey(), String(Date.now())); track('pay_start', { plan, value: price() }); draw(el); };
       } else if (stage === 'pay') {
         el.innerHTML = `<button class="x" type="button" data-close aria-label="${esc(t.close)}">×</button><h2>${esc(plan === 'invite' ? t.payInvT : t.payProT)}</h2>
-          <div class="pay-amount"><span>${esc(t.payAmount)}</span><b>${price()} ${esc(t.som)}</b><span>${esc(t.payNum(num))}</span></div>
+          <div class="pay-amount"><span>${esc(t.payAmount)}</span><b>${price()} ${esc(t.som)}</b></div>
           <a class="btn primary block" data-paylink href="${esc(PAY.link)}" target="_blank" rel="noopener" style="margin-top:14px">${esc(t.payBtn)}</a>
           <img class="qr" data-payqr src="${PAY.qr}" alt="QR MBank" width="220" height="225">
           <ol class="paysteps"><li>${esc(t.payStep1)}</li><li>${esc(t.payStep2(price()))}</li><li>${esc(t.payStep3)}</li></ol>

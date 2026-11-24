@@ -71,6 +71,23 @@
   .chart .tip { position: absolute; pointer-events: none; background: var(--ink); color: #fff; font-size: 13px; padding: 6px 9px; border-radius: 8px;
     white-space: nowrap; transform: translate(-50%, -100%); margin-top: -8px; }
   .detail { border: 2px solid var(--accent-soft); }
+  .how { background: #FFF8EC; border-color: #F1DDB8; }
+  .how ol { margin: 8px 0 0; padding-left: 20px; font-size: 15px; line-height: 1.5; }
+  .claim { display: flex; flex-direction: column; gap: 12px; }
+  .claim .sum { font-size: 22px; font-weight: 700; letter-spacing: -.01em; }
+  .claim .row { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+  .kv { display: grid; grid-template-columns: 110px 1fr; gap: 4px 10px; font-size: 15px; }
+  .kv dt { color: var(--muted); } .kv dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+  .box { border-radius: 14px; background: var(--bg); padding: 12px 14px; }
+  .now { font-size: 17px; font-weight: 600; }
+  .now.ok { color: var(--success); } .now.warn { color: var(--warn); }
+  a.b { display: inline-flex; align-items: center; text-decoration: none; }
+  .b.good { background: #1E7A4C; color: #fff; }
+  details.more { border-top: 1px solid var(--line); padding-top: 10px; }
+  details.more > summary { cursor: pointer; font-weight: 600; color: var(--muted); font-size: 15px; min-height: 32px; }
+  .links { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 4px; }
+  .links a, .lnk { font: inherit; font-size: 14px; font-weight: 600; color: var(--accent-dark); background: none; border: 0; padding: 4px 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .hd { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
   .list > * + * { border-top: 1px solid var(--line); padding-top: 10px; margin-top: 10px; }
   .login { max-width: 420px; margin: 40px auto; text-align: center; }
   .g-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 52px; border-radius: 14px;
@@ -132,7 +149,7 @@
 
   <div id="app" hidden>
     <nav class="tabs" role="tablist" aria-label="Разделы">
-      <button role="tab" data-tab="claims" aria-selected="true">Заявки <span class="count" id="claimsCount" hidden></span></button>
+      <button role="tab" data-tab="claims" aria-selected="true">Оплаты <span class="count" id="claimsCount" hidden></span></button>
       <button role="tab" data-tab="search">Поиск</button>
       <button role="tab" data-tab="catalog">Каталог <span class="count" id="vclaimsCount" hidden></span></button>
       <button role="tab" data-tab="stats">Статистика</button>
@@ -144,12 +161,15 @@
 
     <!-- Заявки -->
     <section data-view="claims" class="stack">
+      <div class="card how"><b>Как проверить оплату</b>
+        <ol><li>Откройте приложение банка (MBank) → поступления.</li>
+          <li>Найдите перевод: та же сумма, то же имя, примерно в то же время.</li>
+          <li>Нашли — нажмите «Оплата пришла»: знак «Образец» сразу исчезнет у клиента. Не нашли — напишите клиенту или нажмите «Оплаты нет».</li></ol></div>
       <div class="section-title">Ждут проверки</div>
-      <p class="muted" style="margin-top:-6px;font-size:14px">Сверьте поступление в банке по имени отправителя и сумме, затем «Открыть безлимит».</p>
       <div class="grid" id="pendingList"></div>
-      <div class="section-title">Обработанные за 30 дней</div>
+      <div class="section-title">Проверенные за 30 дней</div>
       <div class="card"><div class="tbl-wrap"><table class="wide">
-        <thead><tr><th>Когда</th><th>Отправитель</th><th>Той</th><th>Статус</th><th>Кто</th></tr></thead>
+        <thead><tr><th>Когда</th><th>Кто платил</th><th>Той</th><th>Итог</th><th>Проверил</th></tr></thead>
         <tbody id="handledList"></tbody></table></div></div>
     </section>
 
@@ -234,7 +254,7 @@
       </div>
       <div class="card stack">
         <h3>Выгрузка для учёта</h3>
-        <p class="meta">Все выдачи безлимита и размещения в каталоге за период — файлы CSV, открываются в Excel.</p>
+        <p class="meta">Все оплаты и подарки тоям и размещения в каталоге за период — файлы CSV, открываются в Excel.</p>
         <div class="inline">
           <div><label class="flabel" for="from">С</label><input class="input" type="date" id="from"></div>
           <div><label class="flabel" for="to">По</label><input class="input" type="date" id="to"></div>
@@ -352,36 +372,45 @@
   // Телефон плательщика → номер для wa.me (996XXXXXXXXX); пусто, если не похоже на номер
   const waNum = (ph) => { const d = String(ph || '').replace(/\D/g, ''); if (/^996\d{9}$/.test(d)) return d; if (/^0\d{9}$/.test(d)) return '996' + d.slice(1); if (/^\d{9}$/.test(d)) return '996' + d; return ''; };
 
-  // ---------- заявки ----------
+  // ---------- оплаты ----------
+  const planName = (p) => (p === 'invite' ? '«Приглашение»' : '«Приложение»');
+  const invLink = (slug) => (slug ? `../inv/?c=${slug}&own=1` : '');
+  const ownerTxt = (t) => (t.owner_anon ? 'без входа — приглашение сохранено на телефоне клиента' : esc(t.owner_email || '—'));
+  const waBtn = (c, text, label) => `<a class="b sec" target="_blank" rel="noopener" href="https://wa.me/${waNum(c.phone)}?text=${encodeURIComponent(text)}">${label}</a>`;
   async function loadClaims() {
     let d;
     try { d = await rpc('admin_pay_list'); } catch (e) { toast(errRu(e), true); return; }
     const pending = d.claims.filter((c) => c.status === 'pending');
     const handled = d.claims.filter((c) => c.status !== 'pending');
     $('claimsCount').textContent = pending.length; $('claimsCount').hidden = !pending.length;
-    $('pendingList').innerHTML = pending.length ? pending.map((c) => `
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline">
-          <h3>${esc(c.payer_name)}</h3><span class="meta">${when(c.created_at)}</span></div>
-        <div style="margin-top:6px"><span class="badge ${c.plan === 'invite' ? 'gray' : 'ok'}">${c.plan === 'invite' ? 'Приглашение' : 'Приложение'} · ${Number(c.amount || 0).toLocaleString('ru-RU')} сом</span>
-          ${c.prov_active ? '<span class="meta" style="margin-left:6px">уже открыт временно — проверьте платёж</span>' : '<span class="meta" style="margin-left:6px">клиент ждёт — знак «Образец» ещё стоит</span>'}</div>
-        ${c.phone ? `<div style="margin-top:4px">${esc(c.phone)}</div>` : ''}
-        <div class="meta" style="margin-top:6px">№ ${fmtNum(c.num)} · ${esc(c.title)}</div>
-        <div class="meta">${c.people} чел.${c.starts_at ? ' · той ' + day(c.starts_at) : ''}</div>
-        <div class="actions">
-          <button class="b primary" data-grant="${c.num}" data-claim="${c.id}" data-plan="${c.plan || 'pro'}">Оплата пришла — подтвердить</button>
-          <button class="b sec" data-reject="${c.id}" data-name="${esc(c.payer_name)}">Отклонить</button>
-          <button class="b sec" data-open="${c.num}">Подробнее</button>
+    $('pendingList').innerHTML = pending.length ? pending.map((c) => {
+      const sum = `${money(c.amount)} сом`;
+      const already = (c.plan === 'invite' && c.invite_active) || c.pro_active;
+      return `
+      <div class="card claim">
+        <div class="row"><span class="sum">${sum}</span><span class="meta">${when(c.created_at)}</span></div>
+        <dl class="kv">
+          <dt>Кто платил</dt><dd><b>${esc(c.payer_name)}</b> <span class="meta">(как в банке)</span></dd>
+          <dt>За что</dt><dd>${planName(c.plan)}${c.plan === 'invite' ? ' — убрать знак «Образец»' : ''}</dd>
+          <dt>Телефон</dt><dd>${c.phone ? esc(c.phone) : '<span class="meta">не оставил</span>'}</dd>
+          <dt>Той</dt><dd>${esc(c.title)}${c.starts_at ? ` · ${day(c.starts_at)}` : ''}<div class="meta">№ ${fmtNum(c.num)} · гостей ${c.guests || 0}</div>
+            <div class="links">${c.slug ? `<a target="_blank" rel="noopener" href="${invLink(c.slug)}">Посмотреть приглашение ↗</a>` : ''}<button type="button" class="lnk" data-open="${c.num}">Карточка тоя</button></div></dd>
+        </dl>
+        <div class="box meta">${already ? 'У тоя уже есть оплата — возможно, заявка повторная.' : 'Клиент ждёт: знак «Образец» пока стоит.'}</div>
+        <div class="actions" style="margin-top:0">
+          <button class="b good" data-grant="${c.num}" data-claim="${c.id}" data-plan="${c.plan || 'pro'}" data-title="${esc(c.title)}" data-sum="${sum}">✓ Оплата пришла</button>
+          <button class="b danger" data-reject="${c.id}" data-name="${esc(c.payer_name)}">Оплаты нет</button>
         </div>
-        ${waNum(c.phone) ? `<div class="actions" style="margin-top:6px">
-          <a class="b sec" target="_blank" rel="noopener" href="https://wa.me/${waNum(c.phone)}?text=${encodeURIComponent(`Здравствуйте, ${c.payer_name}! Это Той Менеджер. Оплату ${Number(c.amount || 0).toLocaleString('ru-RU')} сом за той № ${fmtNum(c.num)} получили, спасибо! Всё открыто на год: приглашение без знака «Образец», гостей сколько угодно. Если будут вопросы — пишите сюда.`)}">WhatsApp: «оплату получили»</a>
-          <a class="b sec" target="_blank" rel="noopener" href="https://wa.me/${waNum(c.phone)}?text=${encodeURIComponent(`Здравствуйте, ${c.payer_name}! Это Той Менеджер. Мы не нашли вашу оплату ${Number(c.amount || 0).toLocaleString('ru-RU')} сом за той № ${fmtNum(c.num)}. Пришлите, пожалуйста, скриншот перевода — проверим и откроем.`)}">WhatsApp: «не нашли оплату»</a>
-        </div>` : ''}
-      </div>`).join('') : '<p class="empty">Новых заявок нет.</p>';
+        ${waNum(c.phone) ? `<div><div class="hd">Написать клиенту в WhatsApp</div><div class="actions" style="margin-top:0">
+          ${waBtn(c, `Здравствуйте, ${c.payer_name}! Это Той Менеджер. Оплату ${sum} получили, спасибо! Знак «Образец» убран — приглашение можно отправлять гостям. Если будут вопросы — пишите сюда.`, '«Оплату получили»')}
+          ${waBtn(c, `Здравствуйте, ${c.payer_name}! Это Той Менеджер. Мы не нашли вашу оплату ${sum}. Пришлите, пожалуйста, скриншот перевода — проверим и откроем.`, '«Не нашли оплату»')}
+        </div></div>` : ''}
+      </div>`;
+    }).join('') : '<p class="empty">Новых заявок нет.</p>';
     $('handledList').innerHTML = handled.length ? handled.map((c) => `
       <tr><td>${when(c.created_at)}</td><td>${esc(c.payer_name)}${c.phone ? `<div class="meta">${esc(c.phone)}</div>` : ''}</td>
-      <td><button class="row-link" data-open="${c.num}">№ ${fmtNum(c.num)}<div class="meta">${esc(c.title)}</div></button></td>
-      <td>${c.status === 'approved' ? `<span class="badge ok">${c.plan === 'invite' ? 'Приглашение' : 'Приложение'}</span>` : '<span class="badge gray">Отклонён</span>'}</td>
+      <td><button class="row-link" data-open="${c.num}">${esc(c.title)}<div class="meta">№ ${fmtNum(c.num)}</div></button></td>
+      <td>${c.status === 'approved' ? `<span class="badge ok">✓ Оплачено</span><div class="meta">${planName(c.plan)}</div>` : '<span class="badge gray">Оплаты нет</span>'}</td>
       <td class="meta">${esc(c.handled_by_email || '')}</td></tr>`).join('') : '<tr><td colspan="5" class="empty">Пока пусто</td></tr>';
   }
 
@@ -390,15 +419,16 @@
     const b = ev.target.closest('button'); if (!b) return;
     if (b.dataset.grant) {
       const num = Number(b.dataset.grant), plan = b.dataset.plan === 'invite' ? 'invite' : 'pro';
-      const what = plan === 'invite' ? '«Онлайн-приглашение» (без знака «Образец»)' : '«Приложение» (полная версия)';
-      if (!confirm(`Открыть оплаченный ${what} для тоя № ${fmtNum(num)} на год?`)) return;
+      const what = plan === 'invite' ? '«Приглашение» (знак «Образец» исчезнет)' : '«Приложение» (полная версия)';
+      const head = b.dataset.claim ? `Оплата ${b.dataset.sum || ''} пришла?` : 'Отметить оплату без заявки?';
+      if (!confirm(`${head}\n\nТой: ${b.dataset.title || '№ ' + fmtNum(num)}\nОткроется ${what} на год.`)) return;
       b.disabled = true;
       try { const until = await rpc('admin_grant_plan', { p_num: num, p_plan: plan, p_claim: b.dataset.claim || null });
-        toast(until ? `Готово: № ${fmtNum(num)} — ${plan === 'invite' ? 'приглашение' : 'приложение'} до ${day(until)}` : 'Готово'); refresh(num); }
+        toast(until ? `Готово: ${plan === 'invite' ? '«Приглашение»' : '«Приложение»'} оплачено до ${day(until)}` : 'Готово'); refresh(num); }
       catch (e) { toast(errRu(e), true); b.disabled = false; }
     } else if (b.dataset.reject) {
-      if (!confirm(`Отклонить заявку «${b.dataset.name}»? Делайте так, только если оплаты точно нет. Временный доступ (без знака / безлимит) снимется.`)) return;
-      try { await rpc('admin_reject_claim', { p_claim: b.dataset.reject }); toast('Заявка отклонена'); loadClaims(); }
+      if (!confirm(`Оплаты от «${b.dataset.name}» нет?\n\nЗаявка закроется, знак «Образец» останется. Делайте так, только если перевода точно нет — лучше сначала напишите клиенту.`)) return;
+      try { await rpc('admin_reject_claim', { p_claim: b.dataset.reject }); toast('Заявка закрыта: оплаты нет'); loadClaims(); }
       catch (e) { toast(errRu(e), true); }
     } else if (b.dataset.open) {
       show('search'); openToi(Number(b.dataset.open));
@@ -406,14 +436,14 @@
       const num = Number(b.dataset.gift);
       const days = Number($('giftDays').value), note = $('giftNote').value.trim();
       if (!note) { toast('Напишите, кому и за что подарок — это попадёт в учёт', true); $('giftNote').focus(); return; }
-      if (!confirm(`Подарить безлимит тою № ${fmtNum(num)} на ${days} дн.?`)) return;
+      if (!confirm(`Открыть всё бесплатно (подарок) на ${days} дн.?\nТой № ${fmtNum(num)}. В доход не считается.`)) return;
       try { const until = await rpc('admin_gift_pro', { p_num: num, p_days: days, p_note: note });
         toast(`Подарено: до ${day(until)}`); refresh(num); }
       catch (e) { toast(errRu(e), true); }
     } else if (b.dataset.revoke) {
       const num = Number(b.dataset.revoke);
-      if (!confirm(`Отменить безлимит тоя № ${fmtNum(num)}? Добавлять гостей сверх 35 станет нельзя. Оплата за него перестанет считаться доходом.`)) return;
-      try { await rpc('admin_revoke_pro', { p_num: num }); toast('Доступ отменён'); refresh(num); }
+      if (!confirm(`Отменить оплату и подарки тоя № ${fmtNum(num)}?\n\nВернётся знак «Образец», гостей сверх 35 добавить будет нельзя. Оплата перестанет считаться доходом.`)) return;
+      try { await rpc('admin_revoke_pro', { p_num: num }); toast('Отменено: снова бесплатная версия'); refresh(num); }
       catch (e) { toast(errRu(e), true); }
     } else if (b.dataset.removeAdmin) {
       if (!confirm(`Убрать ${b.dataset.email} из администраторов?`)) return;
@@ -450,52 +480,72 @@
   const peopleTxt = (t) => t.is_pro ? `${t.people} чел.` : `${t.people} из ${t.limit} чел.`;
   function proBadge(t) {
     const inv = t.invite_until && Date.parse(t.invite_until) > Date.now() ? ` <span class="badge ok">Приглашение до ${day(t.invite_until)}</span>` : '';
-    const prov = t.prov_plan ? ` <span class="badge warn">Временно открыт: ${t.prov_plan === 'invite' ? 'приглашение' : 'безлимит'} (ждёт проверки)</span>` : '';
+    const prov = t.prov_plan ? ` <span class="badge warn">Ждёт проверки оплаты</span>` : '';
     return (t.is_pro ? `<span class="badge ok">Приложение до ${day(t.pro_until)}</span>`
-      : t.people >= t.limit ? '<span class="badge warn">Лимит исчерпан</span>' : '<span class="badge gray">Бесплатно</span>') + inv + prov;
+      : inv ? '' : t.people >= t.limit ? '<span class="badge warn">Бесплатно · места закончились</span>' : '<span class="badge gray">Бесплатно · знак «Образец»</span>') + inv + prov;
   }
   function toiCard(t) {
     return `<div class="card"><button class="row-link" data-open="${t.num}">
       <div style="display:flex;justify-content:space-between;gap:8px"><h3>${esc(t.title)}</h3><b class="nowrap">№ ${fmtNum(t.num)}</b></div>
-      <div class="meta">${kindRu[t.kind] || ''}${t.starts_at ? ' · ' + day(t.starts_at) : ''} · ${esc(t.owner_email || '')}</div>
+      <div class="meta">${kindRu[t.kind] || ''}${t.starts_at ? ' · ' + day(t.starts_at) : ''} · ${t.owner_anon ? 'без входа' : esc(t.owner_email || '')}</div>
       <div class="meta" style="margin:4px 0 8px">${peopleTxt(t)} · гостей ${t.guests} · команда ${t.members}${t.deleted ? ' · удалён' : ''}</div>
       ${proBadge(t)}</button></div>`;
+  }
+  // Состояние тоя одной строкой: что сейчас видит клиент
+  function nowState(t) {
+    if (t.is_pro) return ['ok', `Оплачено «Приложение» до ${day(t.pro_until)}`, 'Знака «Образец» нет, гостей без ограничений, полная версия приложения.'];
+    if (t.invite_until && Date.parse(t.invite_until) > Date.now()) return ['ok', `Оплачено «Приглашение» до ${day(t.invite_until)}`, 'Знака «Образец» нет, гостей без ограничений.'];
+    if (t.prov_plan || t.claims?.some((c) => c.status === 'pending')) return ['warn', 'Ждёт проверки оплаты', 'Клиент нажал «Я оплатил». Проверьте во вкладке «Оплаты».'];
+    return ['', 'Бесплатная версия', `На приглашении знак «Образец». Людей ${t.people} из ${t.limit} бесплатных.`];
   }
   async function openToi(num) {
     let t;
     try { t = await rpc('admin_toi_detail', { p_num: num }); } catch (e) { toast(errRu(e), true); return; }
     if (!t) { toast('Той не найден', true); return; }
     const owner = isOwner();
+    const [cls, head, sub] = nowState(t);
+    const paidAny = t.is_pro || (t.invite_until && Date.parse(t.invite_until) > Date.now());
+    const invPaid = t.invite_until && Date.parse(t.invite_until) > Date.now();
+    const canMark = !paidAny && !t.claims.some((c) => c.status === 'pending');   // есть заявка — подтверждают её во вкладке «Оплаты»
+    const history = [
+      ...t.grants.map((g) => ({ at: g.created_at, html: `<div><b>${g.kind === 'gift' ? 'Подарок' : 'Оплата'}${g.amount != null && g.kind === 'paid' ? ' · ' + money(g.amount) + ' сом' : ''}</b>
+        ${g.revoked ? ' <span class="badge gray">отменено</span>' : ''}
+        <div class="meta">${day(g.created_at)} → до ${day(g.until)}${g.note ? ' · ' + esc(g.note) : ''}${g.by ? ' · ' + esc(g.by) : ''}</div></div>` })),
+      ...t.claims.map((c) => ({ at: c.created_at, html: `<div>Клиент нажал «Я оплатил»: <b>${esc(c.payer_name)}</b>${c.phone ? ' · ' + esc(c.phone) : ''}
+        <div class="meta">${when(c.created_at)} · ${c.status === 'pending' ? 'ждёт проверки' : c.status === 'approved' ? 'оплата подтверждена' : 'оплаты не нашли'}</div></div>` })),
+    ].sort((a, b) => b.at.localeCompare(a.at)).map((x) => x.html).join('') || '<p class="empty">Пока ничего</p>';
     $('detail').innerHTML = `
       <div class="card detail stack">
         <div style="display:flex;justify-content:space-between;gap:12px;align-items:start">
           <div><h3 style="font-size:20px">${esc(t.title)}</h3>
-            <div class="meta">№ ${fmtNum(t.num)} · ${kindRu[t.kind] || ''}${t.starts_at ? ' · той ' + day(t.starts_at) : ''} · создан ${day(t.created_at)}${t.deleted ? ' · удалён' : ''}</div></div>
+            <div class="meta">№ ${fmtNum(t.num)} · ${kindRu[t.kind] || ''}${t.starts_at ? ' · той ' + day(t.starts_at) : ''}${t.deleted ? ' · удалён' : ''}</div></div>
           <button class="b sec" data-close-detail style="min-height:36px">Закрыть</button>
         </div>
-        <div>${proBadge(t)} <span class="meta" style="margin-left:6px">${peopleTxt(t)} · гостей ${t.guests}</span></div>
+        <div class="box"><div class="hd">Сейчас</div><div class="now ${cls}">${head}</div><div class="meta">${sub}</div></div>
+        <dl class="kv">
+          <dt>Владелец</dt><dd>${ownerTxt(t)}</dd>
+          <dt>Создан</dt><dd>${day(t.created_at)}</dd>
+          <dt>Гостей</dt><dd>${t.guests} в списке · ${t.people} чел.${t.views ? ` · ссылку открывали ${t.views} раз` : ''}</dd>
+        </dl>
         <div class="actions" style="margin-top:0">
-          <button class="b primary" data-grant="${t.num}">Открыть безлимит (год)</button>
-          ${!t.is_pro ? `<button class="b sec" data-grant="${t.num}" data-plan="invite">Открыть «Приглашение» (год)</button>` : ''}
-          ${owner && t.is_pro ? `<button class="b danger" data-revoke="${t.num}">Отменить безлимит</button>` : ''}
+          ${t.slug ? `<a class="b sec" target="_blank" rel="noopener" href="${invLink(t.slug)}">Посмотреть приглашение ↗</a>` : ''}
+          ${canMark ? `<button class="b primary" data-grant="${t.num}" data-plan="invite" data-title="${esc(t.title)}">Отметить оплату «Приглашения»</button>` : ''}
         </div>
-        ${owner ? `<div class="inline">
-          <div><label class="flabel" for="giftDays">Подарить безлимит</label>
-            <select class="input" id="giftDays"><option value="30">30 дней</option><option value="90">90 дней</option><option value="365" selected>Год</option></select></div>
-          <div style="flex:2 1 220px"><label class="flabel" for="giftNote">Кому и за что</label>
-            <input class="input" id="giftNote" maxlength="200" placeholder="например, тестировщик / ресторан Ала-Тоо"></div>
-          <button class="b sec" data-gift="${t.num}">Подарить</button></div>` : ''}
-        <div class="grid">
-          <div><div class="flabel">Команда · ${t.team.length}</div><div class="list">${t.team.map((m) => `
-            <div><b>${esc(m.name || m.email)}</b><div class="meta">${esc(m.email)} · ${roleRu[m.role] || m.role}</div></div>`).join('')}</div></div>
-          <div><div class="flabel">Оплаты и заявки</div><div class="list">${[
-            ...t.grants.map((g) => ({ at: g.created_at, html: `<div><b>${g.kind === 'gift' ? 'Подарок' : 'Оплата'}${g.amount != null && g.kind === 'paid' ? ' · ' + money(g.amount) + ' сом' : ''}</b>
-              ${g.revoked ? ' <span class="badge gray">отменён</span>' : ''}
-              <div class="meta">${day(g.created_at)} → до ${day(g.until)}${g.note ? ' · ' + esc(g.note) : ''}${g.by ? ' · ' + esc(g.by) : ''}</div></div>` })),
-            ...t.claims.map((c) => ({ at: c.created_at, html: `<div>Заявка: <b>${esc(c.payer_name)}</b>${c.phone ? ' · ' + esc(c.phone) : ''}
-              <div class="meta">${when(c.created_at)} · ${c.status === 'pending' ? 'ждёт проверки' : c.status === 'approved' ? 'открыт' : 'отклонена'}</div></div>` })),
-          ].sort((a, b) => b.at.localeCompare(a.at)).map((x) => x.html).join('') || '<p class="empty">Пока ничего</p>'}</div></div>
-        </div>
+        ${canMark ? '<p class="meta" style="margin:-6px 0 0">Если деньги пришли, а клиент не нажал «Я оплатил».</p>' : ''}
+        <div><div class="hd">История оплат</div><div class="list">${history}</div></div>
+        <div><div class="hd">Команда · ${t.team.length}</div><div class="list">${t.team.map((m) => `
+          <div><b>${esc(m.name || m.email || 'Без входа')}</b><div class="meta">${esc(m.email || '')}${m.email ? ' · ' : ''}${roleRu[m.role] || m.role}</div></div>`).join('') || '<p class="empty">—</p>'}</div></div>
+        <details class="more"><summary>Редкие действия</summary>
+          <div class="stack" style="margin-top:10px">
+            ${!t.is_pro ? `<div><button class="b sec" data-grant="${t.num}" data-title="${esc(t.title)}">Отметить оплату «Приложения» (полная версия)</button></div>` : ''}
+            ${owner ? `<div class="inline">
+              <div><label class="flabel" for="giftDays">Подарок: открыть всё бесплатно</label>
+                <select class="input" id="giftDays"><option value="30">30 дней</option><option value="90">90 дней</option><option value="365" selected>Год</option></select></div>
+              <div style="flex:2 1 220px"><label class="flabel" for="giftNote">Кому и за что</label>
+                <input class="input" id="giftNote" maxlength="200" placeholder="например, тестировщик / ресторан Ала-Тоо"></div>
+              <button class="b sec" data-gift="${t.num}">Подарить</button></div>` : ''}
+            ${owner && (t.is_pro || invPaid) ? `<div><button class="b danger" data-revoke="${t.num}">Отменить оплату / подарок</button></div>` : ''}
+          </div></details>
       </div>`;
     $('detail').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
@@ -861,8 +911,8 @@
       kpi(s.invites_sent, 'Приглашений отправлено', `${money(s.rsvp_via_link)} ответили по ссылке`),
       kpi(s.avg_team_size || 0, 'Человек в команде (сред.)'),
       kpi(s.tois_near_limit, 'Близко к лимиту', '25–34 человека'),
-      kpi(s.tois_at_limit, 'Упёрлись в лимит', 'без безлимита'),
-      kpi(s.tois_pro, 'С безлимитом', `${s.tois_pro_paid} оплачено`),
+      kpi(s.tois_at_limit, 'Упёрлись в лимит', 'без оплаты'),
+      kpi(s.tois_pro, 'С «Приложением»', `${s.tois_pro_paid} оплачено`),
       kpi(s.claims_pending, 'Заявок ждут'),
     ].join('');
     const series = [['users', 'Новые пользователи'], ['tois', 'Новые тои'], ['guests', 'Добавлено гостей'], ['invites', 'Отправлено приглашений']];
@@ -979,7 +1029,7 @@
     const cur = m[m.length - 1] || { income: 0, paid: 0, gifts: 0, catalog_income: 0, catalog_paid: 0 };
     const total = m.reduce((a, x) => a + sum(x), 0), paid = m.reduce((a, x) => a + Number(x.paid) + Number(x.catalog_paid || 0), 0);
     $('incomeKpis').innerHTML = `
-      <div class="kpi"><div class="n">${money(sum(cur))}</div><div class="l">сом в этом месяце</div><div class="s">безлимит ${money(cur.income)} · каталог ${money(cur.catalog_income || 0)}</div></div>
+      <div class="kpi"><div class="n">${money(sum(cur))}</div><div class="l">сом в этом месяце</div><div class="s">тои ${money(cur.income)} · каталог ${money(cur.catalog_income || 0)}</div></div>
       <div class="kpi"><div class="n">${money(total)}</div><div class="l">сом за 12 месяцев</div><div class="s">${paid} оплат</div></div>`;
     const name = (ym) => { const [y, mo] = ym.split('-'); return `${monthsN[+mo - 1]} ${y}`; };
     bars($('incomeChart'), m.map((x) => ({ v: sum(x), name: name(x.month), ym: x.month })),
