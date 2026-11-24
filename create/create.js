@@ -54,7 +54,7 @@
       lead: 'Конверт с восковой печатью, музыка, ваши фото, карта 2ГИС и ответы гостей. Каждому гостю — личная ссылка с его именем, и вы видите, кто уже открыл.',
       ticks: ['Готово за 5 минут', 'Без установки приложения', 'Кыргызча и по-русски'],
       pick: 'Какой у вас той?', seeDemo: 'Посмотреть пример', demoNote: 'Так увидит гость — нажмите на печать',
-      ctaCreate: 'Создать приглашение', ctaFree: 'бесплатно, без установки', heroLead: 'Конверт с печатью раскрывается, играет музыка — и гость отвечает «Приду» в одно касание. Каждому — личная ссылка с его именем.',
+      ctaCreate: 'Создать приглашение', ctaFree: 'бесплатно, без установки', heroLead: 'Обложка с именем гостя раскрывается, играет музыка — и гость отвечает «Приду» в одно касание. Каждому — личная ссылка с его именем.',
       heroKind: 'Приглашение на свадьбу', heroNames: 'Азамат & Айпери', heroDate: '20 · 12 · 2026', pv: 'Просмотр', save: 'Сохранить',
       faqT: 'Вопросы', faq: [['Гостям нужно что-то устанавливать?', 'Нет. Приглашение открывается по ссылке из WhatsApp на любом телефоне.'], ['Можно исправить после отправки?', 'Да, в любой момент. Гости увидят новое по той же ссылке — заново отправлять не нужно.'], ['Как оплатить?', 'По QR в MBank или любом банке Кыргызстана. Знак «Образец» снимаем в течение дня — как только проверим платёж.'], ['Сколько гостей можно пригласить?', 'Сколько угодно: в «Онлайн-приглашении» за 490 сом ограничений нет. В бесплатной пробной версии — до 35 человек.']],
       how: [['Соберите', 'Имена, дата, место, фото и оформление. Всё видно сразу в предпросмотре.'], ['Отправьте', 'Одной общей ссылкой или каждому гостю — своей, в WhatsApp.'], ['Следите', 'Кто открыл, кто придёт и сколько человек — в одном списке.']],
@@ -67,7 +67,7 @@
       steps: ['Кто празднует', 'Когда и где', 'Фото', 'Оформление', 'Детали'],
       stepOf: (i, n) => `Шаг ${i} из ${n}`,
       next: 'Далее', back: 'Назад', preview: 'Как увидят гости', finish: 'Готово — сохранить', skip: 'Пропустить',
-      kindL: 'Вид тоя', whoH: 'Чей это праздник?', whoL: 'Имена появятся на конверте, на печати и в тексте приглашения.',
+      kindL: 'Вид тоя', whoH: 'Чей это праздник?', whoL: 'Имена появятся на обложке и в тексте приглашения.',
       groom: 'Жених', bride: 'Невеста', girl: 'Имя невесты', child: 'Имя ребёнка', hero: 'Чей юбилей', memo: 'В память о ком', otherName: 'Чей праздник', otherTitle: 'Название праздника',
       ph: { groom: 'Например, Азамат', bride: 'Например, Айпери', girl: 'Например, Айпери', child: 'Например, Нурсултан', hero: 'Например, Бакыт Асанович', memo: 'Например, Асан Бакытович', otherTitle: 'Например, «Новоселье»', sign: 'Например, «Семья Асановых»', venue: 'Например, ресторан «Ала-Тоо»', addr: 'Например, Бишкек, ул. Токтогула, 100', map: 'https://2gis.kg/…' },
       fromWhom: 'Кто приглашает', fromG: 'Родители жениха', fromB: 'Родители невесты', fromC: 'Сами молодые',
@@ -79,9 +79,9 @@
       photoH: 'Фото', photoL: 'Главное фото будет на первом экране приглашения, остальные — в галерее. Можно пропустить.',
       heroPh: 'Главное фото', heroAdd: 'Добавить главное фото', heroHint: 'Лучше вертикальное, где хорошо видны лица', change: 'Заменить', remove: 'Убрать',
       gallery: 'Галерея', galleryHint: (n) => `До 10 фото · добавлено ${n}`, uploading: 'Загружаем…', photoErr: 'Не удалось загрузить фото. Попробуйте другое.',
-      designH: 'Оформление', designL: 'Выберите цвета, конверт и музыку. Всё сразу видно в предпросмотре.',
+      designH: 'Оформление', designL: 'Выберите оформление и музыку. Всё сразу видно в предпросмотре.',
       theme: 'Оформление', themeHint: 'Сначала — подходящие к вашему тою. Нажмите на любое — образец «Как увидят гости» сразу обновится. Сменить можно в любой момент, даже после отправки.', themesOther: 'Другие оформления', themesAll: (n) => `Все оформления (ещё ${n})`, envelope: 'Конверт', envClassic: 'С восковой печатью', envClassicS: 'Гость ломает печать', envNavy: 'Видео-конверт «Түн»', envNavyS: 'Конверт раскрывается сам',
-      music: 'Музыка', musicS: 'Мелодия «Бакыт кушу» играет, когда гость открывает конверт', lang: 'Язык приглашения', langS: 'Гость может переключить язык сам',
+      music: 'Музыка', musicS: 'Мелодия «Бакыт кушу» играет, когда гость открывает приглашение', lang: 'Язык приглашения', langS: 'Гость может переключить язык сам',
       text: 'Текст приглашения', textAuto: 'Готовый текст (с вашими именами):', textOwn: 'Написать свой текст', textUseAuto: 'Вернуть готовый текст', textOwnPh: 'Ваш текст приглашения',
       detH: 'Детали', detL: 'Включите то, что нужно. Всё можно поменять и после отправки — гости увидят изменения по той же ссылке.',
       countdown: 'Обратный отсчёт', countdownS: 'Сколько дней и часов осталось до тоя',
@@ -103,7 +103,7 @@
       toGuests: 'Перейти к гостям', copy: 'Копировать', copied: 'Ссылка скопирована', share: 'В WhatsApp', open: 'Открыть', views: (n) => `Открыли по общей ссылке: ${n}`,
       inApp: 'В приложении «Той Менеджер» — то же приглашение, плюс конверты, бюджет и рассадка.',
       gAdd: 'Добавить гостей', gAddOne: 'Один гость', gAddMany: 'Списком',
-      gName: 'Имя', gNamePh: 'Асан Бекович', gAddr: 'Как обратиться', gAddrPh: 'Асан байке', gAddrS: 'Так гость увидит своё имя на конверте', gPhone: 'Телефон WhatsApp', gPhonePh: '0555 123 456', gParty: 'Сколько человек',
+      gName: 'Имя', gNamePh: 'Асан Бекович', gAddr: 'Как обратиться', gAddrPh: 'Асан байке', gAddrS: 'Так гость увидит своё имя на обложке', gPhone: 'Телефон WhatsApp', gPhonePh: '0555 123 456', gParty: 'Сколько человек',
       gManyPh: 'Асан байке, 0555 123 456, 3\nГүлнара эже, 0700 111 222, 2\nБакыт', gManyS: 'Каждый гость — с новой строки. Через запятую можно добавить телефон и сколько человек.',
       gSave: 'Добавить', gSaveN: (n) => `Добавить ${n}`, gEdit: 'Изменить гостя', gDel: 'Удалить гостя', gDelQ: 'Удалить гостя из списка?',
       gEmptyT: 'Пока нет гостей', gEmptyS: 'Добавьте гостей — каждый получит приглашение со своим именем.',
@@ -128,7 +128,7 @@
       payWaitT: 'Заявка принята', payWaitP: 'Проверим платёж в течение дня — после этого знак «Образец» исчезнет. Если оставили номер — позвоним. Вопросы — в чате на сайте.', phoneL: 'Телефон для связи (необязательно)', phoneS: 'Напишем, когда откроем приглашение.',
       payHelp: 'Вопросы по оплате — напишите в чат на сайте (кнопка внизу справа)', done: 'Хорошо',
       notFound: 'Приглашение не найдено или у вас нет доступа.', loadErr: 'Не удалось загрузить. Проверьте интернет и обновите страницу.',
-      envShow: 'Показать конверт', envHide: 'Без конверта', close: 'Закрыть', openNew: 'Открыть отдельно',
+      envShow: 'Показать конверт', envHide: 'Без конверта', coverShow: 'Показать обложку', coverHide: 'Без обложки', close: 'Закрыть', openNew: 'Открыть отдельно',
       sample: 'Асан байке', titleSep: ' — ',
       kindTitle: { wedding: 'свадьба', kyz_uzatuu: 'кыз узатуу', sunnot: 'сүннөт той', beshik: 'бешик той', tushoo: 'тушоо кесүү', jubilee: 'юбилей', memorial: 'аш', other: 'праздник' },
       kindTo: { wedding: 'на свадьбу', kyz_uzatuu: 'на кыз узатуу', sunnot: 'на сүннөт той', beshik: 'на бешик той', tushoo: 'на тушоо кесүү', jubilee: 'на юбилей', memorial: 'на аш', other: 'на праздник' },
@@ -144,10 +144,10 @@
       login: 'Кирүү', logout: 'Чыгуу', myInv: 'Менин чакырууларым', newInv: 'Жаңы чакыруу', app: '«Той Менеджер» тиркемеси',
       eyebrow: 'Тойго онлайн чакыруу',
       h1: 'Ачкысы келген чакыруу',
-      lead: 'Мөөр басылган конверт, музыка, сүрөттөрүңүз, 2ГИС картасы жана коноктордун жообу. Ар бир конокко — өз аты жазылган шилтеме, ким ачканын көрүп турасыз.',
+      lead: 'Улуттук стилдеги кооз мукаба, музыка, сүрөттөрүңүз, 2ГИС картасы жана коноктордун жообу. Ар бир конокко — өз аты жазылган шилтеме, ким ачканын көрүп турасыз.',
       ticks: ['5 мүнөттө даяр', 'Тиркеме орнотпой эле', 'Кыргызча жана орусча'],
       pick: 'Кандай той?', seeDemo: 'Мисалды көрүү', demoNote: 'Конок ушинтип көрөт — мөөрдү басыңыз',
-      ctaCreate: 'Чакыруу жасоо', ctaFree: 'акысыз, орнотпостон', heroLead: 'Мөөрлүү конверт ачылат, музыка ойнойт — конок бир басуу менен «Барам» деп жооп берет. Ар бирине — өз аты жазылган шилтеме.',
+      ctaCreate: 'Чакыруу жасоо', ctaFree: 'акысыз, орнотпостон', heroLead: 'Мукаба ачылат, музыка ойнойт — конок бир басуу менен «Барам» деп жооп берет. Ар бирине — өз аты жазылган шилтеме.',
       heroKind: 'Үйлөнүү тоюна чакыруу', heroNames: 'Азамат & Айпери', heroDate: '20 · 12 · 2026', pv: 'Көрүү', save: 'Сактоо',
       faqT: 'Суроолор', faq: [['Конокторго бир нерсе орнотуу керекпи?', 'Жок. Чакыруу WhatsAppтагы шилтеме аркылуу каалаган телефондо ачылат.'], ['Жөнөткөндөн кийин оңдосо болобу?', 'Ооба, каалаган убакта. Коноктор жаңысын ошол эле шилтемеден көрүшөт — кайра жөнөтүүнүн кереги жок.'], ['Кантип төлөйм?', 'QR аркылуу MBank же Кыргызстандын каалаган банкында. Төлөмдү текшергенден кийин «Үлгү» белгисин бир күндүн ичинде алып салабыз.'], ['Канча конок чакырса болот?', 'Каалаганча: 490 сомдук «Онлайн чакырууда» чек жок. Акысыз сынамык версияда — 35 кишиге чейин.']],
       how: [['Түзүңүз', 'Аттар, күнү, жери, сүрөттөр жана жасалгасы. Баары дароо алдын ала көрүнөт.'], ['Жөнөтүңүз', 'Бир жалпы шилтеме менен же ар бир конокко өзүнчө — WhatsAppта.'], ['Көзөмөлдөңүз', 'Ким ачты, ким келет жана канча киши — бир тизмеде.']],
@@ -160,7 +160,7 @@
       steps: ['Кимдин тою', 'Качан жана кайда', 'Сүрөттөр', 'Жасалгасы', 'Кошумча'],
       stepOf: (i, n) => `${n} кадамдын ${i}-кадамы`,
       next: 'Андан ары', back: 'Артка', preview: 'Конок кандай көрөт', finish: 'Даяр — сактоо', skip: 'Өткөрүп жиберүү',
-      kindL: 'Тойдун түрү', whoH: 'Кимдин тою?', whoL: 'Аттар конвертте, мөөрдө жана чакыруунун текстинде көрүнөт.',
+      kindL: 'Тойдун түрү', whoH: 'Кимдин тою?', whoL: 'Аттар мукабада жана чакыруунун текстинде көрүнөт.',
       groom: 'Күйөө бала', bride: 'Колукту', girl: 'Кыздын аты', child: 'Баланын аты', hero: 'Кимдин мааракеси', memo: 'Кимдин элесине', otherName: 'Кимдин тою', otherTitle: 'Тойдун аталышы',
       ph: { groom: 'Мисалы, Азамат', bride: 'Мисалы, Айпери', girl: 'Мисалы, Айпери', child: 'Мисалы, Нурсултан', hero: 'Мисалы, Бакыт Асанович', memo: 'Мисалы, Асан Бакытович', otherTitle: 'Мисалы, «Үй той»', sign: 'Мисалы, «Асановдордун үй-бүлөсү»', venue: 'Мисалы, «Ала-Тоо» ресторан', addr: 'Мисалы, Бишкек, Токтогул көч., 100', map: 'https://2gis.kg/…' },
       fromWhom: 'Ким чакырат', fromG: 'Күйөө баланын ата-энеси', fromB: 'Колуктунун ата-энеси', fromC: 'Жаштардын өздөрү',
@@ -172,9 +172,9 @@
       photoH: 'Сүрөттөр', photoL: 'Негизги сүрөт чакыруунун биринчи экранында, калгандары — галереяда. Өткөрүп жиберсе да болот.',
       heroPh: 'Негизги сүрөт', heroAdd: 'Негизги сүрөт кошуу', heroHint: 'Тик сүрөт жакшы, жүздөр даана көрүнсүн', change: 'Алмаштыруу', remove: 'Алып салуу',
       gallery: 'Галерея', galleryHint: (n) => `10 сүрөткө чейин · кошулду ${n}`, uploading: 'Жүктөлүүдө…', photoErr: 'Сүрөт жүктөлгөн жок. Башкасын сынап көрүңүз.',
-      designH: 'Жасалгасы', designL: 'Түсүн, конвертти жана музыканы тандаңыз. Баары дароо көрүнөт.',
+      designH: 'Жасалгасы', designL: 'Көрүнүштү жана музыканы тандаңыз. Баары дароо көрүнөт.',
       theme: 'Көрүнүш', themeHint: 'Адегенде — тоюңузга ылайыктуулары. Каалаганын басыңыз — үлгү дароо жаңырат. Каалаган убакта, жөнөткөндөн кийин деле алмаштырсаңыз болот.', themesOther: 'Башка көрүнүштөр', themesAll: (n) => `Бардык көрүнүштөр (дагы ${n})`, envelope: 'Конверт', envClassic: 'Мөөр басылган', envClassicS: 'Конок мөөрдү сындырат', envNavy: '«Түн» видео-конверти', envNavyS: 'Конверт өзү ачылат',
-      music: 'Музыка', musicS: 'Конок конвертти ачканда «Бакыт кушу» обону ойнойт', lang: 'Чакыруунун тили', langS: 'Конок тилди өзү алмаштыра алат',
+      music: 'Музыка', musicS: 'Конок чакырууну ачканда «Бакыт кушу» обону ойнойт', lang: 'Чакыруунун тили', langS: 'Конок тилди өзү алмаштыра алат',
       text: 'Чакыруунун тексти', textAuto: 'Даяр текст (аттарыңыз менен):', textOwn: 'Өз текстимди жазам', textUseAuto: 'Даяр текстке кайтуу', textOwnPh: 'Чакыруунун тексти',
       detH: 'Кошумча', detL: 'Керектүүсүн күйгүзүңүз. Жөнөткөндөн кийин да өзгөртсө болот — коноктор ошол эле шилтемеден көрүшөт.',
       countdown: 'Тойго чейин канча калды', countdownS: 'Күн, саат, мүнөт',
@@ -196,7 +196,7 @@
       toGuests: 'Конокторго өтүү', copy: 'Көчүрүү', copied: 'Шилтеме көчүрүлдү', share: 'WhatsAppка', open: 'Ачуу', views: (n) => `Жалпы шилтеме боюнча ачышты: ${n}`,
       inApp: '«Той Менеджер» тиркемесинде — ушул эле чакыруу, кошумча конверттер, бюджет жана отургузуу.',
       gAdd: 'Конок кошуу', gAddOne: 'Бир конок', gAddMany: 'Тизме менен',
-      gName: 'Аты', gNamePh: 'Асан Бекович', gAddr: 'Кантип кайрылуу', gAddrPh: 'Асан байке', gAddrS: 'Конок конвертте өз атын ушинтип көрөт', gPhone: 'WhatsApp номери', gPhonePh: '0555 123 456', gParty: 'Канча киши',
+      gName: 'Аты', gNamePh: 'Асан Бекович', gAddr: 'Кантип кайрылуу', gAddrPh: 'Асан байке', gAddrS: 'Конок мукабада өз атын ушинтип көрөт', gPhone: 'WhatsApp номери', gPhonePh: '0555 123 456', gParty: 'Канча киши',
       gManyPh: 'Асан байке, 0555 123 456, 3\nГүлнара эже, 0700 111 222, 2\nБакыт', gManyS: 'Ар бир конок — жаңы саптан. Үтүр менен телефонду жана канча киши экенин кошсо болот.',
       gSave: 'Кошуу', gSaveN: (n) => `${n} конок кошуу`, gEdit: 'Конокту өзгөртүү', gDel: 'Конокту өчүрүү', gDelQ: 'Конокту тизмеден өчүрөсүзбү?',
       gEmptyT: 'Азырынча конок жок', gEmptyS: 'Конокторду кошуңуз — ар бири өз аты жазылган чакыруу алат.',
@@ -221,7 +221,7 @@
       payWaitT: 'Өтүнмө кабыл алынды', payWaitP: 'Төлөмдү бир күндүн ичинде текшеребиз — андан кийин «Үлгү» белгиси жоголот. Номер калтырсаңыз — чалабыз. Суроолор — сайттагы чатта.', phoneL: 'Байланыш үчүн телефон (милдеттүү эмес)', phoneS: 'Чакыруу ачылганда жазабыз.',
       payHelp: 'Төлөм боюнча суроолор — сайттагы чатка жазыңыз (оң жактагы ылдыйкы баскыч)', done: 'Жакшы',
       notFound: 'Чакыруу табылган жок же сизде уруксат жок.', loadErr: 'Жүктөлгөн жок. Интернетти текшерип, баракты жаңылаңыз.',
-      envShow: 'Конвертти көрсөтүү', envHide: 'Конвертсиз', close: 'Жабуу', openNew: 'Өзүнчө ачуу',
+      envShow: 'Конвертти көрсөтүү', envHide: 'Конвертсиз', coverShow: 'Мукабаны көрсөтүү', coverHide: 'Мукабасыз', close: 'Жабуу', openNew: 'Өзүнчө ачуу',
       sample: 'Асан байке', titleSep: ' — ',
       kindTitle: { wedding: 'үйлөнүү той', kyz_uzatuu: 'кыз узатуу', sunnot: 'сүннөт той', beshik: 'бешик той', tushoo: 'тушоо кесүү', jubilee: 'маараке', memorial: 'эскерүү ашы', other: 'той' },
       kindTo: { wedding: 'үйлөнүү тоюна', kyz_uzatuu: 'кыз узатуу тоюна', sunnot: 'сүннөт тойго', beshik: 'бешик тойго', tushoo: 'тушоо кесүү тоюна', jubilee: 'мааракеге', memorial: 'эскерүү ашына', other: 'тойго' },
@@ -307,12 +307,15 @@
   const L = () => T[lang];
 
   // ---------- Черновик ----------
+  // Оформление по умолчанию — новое (сцена) под вид тоя; пока человек сам не выбрал, при смене вида тоя меняется вместе с ним
+  const DEF_THEME = { wedding: 'ala-too', kyz_uzatuu: 'shokulo', sunnot: 'ak-kalpak', beshik: 'beshik', tushoo: 'ala-jip', jubilee: 'altyn-kuz', memorial: 'tuman', other: 'boz-uy' };
+  const defTheme = (k) => (THEMES.some((x) => x.id === DEF_THEME[k]) ? DEF_THEME[k] : (k === 'memorial' ? 'boz' : 'tun'));
   function newDraft(kind) {
     const memorial = kind === 'memorial';
     return {
       kind, name_a: '', name_b: '', from_whom: 'groom_parents', title: '', signature: '',
       date: '', time: memorial ? '12:00' : '17:00', venue_name: '', venue_address: '', map_url: '',
-      hero_photo: null, gallery: [], theme: memorial ? 'boz' : 'tun', envelope: memorial ? 'classic' : 'navy', music: memorial ? 'none' : 'theme', lang: lang === 'ru' ? 'ru' : 'ky',
+      hero_photo: null, gallery: [], theme: defTheme(kind), theme_chosen: false, envelope: 'classic', music: memorial ? 'none' : 'theme', lang: lang === 'ru' ? 'ru' : 'ky',
       own_text: false, text_ky: '', text_ru: '',
       show_countdown: !memorial, show_program: false, program: [], show_dress: false, dress_text: '', dress_colors: [],
       rsvp_enabled: true, rsvp_ask_count: true, rsvp_deadline: '', wishes_mode: memorial ? 'off' : 'public',
@@ -415,7 +418,7 @@
     Object.assign(d, {
       name_a: c.name_a || '', name_b: c.name_b || '', from_whom: c.from_whom || 'groom_parents', title: c.title || (toi.kind === 'other' ? toi.title : ''),
       signature: c.signature || '', date: w.date, time: w.time, venue_name: ev?.venue_name || '', venue_address: ev?.venue_address || '', map_url: c.map_url || '',
-      hero_photo: c.hero_photo || null, gallery: Array.isArray(c.gallery) ? c.gallery : [], theme: c.theme || d.theme, envelope: c.envelope || 'classic',
+      hero_photo: c.hero_photo || null, gallery: Array.isArray(c.gallery) ? c.gallery : [], theme: c.theme || d.theme, theme_chosen: Boolean(c.theme), envelope: c.envelope || 'classic',
       music: c.music || d.music, lang: c.lang || 'ky', own_text: Boolean(c.text_ky || c.text_ru), text_ky: c.text_ky || '', text_ru: c.text_ru || '',
       show_countdown: c.show_countdown ?? d.show_countdown, show_program: Boolean(c.show_program), program: Array.isArray(c.program) ? c.program : [],
       show_dress: Boolean(c.show_dress), dress_text: c.dress_text || '', dress_colors: Array.isArray(c.dress_colors) ? c.dress_colors : [],
@@ -479,11 +482,15 @@
     frame.contentWindow.postMessage({ type: 'tm-card', r: pvData(), lang: S.draft.lang, open }, location.origin);
   }
   const pvUpdate = () => { clearTimeout(pvTimer); pvTimer = setTimeout(() => pvSend(!pvEnv), 120); };
+  function pvEnvLabel() {
+    const sc = THEMES.find((x) => x.id === S.draft?.theme)?.scene, t = L();
+    $('pvEnv').textContent = $('pvEnv2').textContent = pvEnv ? (sc ? t.coverHide : t.envHide) : (sc ? t.coverShow : t.envShow);
+  }
   function pvLoad(env) {
     pvEnv = env; pvReady = false;
     frame.src = `../inv/?preview=1${env ? '&env=1' : ''}&r=${Date.now()}`;
     pvLoaded = true;
-    $('pvEnv').textContent = $('pvEnv2').textContent = env ? L().envHide : L().envShow;
+    pvEnvLabel();
   }
   window.addEventListener('message', (e) => {
     if (e.origin !== location.origin || e.source !== frame.contentWindow || e.data?.type !== 'tm-ready') return;
@@ -814,13 +821,15 @@
     });
     root.querySelectorAll('[data-set]').forEach((b) => b.addEventListener('click', () => {
       d[b.dataset.set] = b.dataset.v;
+      if (b.dataset.set === 'theme') { d.theme_chosen = true; setTimeout(pvEnvLabel, 0); }
       if (b.dataset.set === 'envelope') { pvLoad(b.dataset.v !== 'classic'); }
       changed(); redrawStep();
     }));
     root.querySelectorAll('[data-kind]').forEach((b) => b.addEventListener('click', () => {
       const k = b.dataset.kind; if (k === d.kind) return;
       d.kind = k;
-      if (k === 'memorial') { d.theme = 'boz'; d.envelope = 'classic'; d.music = 'none'; d.wishes_mode = 'off'; d.show_countdown = false; d.time = d.time || '12:00'; pvLoad(false); }
+      if (!d.theme_chosen) d.theme = defTheme(k);
+      if (k === 'memorial') { d.theme = defTheme(k); d.envelope = 'classic'; d.music = 'none'; d.wishes_mode = 'off'; d.show_countdown = false; d.time = d.time || '12:00'; pvLoad(false); }
       changed(); redrawStep();
     }));
     const music = root.querySelector('[data-music]');
@@ -1340,7 +1349,7 @@
     }
     if (h.startsWith('/new')) {
       S.toi = null; S.guests = null;
-      if (!S.draft) { const l = loadLocal(); if (l) { S.draft = l.d; S.step = l.step || 0; } }
+      if (!S.draft) { const l = loadLocal(); if (l) { S.draft = l.d; S.step = l.step || 0; if (S.draft.theme_chosen === undefined) { if (S.draft.theme === 'tun' && S.draft.envelope === 'navy') { S.draft.theme = defTheme(S.draft.kind); S.draft.envelope = 'classic'; } S.draft.theme_chosen = S.draft.theme !== defTheme(S.draft.kind); } } }
       if (!S.draft) { S.view = 'pick'; renderApp(); return; }
       // фото черновика из браузера
       const keys = [S.draft.hero_photo, ...S.draft.gallery].filter((p) => p && p.startsWith('local:'));
@@ -1364,7 +1373,7 @@
     document.documentElement.lang = lang;
     document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
     $('pvTitle').textContent = t.preview; $('pvClose').textContent = t.close; $('pvOpen').textContent = t.openNew;
-    $('pvEnv').textContent = $('pvEnv2').textContent = pvEnv ? t.envHide : t.envShow;
+    pvEnvLabel();
     let html = '', withPv = false;
     switch (S.view) {
       case 'home': html = renderHome(); break;
