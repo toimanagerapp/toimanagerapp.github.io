@@ -82,7 +82,7 @@
       designH: 'Оформление', designL: 'Выберите оформление и музыку. Всё сразу видно в предпросмотре.',
       theme: 'Оформление', themeHint: 'Сначала — подходящие к вашему тою. Нажмите на любое — образец «Как увидят гости» сразу обновится. Сменить можно в любой момент, даже после отправки.', themesOther: 'Другие оформления', themesAll: (n) => `Все оформления (ещё ${n})`, envelope: 'Конверт', envClassic: 'С восковой печатью', envClassicS: 'Гость ломает печать', envNavy: 'Видео-конверт «Түн»', envNavyS: 'Конверт раскрывается сам',
       music: 'Музыка', musicS: 'Мелодия «Бакыт кушу» играет, когда гость открывает приглашение', musicSK: 'Песня «Ак жол, кызым» играет, когда гость открывает приглашение', lang: 'Язык приглашения', langS: 'Гость может переключить язык сам',
-      text: 'Текст приглашения', textAuto: 'Готовый текст (с вашими именами):', textOwn: 'Написать свой текст', textUseAuto: 'Вернуть готовый текст', textOwnPh: 'Ваш текст приглашения',
+      text: 'Текст приглашения', textAuto: 'Выберите готовый текст — имена подставятся сами:', textVar: (n) => `Вариант ${n}`, textOwn: 'Изменить текст', textUseAuto: 'Вернуть готовый текст', textOwnPh: 'Ваш текст приглашения',
       detH: 'Детали', detL: 'Включите то, что нужно. Всё можно поменять и после отправки — гости увидят изменения по той же ссылке.',
       countdown: 'Обратный отсчёт', countdownS: 'Сколько дней и часов осталось до тоя',
       program: 'Программа', programS: 'Например: 17:00 — встреча гостей', addRow: 'Добавить строку', progTime: '17:00', progText: 'Встреча гостей',
@@ -176,7 +176,7 @@
       designH: 'Жасалгасы', designL: 'Көрүнүштү жана музыканы тандаңыз. Баары дароо көрүнөт.',
       theme: 'Көрүнүш', themeHint: 'Адегенде — тоюңузга ылайыктуулары. Каалаганын басыңыз — үлгү дароо жаңырат. Каалаган убакта, жөнөткөндөн кийин деле алмаштырсаңыз болот.', themesOther: 'Башка көрүнүштөр', themesAll: (n) => `Бардык көрүнүштөр (дагы ${n})`, envelope: 'Конверт', envClassic: 'Мөөр басылган', envClassicS: 'Конок мөөрдү сындырат', envNavy: '«Түн» видео-конверти', envNavyS: 'Конверт өзү ачылат',
       music: 'Музыка', musicS: 'Конок чакырууну ачканда «Бакыт кушу» обону ойнойт', musicSK: 'Конок чакырууну ачканда «Ак жол, кызым» ыры ойнойт', lang: 'Чакыруунун тили', langS: 'Конок тилди өзү алмаштыра алат',
-      text: 'Чакыруунун тексти', textAuto: 'Даяр текст (аттарыңыз менен):', textOwn: 'Өз текстимди жазам', textUseAuto: 'Даяр текстке кайтуу', textOwnPh: 'Чакыруунун тексти',
+      text: 'Чакыруунун тексти', textAuto: 'Даяр текстти тандаңыз — аттар өзү коюлат:', textVar: (n) => `${n}-вариант`, textOwn: 'Текстти өзгөртүү', textUseAuto: 'Даяр текстке кайтуу', textOwnPh: 'Чакыруунун тексти',
       detH: 'Кошумча', detL: 'Керектүүсүн күйгүзүңүз. Жөнөткөндөн кийин да өзгөртсө болот — коноктор ошол эле шилтемеден көрүшөт.',
       countdown: 'Тойго чейин канча калды', countdownS: 'Күн, саат, мүнөт',
       program: 'Той программасы', programS: 'Мисалы: 17:00 — конокторду тосуу', addRow: 'Сап кошуу', progTime: '17:00', progText: 'Конокторду тосуу',
@@ -318,7 +318,7 @@
       kind, name_a: '', name_b: '', from_whom: 'groom_parents', title: '', signature: '',
       date: '', time: memorial ? '12:00' : '17:00', venue_name: '', venue_address: '', map_url: '',
       hero_photo: null, gallery: [], theme: defTheme(kind), theme_chosen: false, envelope: 'classic', music: memorial ? 'none' : 'theme', lang: lang === 'ru' ? 'ru' : 'ky',
-      own_text: false, text_ky: '', text_ru: '',
+      own_text: false, text_v: '1', text_ky: '', text_ru: '',
       show_countdown: !memorial, show_program: false, program: [], show_dress: false, dress_text: '', dress_colors: [],
       rsvp_enabled: true, rsvp_ask_count: true, rsvp_deadline: '', wishes_mode: memorial ? 'off' : 'public',
     };
@@ -405,7 +405,8 @@
       title: d.kind === 'other' ? (d.title.trim() || null) : null,
       name_a: d.name_a.trim() || null, name_b: d.kind === 'wedding' ? (d.name_b.trim() || null) : null, initials: null,
       from_whom: d.from_whom, signature: d.signature.trim() || null, map_url: /^https:\/\//i.test(d.map_url.trim()) ? d.map_url.trim() : null,
-      text_ky: d.own_text ? (d.text_ky.trim() || null) : null, text_ru: d.own_text ? (d.text_ru.trim() || null) : null,
+      text_ky: d.own_text ? (d.text_ky.trim() || null) : d.text_v !== '1' ? textFor(d, 'ky') : null,
+      text_ru: d.own_text ? (d.text_ru.trim() || null) : d.text_v !== '1' ? textFor(d, 'ru') : null,
       show_countdown: d.show_countdown, show_program: d.show_program,
       program: d.program.filter((p) => (p.time || '').trim() || (p.text || '').trim()).slice(0, 12).map((p) => ({ time: (p.time || '').trim().slice(0, 10), text: (p.text || '').trim().slice(0, 80) })),
       show_dress: d.show_dress, dress_text: d.dress_text.trim() || null, dress_colors: d.dress_colors.slice(0, 6),
@@ -426,6 +427,10 @@
       show_dress: Boolean(c.show_dress), dress_text: c.dress_text || '', dress_colors: Array.isArray(c.dress_colors) ? c.dress_colors : [],
       rsvp_enabled: c.rsvp_enabled ?? true, rsvp_ask_count: c.rsvp_ask_count ?? true, rsvp_deadline: c.rsvp_deadline || '', wishes_mode: c.wishes_mode || d.wishes_mode,
     });
+    // готовый вариант 2/3 сохраняется текстом — узнаём его, чтобы он и дальше менялся вместе с именами
+    if (d.own_text) for (const v of ['2', '3']) {
+      if (textFor({ ...d, text_v: v }, 'ky') === d.text_ky && textFor({ ...d, text_v: v }, 'ru') === d.text_ru) { d.own_text = false; d.text_v = v; d.text_ky = ''; d.text_ru = ''; break; }
+    }
     // приглашение из приложения без имён: берём название тоя
     if (!d.name_a && toi.kind !== 'other') d.name_a = '';
     return d;
@@ -441,6 +446,66 @@
     return name.trim() + cons + vow + (gen ? 'н' : '');
   }
   const kyGen = (n) => kySuffix(n, true), kyAcc = (n) => kySuffix(n, false);
+  // Текст по выбранному варианту: 1 — классический (autoText), 2 — тёплый, 3 — с благословением
+  const textFor = (d, lg) => (d.text_v === '2' || d.text_v === '3' ? altText(d, lg, d.text_v) : autoText(d, lg));
+  function altText(d, lg, v) {
+    const ky = lg === 'ky', a = d.name_a.trim() || 'Азамат', b = d.name_b.trim(), two = v === '3';
+    const pick = (k2, r2, k3, r3) => (ky ? (two ? k3 : k2) : (two ? r3 : r2));
+    switch (d.kind) {
+      case 'wedding': {
+        const bb = b || 'Айпери';
+        if (d.from_whom === 'couple') return pick(
+          'Биз үй-бүлө куруп жатабыз! Өмүрүбүздөгү эң маанилүү күндү жакын адамдарыбыз менен бирге белгилегибиз келет. Тоюбузга келип, кубанычыбызды бөлүшүңүз!',
+          'Мы женимся! Хотим провести самый важный день нашей жизни рядом с самыми близкими людьми. Приходите разделить с нами эту радость!',
+          'Жаңы үй-бүлөбүздүн алгачкы күнүндө жаныбызда болуп, ак батаңызды бериңиз. Сизди үйлөнүү тоюбузда күтөбүз!',
+          'Будьте рядом в первый день нашей семьи и подарите нам своё благословение. Ждём вас на нашей свадьбе!');
+        const bride = d.from_whom === 'bride_parents';
+        const pairKy = bride ? `Кызыбыз ${bb} менен күйөө балабыз ${a}` : `Уулубуз ${a} менен келинибиз ${bb}`;
+        const pairKyGen = bride ? `кызыбыз ${bb} менен күйөө балабыз ${kyGen(a)}` : `уулубуз ${a} менен келинибиз ${kyGen(bb)}`;
+        const pairRu = bride ? `Наша дочь ${bb} и наш зять ${a}` : `Наш сын ${a} и наша невестка ${bb}`;
+        return pick(
+          `Урматтуу туугандар жана досторубуз! ${pairKy} жаңы үй-бүлө куруп жатышат. Ушул кубанычтуу күндү сиз менен бирге белгилегибиз келет. Тоюбуздун төрүнөн орун алыңыз!`,
+          `Дорогие родные и друзья! ${pairRu} создают семью. Мы хотим разделить эту радость с вами — будем рады видеть вас на нашем тое.`,
+          `Жаштарга ак батаңызды берип, кубанычыбызды бөлүшүү үчүн ${pairKyGen} үйлөнүү тоюна чакырабыз. Сизди күтөбүз!`,
+          `${pairRu} женятся! Ваше присутствие и добрые пожелания — лучший подарок для молодых. Ждём вас на свадебном тое!`);
+      }
+      case 'kyz_uzatuu': return pick(
+        `Урматтуу туугандар жана досторубуз! Кызыбыз ${a} жаңы үй-бүлөгө узатылып жатат. Ушул толкундуу күндү сиз менен бирге өткөргүбүз келет. Кыз узатуу тоюбузга кош келиңиз!`,
+        `Дорогие родные и друзья! Наша дочь ${a} уходит в новую семью. Мы хотим провести этот трогательный день вместе с вами — приходите на кыз узатуу!`,
+        `Кызыбыз ${kyAcc(a)} ак батаңыз менен жаңы жолго узатуу үчүн салтанаттуу дасторконубузга чакырабыз. Кадырлуу коногубуз болуңуз!`,
+        `Приглашаем вас благословить нашу дочь ${a} в добрый путь. Будем рады видеть вас дорогим гостем на праздничном дасторконе.`);
+      case 'sunnot': return pick(
+        `Урматтуу туугандар жана досторубуз! Уулубуз ${a} азаматтыкка алгачкы кадамын шилтеп жатат. Ушул кубанычтуу күндү сиз менен бирге белгилегибиз келет. Сүннөт тоюбузга кош келиңиз!`,
+        `Дорогие родные и друзья! Наш сын ${a} отмечает важный день в своей жизни. Приглашаем вас разделить с нами радость на сүннөт тое!`,
+        `Уулубуз ${kyGen(a)} сүннөт тоюна арналган салтанаттуу дасторконубузга чакырабыз. Ак батаңызды берип, кадырлуу коногубуз болуңуз!`,
+        `Приглашаем вас на праздничный дасторкон в честь сүннөт тоя. Виновник торжества — наш сын ${a}. Будем рады вашему благословению!`);
+      case 'beshik': return pick(
+        `Үйүбүзгө чоң кубаныч келди — ${a} төрөлдү! Бул кубанычты сиз менен бирге бөлүшкүбүз келет. Бешик тоюбузга кош келиңиз!`,
+        `В нашей семье большая радость — у нас малыш ${a}! Приглашаем вас разделить её с нами на бешик тое.`,
+        `Наристебиз ${kyGen(a)} бешигине ак батаңызды бериңиз. Сизди салтанаттуу бешик тоюбузга кадырлуу конок болууга чакырабыз.`,
+        `Приглашаем вас на бешик той. Пусть ваши добрые пожелания станут первым благословением для малыша ${a}!`);
+      case 'tushoo': return pick(
+        `${a} алгачкы кадамын шилтеп жатат! Ушул кубанычтуу күндү сиз менен бирге белгилегибиз келет. Тушоо кесүү тоюбузга кош келиңиз!`,
+        `${a} делает свои первые шаги! Хотим отметить этот радостный день вместе с вами — приходите на тушоо кесүү!`,
+        `Ата-бабалардын салтын улап, ${kyGen(a)} тушоосун кесебиз. Жолу ачык болсун деп ак батаңызды бериңиз — сизди тоюбузга чакырабыз.`,
+        `По доброй традиции разрежем тушоо — и пусть дорога малыша ${a} будет лёгкой и светлой! Приходите благословить первые шаги.`);
+      case 'jubilee': return pick(
+        `Урматтуу туугандар жана досторубуз! ${a} мааракесин белгилеп жатат. Ушул кубанычтуу күндү сиз менен бирге өткөргүбүз келет. Тоюбуздун кадырлуу коногу болуңуз!`,
+        `Дорогие родные и друзья! ${a} отмечает юбилей. Будем рады отпраздновать этот день вместе с вами!`,
+        `${kyGen(a)} мааракесине арналган салтанаттуу дасторконго чакырабыз. Жылуу сөзүңүз жана ак тилегиңиз биз үчүн эң кымбат белек!`,
+        `Приглашаем вас на праздничный дасторкон в честь юбилея: ${a}. Ваши тёплые слова и добрые пожелания — самый дорогой подарок!`);
+      case 'memorial': return pick(
+        `${kyGen(a)} жаркын элесин эскерип, ашка чакырабыз. Сиздин катышууңуз биз үчүн чоң колдоо.`,
+        `Приглашаем вас на аш, чтобы вместе вспомнить: ${a}. Ваше присутствие — большая поддержка для нашей семьи.`,
+        `${kyGen(a)} элесине арналган ашка келип, дуба кылып бериңиз. Сиздин келишиңиз биз үчүн чоң колдоо.`,
+        `Просим вас прийти на аш, чтобы почтить память: ${a}. Будем благодарны за вашу молитву и поддержку.`);
+      default: return pick(
+        'Урматтуу досторубуз! Кубанычыбызды сиз менен бөлүшкүбүз келет. Майрамыбызга кош келиңиз!',
+        'Дорогие друзья! Хотим разделить нашу радость с вами. Приходите на наш праздник!',
+        'Сизди майрамдык кечебизге чакырабыз. Жылуу маанай, даамдуу дасторкон жана жакшы маек күтүп турат!',
+        'Приглашаем вас на праздничный вечер. Вас ждут тёплая атмосфера, щедрый дасторкон и приятное общение!');
+    }
+  }
   function autoText(d, lg) {
     const ky = lg === 'ky', a = d.name_a.trim() || (ky ? 'Азамат' : 'Азамат'), b = d.name_b.trim();
     switch (d.kind) {
@@ -755,11 +820,12 @@
     const isScene = THEMES.find((x) => x.id === d.theme)?.scene;
     const envs = [['classic', t.envClassic, t.envClassicS, '../inv/env/classic.jpg'], ['navy', t.envNavy, t.envNavyS, '../inv/env/navy.jpg']]
       .map(([id, n, s, img]) => `<button type="button" class="env" data-set="envelope" data-v="${id}" aria-pressed="${d.envelope === id}"><img src="${img}" alt="" loading="lazy"><b>${esc(n)}</b><small>${esc(s)}</small></button>`).join('');
+    if (!d.text_v) d.text_v = '1';
     const own = d.own_text, lk = d.lang;
     const textBlock = own
       ? `${field(t.text + (lk === 'ky' ? ' · кыргызча' : ' · по-русски'), `<textarea class="input" data-f="${lk === 'ky' ? 'text_ky' : 'text_ru'}" maxlength="1000" placeholder="${esc(t.textOwnPh)}">${esc(lk === 'ky' ? d.text_ky : d.text_ru)}</textarea>`)}
          <button type="button" class="link" data-act="autotext">${esc(t.textUseAuto)}</button>`
-      : `<div class="field"><span>${esc(t.text)}</span><small style="margin:0 0 8px">${esc(t.textAuto)}</small><div class="auto-text" id="autoText">${esc(autoText(d, lk))}</div></div>
+      : `<div class="field"><span>${esc(t.text)}</span><small style="margin:0 0 8px">${esc(t.textAuto)}</small>${seg('text_v', [['1', t.textVar(1)], ['2', t.textVar(2)], ['3', t.textVar(3)]], ' seg-tv')}<div class="auto-text" id="autoText">${esc(textFor(d, lk))}</div></div>
          <button type="button" class="link" data-act="owntext">${esc(t.textOwn)}</button>`;
     return `<h1>${esc(t.designH)}</h1><p class="lead2">${esc(t.designL)}</p>
       <div class="group"><h3>${esc(t.theme)}</h3><p class="hint2">${esc(t.themeHint)}</p>${themes}</div>
@@ -830,7 +896,7 @@
       const ev = el.type === 'checkbox' || el.type === 'date' || el.type === 'time' ? 'change' : 'input';
       el.addEventListener(ev, () => {
         d[f] = el.type === 'checkbox' ? el.checked : el.value;
-        if (['name_a', 'name_b'].includes(f) && $('autoText')) $('autoText').textContent = autoText(d, d.lang);
+        if (['name_a', 'name_b'].includes(f) && $('autoText')) $('autoText').textContent = textFor(d, d.lang);
         changed();
         if (el.dataset.redraw !== undefined) redrawStep();
       });
@@ -912,9 +978,9 @@
     }
     if (a === 'back') goStep(S.step - 1);
     if (a === 'preview') openPreview();
-    if (a === 'owntext') { d.own_text = true; const k = d.lang === 'ky' ? 'text_ky' : 'text_ru'; if (!d[k]) d[k] = autoText(d, d.lang); changed(); redrawStep(); }
+    if (a === 'owntext') { d.own_text = true; if (!d.text_ky) d.text_ky = textFor(d, 'ky'); if (!d.text_ru) d.text_ru = textFor(d, 'ru'); changed(); redrawStep(); }
     if (a === 'allthemes') { S.allThemes = true; redrawStep(); return; }
-    if (a === 'autotext') { d.own_text = false; d.text_ky = ''; d.text_ru = ''; changed(); redrawStep(); }
+    if (a === 'autotext') { d.own_text = false; d.text_ky = ''; d.text_ru = ''; d.text_v = d.text_v || '1'; changed(); redrawStep(); }
     if (a === 'addrow') { if (d.program.length < 12) d.program.push({ time: '', text: '' }); changed(); redrawStep(); setTimeout(() => document.querySelector(`[data-prog="${d.program.length - 1}"]`)?.focus(), 30); }
     if (a === 'finish') finish();
   }

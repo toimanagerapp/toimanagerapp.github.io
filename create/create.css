@@ -217,6 +217,8 @@ input[type="date"].input, input[type="time"].input { min-width: 0; }
 .colors button[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--accent); }
 
 /* Текст приглашения */
+.seg-tv { margin-bottom: 10px; }
+.seg-tv button { min-height: 40px; padding: 0 14px; font-size: 14px; }
 .auto-text { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 19px; line-height: 1.5; color: #3B2F22; background: #FBF7EF; border: 1px solid #EFE4CF;
   border-radius: 14px; padding: 14px 16px; }
 
