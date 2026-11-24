@@ -21,6 +21,9 @@
     'asman': { title: 'Асман', music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FBFDFF', '#E3ECF4', '#5D8AB8', '#2F5D8A'], color: '#F2F6FA' },
     'kiyiz': { title: 'Кийиз', music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FCF7EE', '#EDE1CE', '#C94A35', '#A3271F'], color: '#F6EEE1' },
     'boz': { title: 'Боз', music: '/inv/music/bakyt-kushu.mp3', swatches: ['#F7F6F3', '#E4E2DE', '#94989C', '#45494D'], color: '#EEEDEA' },
+    // Шаблоны-сцены: картинка на весь экран (/inv/scenes/<id>.webp), обложка вместо конверта
+    'ala-too': { title: 'Ала-Тоо', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#FFFCF8', '#EEE3D8', '#D7A86E', '#6E3B5A'], color: '#1E2142' },
+    'tunku-asman': { title: 'Түнкү асман', scene: true, music: '/inv/music/bakyt-kushu.mp3', swatches: ['#0B1230', '#142048', '#F4DFA6', '#C49A4A'], color: '#060A1E' },
   };
   // Видео-конверты (4 с, 720×1280): кадр-заставка .jpg и ролик .mp4 в /inv/env/. light — светлый конверт, тёмный текст
   // Готовые видео-конверты (остальные добавляются по мере готовности роликов; неизвестный — обычный конверт)
@@ -306,6 +309,12 @@
     document.querySelector('.hero .amp').hidden = !C.b; $('nameB').hidden = !C.b; $('nameB').textContent = C.b;
     const starts = R.event?.starts_at, d = starts ? bk(starts) : null;
     $('heroDate').textContent = d ? `${pad(d.getUTCDate())} · ${pad(d.getUTCMonth() + 1)} · ${d.getUTCFullYear()}` : '';
+    if (THEMES[theme]?.scene) {
+      $('scKind').textContent = $('kindTitle').textContent;
+      $('scNames').innerHTML = [C.a, C.b].filter(Boolean).map((x) => `<span>${esc(x)}</span>`).join('<span class="amp2">&amp;</span>');
+      $('scDate').textContent = $('heroDate').textContent;
+      $('scTo').textContent = L.envTo; $('scWho').textContent = guest ? guest.name : L.guestsAll; $('scHint').textContent = L.tapOpen;
+    }
     // приветствие и текст
     $('greet').textContent = guest ? L.greet(guest.name) : L.greetAll;
     const custom = (lang === 'ky' ? C.text_ky : C.text_ru) || '';
@@ -476,6 +485,33 @@
   }
   $('seal').onclick = open;
 
+  // ---------- Обложка-сцена ----------
+  const scover = $('scover');
+  function openScene() {
+    if (opened || !R) return; opened = true;
+    play();
+    $('page').removeAttribute('aria-hidden');
+    window.scrollTo(0, 0);
+    scover.classList.add('open');
+    setTimeout(showPage, reduce ? 0 : 250);
+    setTimeout(() => { scover.hidden = true; }, reduce ? 50 : 1500);
+  }
+  scover.addEventListener('click', openScene);
+  scover.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openScene(); } });
+  function setupScene() {
+    const on = !!THEMES[theme]?.scene;
+    document.body.classList.toggle('scene', on);
+    const hp = $('heroPhoto');
+    if (!on) {
+      scover.hidden = true;
+      if (hp.classList.contains('below') && !document.body.classList.contains('venv-card')) { hp.classList.remove('below'); $('wmStamp').after(hp); }
+      return false;
+    }
+    document.body.style.setProperty('--scene', `url(/inv/scenes/${theme}.webp)`); if (!hp.classList.contains('below')) { hp.classList.add('below'); document.querySelector('.hero').after(hp); }
+    if (!opened) { scover.hidden = false; $('envelope').classList.add('gone'); venv.hidden = true; }
+    return true;
+  }
+
   // ---------- Видео-конверт ----------
   const venv = $('venv'), vid = $('venvVideo');
   let revealed = false;
@@ -567,7 +603,7 @@
     }
     render();
     hint.textContent = T[lang].envHint;
-    if (C.envelope && C.envelope !== 'classic') setupVideoEnvelope(C.envelope);
+    if (!setupScene() && C.envelope && C.envelope !== 'classic') setupVideoEnvelope(C.envelope);
   }
   function fail(net) {
     const L = T[lang];
@@ -623,7 +659,7 @@
       if (want) lang = want;
       const prevTheme = theme;
       R = r; C = withDefaults(r); theme = C.theme;
-      if (theme !== prevTheme) applyTheme();
+      if (theme !== prevTheme) { applyTheme(); setupScene(); }
       // фото перерисовываем заново
       const hp = $('heroPhoto'); delete hp.dataset.src; hp.querySelector('img').removeAttribute('src');
       $('gallery').innerHTML = '';
@@ -639,7 +675,7 @@
   // Сразу показать страницу (без конверта) — для предпросмотра
   function openInstant() {
     opened = true; revealed = true;
-    $('envelope').classList.add('gone'); venv.hidden = true;
+    $('envelope').classList.add('gone'); venv.hidden = true; scover.hidden = true;
     $('page').removeAttribute('aria-hidden');
     document.body.classList.remove('locked');
     $('music').hidden = !audio.getAttribute('src');

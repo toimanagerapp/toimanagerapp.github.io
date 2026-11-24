@@ -246,6 +246,7 @@
   };
   const CATEGORIES = ['Туугандар', 'Кудалар', 'Тайкелер', 'Достор', 'Кошуналар', 'Классташтар', 'Кесиптештер'];
   // Оформления открытки — те же, что в /inv/inv.js
+  const SCENES_READY = false;   // true — когда пришли настоящие фоны (tools/scenes)
   const THEMES = [
     { id: 'ak-altyn', name: 'Ак алтын', bg: 'linear-gradient(150deg,#FBF6EC,#EFE2C9)', ink: '#A9823E' },
     { id: 'ak', name: 'Ак', bg: 'linear-gradient(150deg,#FFFFFF,#F4EBDD)', ink: '#7A1E2C' },
@@ -257,7 +258,10 @@
     { id: 'bermet', name: 'Бермет', bg: 'linear-gradient(150deg,#FFF8F5,#F1DCD6)', ink: '#9A5560' },
     { id: 'asman', name: 'Асман', bg: 'linear-gradient(150deg,#FBFDFF,#DCE6F1)', ink: '#2C5580' },
     { id: 'boz', name: 'Боз', bg: 'linear-gradient(150deg,#F7F6F3,#DFDDD8)', ink: '#3C4044' },
-  ];
+    // Шаблоны-сцены (картинка на весь экран). Показываются, когда готовы фоны; до этого — по ?scenes=1
+    { id: 'ala-too', name: 'Ала-Тоо', scene: true, bg: 'center/cover url(/inv/scenes/ala-too.webp)', ink: '#F4DFA6' },
+    { id: 'tunku-asman', name: 'Түнкү асман', scene: true, bg: 'center/cover url(/inv/scenes/tunku-asman.webp)', ink: '#F4DFA6' },
+  ].filter((x) => !x.scene || SCENES_READY || new URLSearchParams(location.search).get('scenes') === '1');
   const DRESS = ['#FFFFFF', '#F1E6D2', '#D9BE8C', '#B48A3E', '#7A1E2C', '#16213F', '#0F3A31', '#C9A7D8', '#F4B8C8', '#1E1E1E'];
 
   // ---------- Состояние ----------
@@ -686,7 +690,7 @@
   }
   function stepDesign() {
     const d = S.draft, t = L();
-    const themes = THEMES.map((x) => `<button type="button" class="theme" data-set="theme" data-v="${x.id}" aria-pressed="${d.theme === x.id}"><div class="sw" style="background:${x.bg}"><span style="color:${x.ink}">${esc((initialsOf(d) || 'А · А').replace(/ /g, ''))}</span></div><b>${esc(x.name)}</b></button>`).join('');
+    const themes = THEMES.map((x) => `<button type="button" class="theme" data-set="theme" data-v="${x.id}" aria-pressed="${d.theme === x.id}"><div class="sw${x.scene ? ' scene' : ''}" style="background:${x.bg}"><span style="color:${x.ink}">${esc((initialsOf(d) || 'А · А').replace(/ /g, ''))}</span></div><b>${esc(x.name)}</b></button>`).join('');
     const envs = [['classic', t.envClassic, t.envClassicS, '../inv/env/classic.jpg'], ['navy', t.envNavy, t.envNavyS, '../inv/env/navy.jpg']]
       .map(([id, n, s, img]) => `<button type="button" class="env" data-set="envelope" data-v="${id}" aria-pressed="${d.envelope === id}"><img src="${img}" alt="" loading="lazy"><b>${esc(n)}</b><small>${esc(s)}</small></button>`).join('');
     const own = d.own_text, lk = d.lang;

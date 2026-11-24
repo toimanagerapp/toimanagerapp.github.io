@@ -374,3 +374,12 @@ a:focus-visible, button:focus-visible, summary:focus-visible, .btn:focus-visible
 @media (min-width: 900px) { .designs { grid-auto-flow: row; grid-template-columns: repeat(5, 1fr); grid-auto-columns: auto; overflow: visible; max-width: 860px; margin: 0 auto; padding: 4px 0 0; } }
 .article .designs { margin: 0 -16px 24px; }
 @media (min-width: 900px) { .article .designs { margin: 0 0 24px; max-width: none; } }
+
+/* Вкладки каталога оформлений */
+.d-tabs { display: flex; gap: 8px; overflow-x: auto; justify-content: flex-start; padding: 2px 2px 14px; margin: 0 auto; max-width: 860px; scrollbar-width: none; }
+.d-tabs::-webkit-scrollbar { display: none; }
+@media (min-width: 900px) { .d-tabs { justify-content: center; } }
+.d-tabs button { flex: none; font: 500 14px/1 Inter, system-ui, sans-serif; padding: 10px 14px; border-radius: 999px; border: 1px solid #DDD3C2; background: #fff; color: #1F2547; cursor: pointer; min-height: 40px; }
+.d-tabs button[aria-pressed="true"] { background: #1F2547; border-color: #1F2547; color: #fff; }
+.design[hidden] { display: none; }
+@media (min-width: 900px) { .d-tabs + .designs { grid-template-columns: repeat(auto-fit, minmax(150px, 160px)); justify-content: center; } }

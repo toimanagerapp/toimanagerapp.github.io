@@ -22,7 +22,7 @@
 <script>document.documentElement.classList.add('js');
 // пример с видео-конвертом: картинку конверта грузим первой, до шрифтов и скриптов
 (function(){var e=new URLSearchParams(location.search).get('env');if(e==='navy'){var l=document.createElement('link');l.rel='preload';l.as='image';l.href='/inv/env/navy-poster.webp';l.setAttribute('fetchpriority','high');document.head.appendChild(l);}})();</script>
-<link rel="stylesheet" href="inv.css?v=1123e">
+<link rel="stylesheet" href="inv.css?v=1124a">
 </head>
 <body data-theme="ak-altyn" class="locked">
 <div class="backdrop" aria-hidden="true"></div>
@@ -46,6 +46,12 @@
   <video id="venvVideo" playsinline muted preload="auto" disablepictureinpicture></video>
   <div class="venv-to"><div class="caps" id="venvToLabel"></div><div class="who script" id="venvWho"></div></div>
   <div class="venv-hint" id="venvHint"></div>
+</div>
+
+<div class="scover" id="scover" hidden role="button" tabindex="0">
+  <div class="scover-bg" aria-hidden="true"></div>
+  <div class="scover-top"><div class="caps" id="scKind"></div><div class="sc-names" id="scNames"></div><div class="sc-date" id="scDate"></div></div>
+  <div class="scover-bot"><div class="caps" id="scTo"></div><div class="who" id="scWho"></div><div class="sc-btn" aria-hidden="true"></div><div class="sc-hint" id="scHint"></div></div>
 </div>
 
 <div class="oops" id="oops" hidden>
@@ -214,6 +220,6 @@
   </defs>
 </svg>
 
-<script src="inv.js?v=1123f"></script>
+<script src="inv.js?v=1124a"></script>
 </body>
 </html>
