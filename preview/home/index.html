@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Прототип главной — Той Менеджер</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F8F2E8">
+<link rel="icon" type="image/png" href="/favicon.png?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: 'Cormorant Garamond'; font-weight: 500; font-display: swap; src: url(/inv/fonts/cormorant-garamond-cyrillic-500-normal.woff2) format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: 'Cormorant Garamond'; font-weight: 500; font-display: swap; src: url(/inv/fonts/cormorant-garamond-cyrillic-ext-500-normal.woff2) format('woff2'); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: 'Cormorant Garamond'; font-weight: 500; font-display: swap; src: url(/inv/fonts/cormorant-garamond-latin-500-normal.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+2000-206F; }
+:root { --bg: #F8F2E8; --bg2: #F1E7D8; --paper: #FFFBF4; --ink: #2B1D18; --muted: #6E5D52; --line: #E5D6C1;
+  --bord: #7A1E2C; --bord2: #5E1520; --gold: #A9843F; --gold2: #D9B877; --r: 18px; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.6 Inter, system-ui, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
+body::before { content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .45 0 0 0 0 .35 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); }
+a { color: inherit; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+h1, h2, h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; line-height: 1.08; margin: 0; letter-spacing: -.005em; }
+.kick { font: 600 12px/1 Inter, sans-serif; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+.orn { display: block; width: 180px; height: 30px; margin: 14px auto; color: var(--gold); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 50px; padding: 0 24px; border-radius: 999px;
+  font: 600 16px/1 Inter, sans-serif; text-decoration: none; border: 1px solid transparent; cursor: pointer; transition: transform .15s, background .15s; }
+.btn:active { transform: scale(.98); }
+.btn.p { background: var(--bord); color: #FFF7EE; box-shadow: 0 10px 24px rgba(122, 30, 44, .22); }
+.btn.p:hover { background: var(--bord2); }
+.btn.g { background: transparent; color: var(--bord); border-color: rgba(122, 30, 44, .35); }
+/* шапка */
+.top { position: sticky; top: 0; z-index: 20; background: rgba(248, 242, 232, .88); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid transparent; }
+.top.s { border-bottom-color: var(--line); }
+.top .wrap { display: flex; align-items: center; gap: 16px; height: 64px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 600; white-space: nowrap; }
+.brand img { width: 34px; height: 34px; border-radius: 9px; }
+.top nav { margin-left: auto; display: none; gap: 26px; font-size: 15px; }
+.top nav a { text-decoration: none; color: var(--muted); }
+.top nav a:hover { color: var(--ink); }
+.lang { display: flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; font-size: 13px; margin-left: auto; }
+.lang a { padding: 6px 10px; border-radius: 999px; text-decoration: none; color: var(--muted); }
+.lang a[aria-current] { background: var(--bg2); color: var(--ink); }
+.top .btn { min-height: 40px; padding: 0 16px; font-size: 14px; }
+@media (min-width: 900px) { .top nav { display: flex; } .lang { margin-left: 0; } }
+@media (max-width: 430px) { .top .wrap { gap: 10px; } .brand span { display: none; } }
+body { overflow-x: clip; }
+/* первый экран */
+.hero { position: relative; overflow: hidden; padding: 36px 0 56px; }
+.hero::after { content: ''; position: absolute; right: -180px; top: -120px; width: 620px; height: 620px; border-radius: 50%; z-index: -1;
+  background: radial-gradient(circle, rgba(217, 184, 119, .28), transparent 65%); }
+.hero .wrap { display: grid; gap: 36px; align-items: center; }
+.hero h1 { font-size: clamp(40px, 10vw, 68px); margin: 14px 0 0; }
+.hero h1 em { font-style: normal; color: var(--bord); }
+.hero p.lead { font-size: 18px; color: var(--muted); max-width: 520px; margin: 18px 0 26px; }
+.hero .cta { display: flex; flex-wrap: wrap; gap: 10px; }
+.trust { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 22px; font-size: 14px; color: var(--muted); padding: 0; list-style: none; }
+.trust li::before { content: '◆'; color: var(--gold); font-size: 9px; margin-right: 8px; vertical-align: 2px; }
+.phones { position: relative; height: 470px; max-width: 420px; margin: 0 auto; width: 100%; }
+.phones img { position: absolute; width: 200px; aspect-ratio: 1 / 2; object-fit: cover; border-radius: 26px; border: 6px solid #fff;
+  box-shadow: 0 30px 60px rgba(60, 30, 20, .22); }
+.phones img:nth-child(1) { left: 4%; top: 40px; transform: rotate(-8deg); }
+.phones img:nth-child(2) { right: 4%; top: 40px; transform: rotate(8deg); }
+.phones img:nth-child(3) { left: 50%; top: 0; transform: translateX(-50%); z-index: 2; width: 220px; }
+@media (min-width: 900px) { .hero { padding: 72px 0 88px; } .hero .wrap { grid-template-columns: 1.05fr .95fr; } .phones { height: 520px; }
+  .phones img { width: 220px; } .phones img:nth-child(3) { width: 240px; } }
+/* блоки */
+section.b { padding: 64px 0; }
+.head { text-align: center; max-width: 640px; margin: 0 auto 28px; }
+.head h2 { font-size: clamp(34px, 7vw, 50px); margin-top: 10px; }
+.head p { color: var(--muted); margin: 12px 0 0; }
+/* каталог */
+.tabs { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 16px; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+@media (min-width: 900px) { .tabs { justify-content: center; } }
+.tabs button { flex: none; min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--paper);
+  font: 500 14px/1 Inter, sans-serif; color: var(--ink); cursor: pointer; }
+.tabs button[aria-pressed="true"] { background: var(--bord); border-color: var(--bord); color: #FFF7EE; }
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px 14px; }
+@media (min-width: 640px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 900px) { .grid { grid-template-columns: repeat(5, 1fr); } }
+.d { text-decoration: none; display: flex; flex-direction: column; gap: 2px; }
+.d img { width: 100%; aspect-ratio: 1 / 2; object-fit: cover; border-radius: 16px; box-shadow: 0 12px 26px rgba(60, 30, 20, .14); transition: transform .2s, box-shadow .2s; }
+.d:hover img { transform: translateY(-4px); box-shadow: 0 20px 36px rgba(60, 30, 20, .2); }
+.d b { font: 500 20px/1.2 'Cormorant Garamond', serif; margin-top: 10px; }
+.d small { font-size: 13px; color: var(--muted); }
+.d[hidden], .grid.short .d.more { display: none; }
+.more-btn { display: flex; justify-content: center; margin-top: 26px; }
+/* как гость видит */
+.feat { display: grid; gap: 14px; }
+@media (min-width: 900px) { .feat { grid-template-columns: repeat(4, 1fr); } }
+.f { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 22px; }
+.f i { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--bg2); color: var(--bord); font-style: normal; font-size: 20px; }
+.f h3 { font-size: 24px; margin: 14px 0 6px; }
+.f p { margin: 0; color: var(--muted); font-size: 15px; }
+/* шаги */
+.steps { display: grid; gap: 14px; counter-reset: s; }
+@media (min-width: 900px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+.st { position: relative; padding: 26px 22px 22px; border-top: 1px solid var(--gold); }
+.st::before { counter-increment: s; content: counter(s); font: 500 44px/1 'Cormorant Garamond', serif; color: var(--gold); }
+.st h3 { font-size: 26px; margin: 6px 0 6px; }
+.st p { margin: 0; color: var(--muted); }
+/* приложение */
+.app { background: linear-gradient(160deg, #4A1520, #2B0C12); color: #F6EADB; border-radius: 28px; padding: 36px 24px; position: relative; overflow: hidden; }
+.app .kick { color: var(--gold2); }
+.app h2 { font-size: clamp(32px, 6vw, 46px); margin: 10px 0 12px; }
+.app ul { padding: 0; list-style: none; margin: 0 0 22px; display: grid; gap: 8px; color: #E8D8C6; }
+.app li::before { content: '◆'; color: var(--gold2); font-size: 9px; margin-right: 10px; vertical-align: 2px; }
+.app .soon { display: inline-flex; gap: 10px; flex-wrap: wrap; }
+.app .soon span { border: 1px solid rgba(246, 234, 219, .35); border-radius: 12px; padding: 10px 16px; font-size: 14px; color: #E8D8C6; }
+.app .orn { color: var(--gold2); margin: 0 0 6px; }
+@media (min-width: 900px) { .app { padding: 56px; } }
+/* цены */
+.plans { display: grid; gap: 14px; }
+@media (min-width: 900px) { .plans { grid-template-columns: repeat(3, 1fr); align-items: stretch; } }
+.pl { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r); padding: 26px 22px; display: flex; flex-direction: column; }
+.pl.main { border: 1.5px solid var(--bord); box-shadow: 0 18px 40px rgba(122, 30, 44, .12); }
+.pl.off { opacity: .7; }
+.pl h3 { font: 600 16px/1.2 Inter, sans-serif; }
+.pl .tag { font: 600 11px/1 Inter, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--bord); background: #F6E6E2; border-radius: 999px; padding: 6px 10px; margin-left: 8px; }
+.pl .pr { font: 500 46px/1 'Cormorant Garamond', serif; margin: 14px 0 4px; }
+.pl .pr small { font: 400 15px/1 Inter, sans-serif; color: var(--muted); }
+.pl ul { padding: 0; list-style: none; margin: 14px 0 22px; display: grid; gap: 8px; font-size: 15px; flex: 1; }
+.pl li::before { content: '✓'; color: var(--gold); margin-right: 8px; }
+/* вопросы */
+.faq { max-width: 760px; margin: 0 auto; }
+.faq details { border-bottom: 1px solid var(--line); padding: 16px 0; }
+.faq summary { cursor: pointer; font: 500 22px/1.3 'Cormorant Garamond', serif; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+.faq summary::after { content: '+'; color: var(--gold); font: 400 24px/1 Inter, sans-serif; }
+.faq details[open] summary::after { content: '−'; }
+.faq p { margin: 10px 0 0; color: var(--muted); }
+/* финал */
+.final { text-align: center; padding: 64px 0 80px; }
+.final h2 { font-size: clamp(36px, 7vw, 56px); }
+.final p { color: var(--muted); margin: 12px 0 24px; }
+.foot { border-top: 1px solid var(--line); padding: 28px 0 40px; font-size: 14px; color: var(--muted); }
+.foot .wrap { display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; }
+.foot a { color: var(--muted); }
+.ribbon { background: var(--ink); color: #F6EADB; text-align: center; font-size: 13px; padding: 8px 16px; }
+.ribbon a { color: var(--gold2); }
+</style>
+</head>
+<body>
+<div class="ribbon">Прототип новой главной · не для поиска · <a href="/">открыть текущую главную</a></div>
+<header class="top" id="top">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/icon-192.png?v=2" alt=""><span>Той Менеджер</span></a>
+    <nav aria-label="Разделы"><a href="#designs">Оформления</a><a href="#how">Как это работает</a><a href="#price">Цены</a><a href="#faq">Вопросы</a></nav>
+    <div class="lang"><a href="/ky/" lang="ky">Кыр</a><a href="#" aria-current="true">Рус</a></div>
+    <a class="btn p" href="/create/">Создать</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="kick">Онлайн-приглашение на той</span>
+        <h1>Приглашение, достойное <em>вашего тоя</em></h1>
+        <p class="lead">Красивая обложка с именем гостя, музыка, место в 2ГИС и ответ «Приду» в одно касание. Гости открывают прямо в WhatsApp — ничего не нужно устанавливать.</p>
+        <div class="cta"><a class="btn p" href="/create/">Создать приглашение</a><a class="btn g" href="#designs">Смотреть оформления</a></div>
+        <ul class="trust"><li>490 сом за той</li><li>Гостей сколько угодно</li><li>Кыргызча и по-русски</li></ul>
+      </div>
+      <div class="phones" aria-hidden="true">
+        <img src="/img/themes/ru_ala-too.webp" alt="">
+        <img src="/img/themes/ru_kyzyl-kiyiz.webp" alt="">
+        <img src="/img/themes/ru_shokulo.webp" alt="">
+      </div>
+    </div>
+  </section>
+
+  <section class="b" id="designs" style="padding-top:24px">
+    <div class="wrap">
+      <div class="head"><span class="kick">Оформления</span><svg class="orn" viewBox="0 0 240 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+<path d="M0 20 H84"/><path d="M156 20 H240"/>
+<path d="M120 32 C120 20 108 10 98 14 C90 17 91 28 99 28 C105 28 106 21 101 20"/>
+<path d="M120 32 C120 20 132 10 142 14 C150 17 149 28 141 28 C135 28 134 21 139 20"/>
+<path d="M120 8 L124 14 L120 20 L116 14 Z"/></g></svg><h2>38 оформлений в национальном стиле</h2>
+        <p>Боз үй, шырдак, шөкүлө, горы Ала-Тоо. Нажмите — откроется живой пример. Оформление можно сменить даже после отправки гостям.</p></div>
+      <div class="tabs" role="group" aria-label="Вид тоя"><button type="button" data-k="all" aria-pressed="true">Все</button><button type="button" data-k="wedding" aria-pressed="false">Свадьба</button><button type="button" data-k="kyz_uzatuu" aria-pressed="false">Кыз узатуу</button><button type="button" data-k="sunnot" aria-pressed="false">Сүннөт той</button><button type="button" data-k="beshik" aria-pressed="false">Бешик, тушоо</button><button type="button" data-k="jubilee" aria-pressed="false">Юбилей</button><button type="button" data-k="memorial" aria-pressed="false">Аш</button></div>
+      <div class="grid short" id="grid"><a class="d" data-k="wedding kyz_uzatuu" href="/inv/?theme=ala-too&amp;kind=wedding&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_ala-too.webp" alt="Оформление «Ала-Тоо»" loading="lazy" width="195" height="390"><b>Ала-Тоо</b><small>Свадьба, Кыз узатуу</small></a><a class="d" data-k="wedding nikah jubilee" href="/inv/?theme=boz-uy&amp;kind=wedding&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_boz-uy.webp" alt="Оформление «Боз үй»" loading="lazy" width="195" height="390"><b>Боз үй</b><small>Свадьба, никах, Юбилей</small></a><a class="d" data-k="wedding nikah" href="/inv/?theme=jibek&amp;kind=wedding&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_jibek.webp" alt="Оформление «Жибек»" loading="lazy" width="195" height="390"><b>Жибек</b><small>Свадьба, никах</small></a><a class="d" data-k="wedding jubilee" href="/inv/?theme=barhat&amp;kind=wedding&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_barhat.webp" alt="Оформление «Бархат»" loading="lazy" width="195" height="390"><b>Бархат</b><small>Свадьба, Юбилей</small></a><a class="d" data-k="wedding nikah" href="/inv/?theme=bilerik&amp;kind=wedding&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_bilerik.webp" alt="Оформление «Билерик»" loading="lazy" width="195" height="390"><b>Билерик</b><small>Свадьба, никах</small></a><a class="d" data-k="kyz_uzatuu" href="/inv/?theme=shokulo&amp;kind=kyz_uzatuu&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_shokulo.webp" alt="Оформление «Шөкүлө»" loading="lazy" width="195" height="390"><b>Шөкүлө</b><small>Кыз узатуу</small></a><a class="d" data-k="kyz_uzatuu" href="/inv/?theme=jurkan&amp;kind=kyz_uzatuu&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_jurkan.webp" alt="Оформление «Жууркан»" loading="lazy" width="195" height="390"><b>Жууркан</b><small>Кыз узатуу</small></a><a class="d" data-k="kyz_uzatuu jubilee" href="/inv/?theme=shyrdak&amp;kind=kyz_uzatuu&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_shyrdak.webp" alt="Оформление «Шырдак»" loading="lazy" width="195" height="390"><b>Шырдак</b><small>Кыз узатуу, Юбилей</small></a><a class="d" data-k="sunnot" href="/inv/?theme=ak-kalpak&amp;kind=sunnot&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_ak-kalpak.webp" alt="Оформление «Ак калпак»" loading="lazy" width="195" height="390"><b>Ак калпак</b><small>Сүннөт той</small></a><a class="d" data-k="sunnot birthday" href="/inv/?theme=kok-asman&amp;kind=sunnot&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_kok-asman.webp" alt="Оформление «Көк асман»" loading="lazy" width="195" height="390"><b>Көк асман</b><small>Сүннөт той, день рождения</small></a><a class="d" data-k="beshik" href="/inv/?theme=beshik&amp;kind=beshik&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_beshik.webp" alt="Оформление «Бешик»" loading="lazy" width="195" height="390"><b>Бешик</b><small>Бешик той, тушоо кесүү</small></a><a class="d" data-k="beshik" href="/inv/?theme=ala-jip&amp;kind=tushoo&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_ala-jip.webp" alt="Оформление «Ала жип»" loading="lazy" width="195" height="390"><b>Ала жип</b><small>Бешик той, тушоо кесүү</small></a><a class="d" data-k="jubilee birthday" href="/inv/?theme=altyn-kuz&amp;kind=jubilee&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_altyn-kuz.webp" alt="Оформление «Алтын күз»" loading="lazy" width="195" height="390"><b>Алтын күз</b><small>Юбилей, день рождения</small></a><a class="d" data-k="jubilee birthday" href="/inv/?theme=tunku-asman&amp;kind=jubilee&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_tunku-asman.webp" alt="Оформление «Түнкү асман»" loading="lazy" width="195" height="390"><b>Түнкү асман</b><small>Юбилей, день рождения</small></a><a class="d" data-k="memorial" href="/inv/?theme=tuman&amp;kind=memorial&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_tuman.webp" alt="Оформление «Туман»" loading="lazy" width="195" height="390"><b>Туман</b><small>Аш</small></a><a class="d" data-k="kyz_uzatuu wedding jubilee" href="/inv/?theme=kyzyl-kiyiz&amp;kind=kyz_uzatuu&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_kyzyl-kiyiz.webp" alt="Оформление «Кызыл кийиз»" loading="lazy" width="195" height="390"><b>Кызыл кийиз</b><small>Кыз узатуу, Свадьба, Юбилей</small></a><a class="d" data-k="wedding nikah" href="/inv/?theme=altyn-jibek&amp;kind=wedding&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_altyn-jibek.webp" alt="Оформление «Алтын жибек»" loading="lazy" width="195" height="390"><b>Алтын жибек</b><small>Свадьба, никах</small></a><a class="d" data-k="wedding jubilee" href="/inv/?theme=nuska&amp;kind=wedding&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_nuska.webp" alt="Оформление «Нуска»" loading="lazy" width="195" height="390"><b>Нуска</b><small>Свадьба, Юбилей</small></a><a class="d" data-k="wedding kyz_uzatuu" href="/inv/?theme=tunduk&amp;kind=wedding&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_tunduk.webp" alt="Оформление «Түндүк»" loading="lazy" width="195" height="390"><b>Түндүк</b><small>Свадьба, Кыз узатуу</small></a><a class="d" data-k="kyz_uzatuu wedding" href="/inv/?theme=tasma&amp;kind=kyz_uzatuu&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_tasma.webp" alt="Оформление «Тасма»" loading="lazy" width="195" height="390"><b>Тасма</b><small>Кыз узатуу, Свадьба</small></a><a class="d" data-k="kyz_uzatuu wedding" href="/inv/?theme=kemer&amp;kind=kyz_uzatuu&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_kemer.webp" alt="Оформление «Кемер»" loading="lazy" width="195" height="390"><b>Кемер</b><small>Кыз узатуу, Свадьба</small></a><a class="d" data-k="kyz_uzatuu" href="/inv/?theme=sep&amp;kind=kyz_uzatuu&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_sep.webp" alt="Оформление «Сеп»" loading="lazy" width="195" height="390"><b>Сеп</b><small>Кыз узатуу</small></a><a class="d" data-k="wedding kyz_uzatuu jubilee" href="/inv/?theme=tor&amp;kind=jubilee&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_tor.webp" alt="Оформление «Төр»" loading="lazy" width="195" height="390"><b>Төр</b><small>Свадьба, Кыз узатуу, Юбилей</small></a><a class="d" data-k="jubilee wedding kyz_uzatuu" href="/inv/?theme=dastorkon&amp;kind=jubilee&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_dastorkon.webp" alt="Оформление «Дасторкон»" loading="lazy" width="195" height="390"><b>Дасторкон</b><small>Юбилей, Свадьба, Кыз узатуу</small></a><a class="d" data-k="wedding jubilee" href="/inv/?theme=tan&amp;kind=wedding&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_tan.webp" alt="Оформление «Таң»" loading="lazy" width="195" height="390"><b>Таң</b><small>Свадьба, Юбилей</small></a><a class="d" data-k="jubilee birthday" href="/inv/?theme=kuzgu-jailoo&amp;kind=jubilee&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_kuzgu-jailoo.webp" alt="Оформление «Күзгү жайлоо»" loading="lazy" width="195" height="390"><b>Күзгү жайлоо</b><small>Юбилей, день рождения</small></a><a class="d" data-k="wedding kyz_uzatuu beshik" href="/inv/?theme=jaz&amp;kind=wedding&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_jaz.webp" alt="Оформление «Жаз»" loading="lazy" width="195" height="390"><b>Жаз</b><small>Свадьба, Кыз узатуу, Бешик той, тушоо кесүү</small></a><a class="d" data-k="wedding jubilee" href="/inv/?theme=kysh&amp;kind=wedding&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_kysh.webp" alt="Оформление «Кыш»" loading="lazy" width="195" height="390"><b>Кыш</b><small>Свадьба, Юбилей</small></a><a class="d" data-k="wedding" href="/inv/?theme=tun&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_tun.webp" alt="Оформление «Түн»" loading="lazy" width="195" height="390"><b>Түн</b><small>Свадьба</small></a><a class="d" data-k="wedding nikah" href="/inv/?theme=ak-altyn&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_ak-altyn.webp" alt="Оформление «Ак алтын»" loading="lazy" width="195" height="390"><b>Ак алтын</b><small>Свадьба, никах</small></a><a class="d" data-k="wedding nikah" href="/inv/?theme=ak&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_ak.webp" alt="Оформление «Ак»" loading="lazy" width="195" height="390"><b>Ак</b><small>Свадьба</small></a><a class="d" data-k="wedding jubilee" href="/inv/?theme=anar&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_anar.webp" alt="Оформление «Анар»" loading="lazy" width="195" height="390"><b>Анар</b><small>Свадьба, юбилей</small></a><a class="d" data-k="kyz_uzatuu" href="/inv/?theme=jashyl&amp;kind=kyz_uzatuu&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_jashyl.webp" alt="Оформление «Жашыл»" loading="lazy" width="195" height="390"><b>Жашыл</b><small>Кыз узатуу</small></a><a class="d" data-k="kyz_uzatuu jubilee" href="/inv/?theme=kiyiz&amp;kind=kyz_uzatuu&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_kiyiz.webp" alt="Оформление «Кийиз»" loading="lazy" width="195" height="390"><b>Кийиз</b><small>Кыз узатуу, юбилей</small></a><a class="d" data-k="beshik kyz_uzatuu" href="/inv/?theme=bermet&amp;kind=tushoo&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_bermet.webp" alt="Оформление «Бермет»" loading="lazy" width="195" height="390"><b>Бермет</b><small>Тушоо кесүү, бешик той</small></a><a class="d" data-k="sunnot birthday" href="/inv/?theme=asman&amp;kind=sunnot&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_asman.webp" alt="Оформление «Асман»" loading="lazy" width="195" height="390"><b>Асман</b><small>Сүннөт той, день рождения</small></a><a class="d" data-k="jubilee" href="/inv/?theme=tunku&amp;kind=jubilee&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_tunku.webp" alt="Оформление «Түнкү»" loading="lazy" width="195" height="390"><b>Түнкү</b><small>Юбилей</small></a><a class="d" data-k="memorial" href="/inv/?theme=boz&amp;kind=memorial&amp;lang=ru" target="_blank" rel="noopener"><img src="/img/themes/ru_boz.webp" alt="Оформление «Боз»" loading="lazy" width="195" height="390"><b>Боз</b><small>Аш, жылдык</small></a></div>
+      <div class="more-btn"><button type="button" class="btn g" id="more">Показать все оформления</button></div>
+    </div>
+  </section>
+
+  <section class="b" style="padding-top:16px">
+    <div class="wrap">
+      <div class="head"><span class="kick">Для гостя</span><svg class="orn" viewBox="0 0 240 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+<path d="M0 20 H84"/><path d="M156 20 H240"/>
+<path d="M120 32 C120 20 108 10 98 14 C90 17 91 28 99 28 C105 28 106 21 101 20"/>
+<path d="M120 32 C120 20 132 10 142 14 C150 17 149 28 141 28 C135 28 134 21 139 20"/>
+<path d="M120 8 L124 14 L120 20 L116 14 Z"/></g></svg><h2>Что увидит гость</h2></div>
+      <div class="feat">
+        <div class="f"><i>✦</i><h3>Обложка с его именем</h3><p>«Урматтуу Таалай байке» — у каждого гостя своя ссылка и своё обращение.</p></div>
+        <div class="f"><i>♪</i><h3>Музыка и анимация</h3><p>Обложка раскрывается, играет музыка, проявляются имена и дата.</p></div>
+        <div class="f"><i>⌖</i><h3>Место в 2ГИС</h3><p>Кнопка маршрута, «В календарь» и обратный отсчёт до тоя.</p></div>
+        <div class="f"><i>✓</i><h3>Ответ в одно касание</h3><p>«Приду» или «Не смогу» и сколько человек — вы видите список сразу.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="b" id="how">
+    <div class="wrap">
+      <div class="head"><span class="kick">Как это работает</span><svg class="orn" viewBox="0 0 240 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+<path d="M0 20 H84"/><path d="M156 20 H240"/>
+<path d="M120 32 C120 20 108 10 98 14 C90 17 91 28 99 28 C105 28 106 21 101 20"/>
+<path d="M120 32 C120 20 132 10 142 14 C150 17 149 28 141 28 C135 28 134 21 139 20"/>
+<path d="M120 8 L124 14 L120 20 L116 14 Z"/></g></svg><h2>Пять минут с телефона</h2></div>
+      <div class="steps">
+        <div class="st"><h3>Выберите оформление</h3><p>Под ваш той: свадьба, кыз узатуу, сүннөт той, бешик той, юбилей, аш.</p></div>
+        <div class="st"><h3>Впишите имена и место</h3><p>Дата, время, ресторан из 2ГИС. Текст приглашения появится сам — его можно поправить.</p></div>
+        <div class="st"><h3>Отправьте в WhatsApp</h3><p>Каждому гостю — своя ссылка, или одна общая в групповой чат.</p></div>
+      </div>
+      <div style="text-align:center;margin-top:28px"><a class="btn p" href="/create/">Создать приглашение</a></div>
+    </div>
+  </section>
+
+  <section class="b" style="padding-top:8px">
+    <div class="wrap">
+      <div class="app">
+        <svg class="orn" style="margin:0 0 6px" viewBox="0 0 240 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+<path d="M0 20 H84"/><path d="M156 20 H240"/>
+<path d="M120 32 C120 20 108 10 98 14 C90 17 91 28 99 28 C105 28 106 21 101 20"/>
+<path d="M120 32 C120 20 132 10 142 14 C150 17 149 28 141 28 C135 28 134 21 139 20"/>
+<path d="M120 8 L124 14 L120 20 L116 14 Z"/></g></svg>
+        <span class="kick">Приложение для тоя</span>
+        <h2>Гости, конверты и бюджет — вместе с роднёй</h2>
+        <ul><li>Список гостей по сторонам: ата тарап, эне тарап, кудалар</li><li>«У входа»: отметки гостей и конвертов</li><li>Бюджет, авансы, подарки и рассадка</li></ul>
+        <div class="soon"><span>Скоро в Google Play</span><span>Скоро в App Store</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="b" id="price">
+    <div class="wrap">
+      <div class="head"><span class="kick">Цены</span><svg class="orn" viewBox="0 0 240 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+<path d="M0 20 H84"/><path d="M156 20 H240"/>
+<path d="M120 32 C120 20 108 10 98 14 C90 17 91 28 99 28 C105 28 106 21 101 20"/>
+<path d="M120 32 C120 20 132 10 142 14 C150 17 149 28 141 28 C135 28 134 21 139 20"/>
+<path d="M120 8 L124 14 L120 20 L116 14 Z"/></g></svg><h2>Платите один раз за той</h2>
+        <p>Без подписки. Оплата по QR: MBank или любой банк Кыргызстана.</p></div>
+      <div class="plans">
+        <div class="pl"><h3>Бесплатно</h3><div class="pr">0 <small>сом</small></div><ul><li>Пробное приглашение со знаком «Образец»</li><li>Приложение целиком для тоя до 35 человек</li><li>Команда без ограничений</li></ul><a class="btn g" href="/create/">Попробовать</a></div>
+        <div class="pl main"><h3>Онлайн-приглашение <span class="tag">чаще всего</span></h3><div class="pr">490 <small>сом за той</small></div><ul><li>Без знака «Образец»</li><li>Гости без ограничений</li><li>Личные ссылки и «кто открыл»</li><li>Видео-конверт, музыка, фото</li></ul><a class="btn p" href="/create/">Создать приглашение</a></div>
+        <div class="pl off"><h3>Приложение <span class="tag">скоро</span></h3><div class="pr">990 <small>сом за той</small></div><ul><li>Всё из онлайн-приглашения</li><li>Полная версия приложения для тоя любого размера</li><li>«У входа», конверты, бюджет, подарки</li></ul><span class="btn g" aria-disabled="true">Скоро в Google Play</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="b" id="faq" style="padding-top:16px">
+    <div class="wrap">
+      <div class="head"><span class="kick">Вопросы</span><svg class="orn" viewBox="0 0 240 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+<path d="M0 20 H84"/><path d="M156 20 H240"/>
+<path d="M120 32 C120 20 108 10 98 14 C90 17 91 28 99 28 C105 28 106 21 101 20"/>
+<path d="M120 32 C120 20 132 10 142 14 C150 17 149 28 141 28 C135 28 134 21 139 20"/>
+<path d="M120 8 L124 14 L120 20 L116 14 Z"/></g></svg><h2>Частые вопросы</h2></div>
+      <div class="faq"><details><summary>Нужно ли гостям скачивать приложение?</summary><p>Нет. Гость получает в WhatsApp ссылку, открывает её в браузере и отвечает «Приду» или «Не смогу». Приложение нужно только вам и вашей команде.</p></details><details><summary>Можно ли сменить оформление после отправки?</summary><p>Да, в любой момент. Гости по той же ссылке сразу увидят новое оформление.</p></details><details><summary>Как оплатить?</summary><p>Онлайн-приглашение — прямо в конструкторе, кнопка «Убрать знак». Оплата по QR в MBank или любом банке, затем «Я оплатил» — мы проверим платёж и откроем доступ в течение дня.</p></details><details><summary>Можно ли вернуть деньги?</summary><p>Приглашение — цифровая услуга: знак «Образец» снимается сразу после проверки оплаты, поэтому возврат не предусмотрен. До оплаты всё можно посмотреть и попробовать бесплатно. Если приглашение не открылось по нашей вине — вернём деньги полностью.</p></details><details><summary>На каком языке приглашение?</summary><p>На кыргызском и русском. Гость сам переключает язык.</p></details></div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap"><svg class="orn" viewBox="0 0 240 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+<path d="M0 20 H84"/><path d="M156 20 H240"/>
+<path d="M120 32 C120 20 108 10 98 14 C90 17 91 28 99 28 C105 28 106 21 101 20"/>
+<path d="M120 32 C120 20 132 10 142 14 C150 17 149 28 141 28 C135 28 134 21 139 20"/>
+<path d="M120 8 L124 14 L120 20 L116 14 Z"/></g></svg><h2>Сделайте приглашение прямо сейчас</h2><p>Пять минут с телефона. Попробовать — бесплатно.</p><a class="btn p" href="/create/">Создать приглашение</a></div>
+  </section>
+</main>
+<footer class="foot"><div class="wrap"><span>© 2026 Той Менеджер, Бишкек, Кыргызстан</span><span><a href="/tosty-i-pozdravleniya/">Тосты и поздравления</a> · <a href="/teksty-priglasheniy-na-toi/">Тексты приглашений</a> · <a href="/privacy/">Конфиденциальность</a></span></div></footer>
+<script>
+  const hdr = document.getElementById('top');
+  addEventListener('scroll', () => hdr.classList.toggle('s', scrollY > 8), { passive: true });
+  const grid = document.getElementById('grid'), more = document.getElementById('more');
+  const cards = [...grid.querySelectorAll('.d')];
+  const limit = () => (matchMedia('(min-width: 900px)').matches ? 10 : 6);
+  function apply(k) {
+    let n = 0;
+    cards.forEach((d) => { const ok = k === 'all' || (' ' + d.dataset.k + ' ').includes(' ' + k + ' '); d.hidden = !ok; d.classList.toggle('more', ok && ++n > limit()); });
+    more.parentElement.hidden = n <= limit() || !grid.classList.contains('short');
+  }
+  document.querySelector('.tabs').addEventListener('click', (ev) => {
+    const b = ev.target.closest('button'); if (!b) return;
+    document.querySelectorAll('.tabs button').forEach((x) => x.setAttribute('aria-pressed', x === b));
+    grid.classList.add('short'); apply(b.dataset.k);
+  });
+  more.addEventListener('click', () => { grid.classList.remove('short'); more.parentElement.hidden = true; });
+  apply('all');
+</script>
+
+</body>
+</html>
