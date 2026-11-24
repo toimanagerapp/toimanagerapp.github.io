@@ -90,6 +90,7 @@
       rsvp: 'Ответ гостей', rsvpS: '«Приду / Не смогу» прямо в приглашении', askCount: 'Спрашивать, сколько человек придёт', deadline: 'Ответить до',
       wishes: 'Пожелания гостей', wishesS: 'Гости оставляют тёплые слова', wPublic: 'Видят все', wPrivate: 'Только вы', wOff: 'Выключить',
       saveH: 'Сохраните приглашение', saveL: 'Войдите через Google — приглашение сохранится, и вы получите ссылку для гостей. Оно же появится в приложении «Той Менеджер».',
+      anonH: 'Не потеряйте приглашение', anonL: 'Сейчас приглашение сохранено только на этом телефоне. Войдите через Google — и открывайте его с любого устройства.', anonBtn: 'Сохранить через Google', anonNote: 'Приглашение сохранено на этом телефоне.', moved: 'Готово: приглашения перенесены в ваш аккаунт Google.',
       google: 'Войти через Google', loginAlt: 'Не получается? Войти другим способом', loginErr: 'Не удалось войти. Попробуйте ещё раз.', creating: 'Сохраняем приглашение…',
       createErr: 'Не удалось сохранить. Проверьте интернет и попробуйте ещё раз.',
       tabCard: 'Приглашение', tabGuests: 'Гости', tabSend: 'Отправить', allInv: 'Все приглашения',
@@ -183,6 +184,7 @@
       rsvp: 'Коноктордун жообу', rsvpS: '«Барам / Бара албайм» — чакыруунун ичинде эле', askCount: 'Канча киши келерин суроо', deadline: 'Жооп берүү мөөнөтү',
       wishes: 'Тилектер', wishesS: 'Коноктор жылуу сөздөрүн калтырышат', wPublic: 'Баары көрөт', wPrivate: 'Сиз гана', wOff: 'Өчүрүү',
       saveH: 'Чакырууну сактаңыз', saveL: 'Google аркылуу кириңиз — чакыруу сакталат жана коноктор үчүн шилтеме аласыз. Ал «Той Менеджер» тиркемесинде да пайда болот.',
+      anonH: 'Чакырууну жоготпоңуз', anonL: 'Азыр чакыруу ушул телефондо гана сакталган. Google аркылуу кириңиз — каалаган түзмөктөн ачасыз.', anonBtn: 'Google аркылуу сактоо', anonNote: 'Чакыруу ушул телефондо сакталды.', moved: 'Даяр: чакыруулар Google аккаунтуңузга өттү.',
       google: 'Google аркылуу кирүү', loginAlt: 'Болбой жатабы? Башка жол менен кирүү', loginErr: 'Кирүү болгон жок. Кайра аракет кылыңыз.', creating: 'Чакыруу сакталууда…',
       createErr: 'Сакталган жок. Интернетти текшерип, кайра аракет кылыңыз.',
       tabCard: 'Чакыруу', tabGuests: 'Коноктор', tabSend: 'Жөнөтүү', allInv: 'Бардык чакыруулар',
@@ -595,7 +597,9 @@
   // ---------- Вход ----------
   async function signIn() {
     store.set('tm_auth_return', location.pathname + location.hash);
-    const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: `${location.origin}/create/` } });
+    const opts = { provider: 'google', options: { redirectTo: `${location.origin}/create/` } };
+    // гостевой аккаунт (приглашение без входа) привязываем к Google — тои остаются на месте
+    const { error } = S.user?.is_anonymous ? await sb.auth.linkIdentity(opts) : await sb.auth.signInWithOAuth(opts);
     if (error) toast(L().loginErr, true);
   }
   // Вход официальной кнопкой Google: в окне выбора аккаунта видно «Той Менеджер» / toimanager.app, а не адрес базы.
@@ -624,8 +628,20 @@
       google.accounts.id.initialize({
         client_id: GIS_ID, nonce: hashed, ux_mode: 'popup', itp_support: true,
         callback: async (r) => {
-          const { data, error } = await sb.auth.signInWithIdToken({ provider: 'google', token: r.credential, nonce: raw });
+          let data, error, moved = false;
+          if (S.user?.is_anonymous) {
+            // гость → привязать Google к этому же аккаунту; если такой Google уже есть у нас — перенести тои в него
+            ({ data, error } = await sb.auth.linkIdentity({ provider: 'google', token: r.credential, nonce: raw }));
+            if (error) {
+              const tk = (await sb.rpc('transfer_start')).data;
+              ({ data, error } = await sb.auth.signInWithIdToken({ provider: 'google', token: r.credential, nonce: raw }));
+              if (!error && tk) { const fin = await sb.rpc('transfer_finish', { p_token: tk }); moved = !fin.error; }
+            }
+          } else {
+            ({ data, error } = await sb.auth.signInWithIdToken({ provider: 'google', token: r.credential, nonce: raw }));
+          }
           if (error || !data?.user) { toast(L().loginErr, true); return; }
+          if (moved) toast(L().moved);
           S.user = data.user; S.tois = null; close(); renderAcct();
           track('login', { method: 'google_gis' });
           if (reasonSave || store.get('tm_pending_save')) { store.del('tm_pending_save'); createFromDraft(); } else route();
@@ -638,7 +654,8 @@
     } catch (e) { return false; }
   }
   function loginSheet(reasonSave) {
-    sheet(`<h2>${esc(reasonSave ? L().saveH : L().login)}</h2><p class="lead3">${esc(L().saveL)}</p>
+    const anon = !!S.user?.is_anonymous;
+    sheet(`<h2>${esc(anon ? L().anonH : reasonSave ? L().saveH : L().login)}</h2><p class="lead3">${esc(anon ? L().anonL : L().saveL)}</p>
       <div id="gisSlot" style="display:flex;justify-content:center;min-height:44px"><button class="google" type="button" id="gBtn">${G_LOGO}<span>${esc(L().google)}</span></button></div>
       <button type="button" class="link" id="gAlt" hidden style="display:block;margin:12px auto 0;font-size:14px">${esc(L().loginAlt)}</button>`, (el, close) => {
       const legacy = () => { if (reasonSave) store.set('tm_pending_save', '1'); signIn(); };
@@ -649,7 +666,7 @@
   }
   function renderAcct() {
     const a = $('acct');
-    if (!S.user) { a.innerHTML = `<button type="button" class="btn ghost sm" id="loginBtn">${esc(L().login)}</button>`; $('loginBtn').onclick = () => loginSheet(false); return; }
+    if (!S.user || S.user.is_anonymous) { a.innerHTML = `<button type="button" class="btn ghost sm" id="loginBtn">${esc(L().login)}</button>`; $('loginBtn').onclick = () => loginSheet(false); return; }
     const m = S.user.user_metadata || {}, name = m.full_name || m.name || S.user.email || '';
     const av = m.avatar_url ? `<img src="${esc(m.avatar_url)}" alt="" referrerpolicy="no-referrer">` : `<b class="av">${esc((name[0] || '?').toUpperCase())}</b>`;
     a.innerHTML = `<button type="button" id="acctBtn" aria-haspopup="menu" aria-expanded="false">${av}<span>${esc(name.split(' ')[0])}</span></button>
@@ -906,7 +923,12 @@
   async function finish() {
     const t = L();
     for (let k = 0; k < 2; k++) if (!validStep(k)) { goStep(k); setTimeout(() => { const e = $('stepErr'); e.textContent = k === 1 ? t.dateNeed : t.namesNeed; e.hidden = false; }, 30); return; }
-    if (!S.user) { loginSheet(true); return; }
+    if (!S.user) {
+      // Ссылка без входа: гостевой аккаунт на этом телефоне. Войти через Google можно потом — тои сохранятся.
+      const { data, error } = await sb.auth.signInAnonymously();
+      if (error || !data?.user) { loginSheet(true); return; }
+      S.user = data.user; renderAcct(); track('login', { method: 'anon' });
+    }
     await createFromDraft();
   }
   async function createFromDraft() {
@@ -1090,6 +1112,7 @@
     return `<div class="editor-wrap"><div class="panel">${toiHead('send')}
       <div class="stack" style="gap:14px;margin-top:16px">
         ${statusCard()}
+        ${S.user?.is_anonymous ? `<div class="group anon-note"><p style="margin:0 0 10px;font-size:14px"><b>${esc(t.anonNote)}</b> ${esc(t.anonL.split('. ').slice(1).join('. '))}</p><button type="button" class="btn ghost sm" data-act="anon-save">${esc(t.anonBtn)}</button></div>` : ''}
         <div class="group"><h3>${esc(t.general)}</h3><p class="muted" style="font-size:14px;margin-bottom:12px">${esc(t.generalS)}</p>
           <div class="linkbox"><code>${esc(link.replace('https://', ''))}</code><button type="button" class="btn soft sm" data-copy="${esc(link)}">${I.copy}${esc(t.copy)}</button></div>
           <div class="share-row"><a class="btn wa sm" href="${esc(waUrl(null, gtext))}" target="_blank" rel="noopener">${I.wa}${esc(t.share)}</a>
@@ -1104,6 +1127,7 @@
     </div><div class="pv-slot"></div></div>`;
   }
   function bindSend(root) {
+    root.querySelector('[data-act="anon-save"]')?.addEventListener('click', () => loginSheet(false));
     root.querySelectorAll('[data-copy]').forEach((b) => b.addEventListener('click', () => copy(b.dataset.copy)));
     root.querySelectorAll('[data-act="preview"]').forEach((b) => b.addEventListener('click', openPreview));
     root.querySelectorAll('[data-act="pay"]').forEach((b) => b.addEventListener('click', () => paySheet('invite')));
