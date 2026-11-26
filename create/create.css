@@ -550,3 +550,13 @@ body { background: var(--bg); overflow-x: clip; }
 .chk { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.4; cursor: pointer; }
 .chk input { flex: none; width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--accent); }
 .row-btns { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+
+/* Видео-приглашение */
+.vid-box { width: min(100%, 300px); aspect-ratio: 9 / 16; margin: 6px auto 14px; border-radius: 18px; overflow: hidden; background: #1b1412; box-shadow: var(--shadow-2); }
+.vid-box canvas, .vid-box video { display: block; width: 100%; height: 100%; object-fit: contain; background: #1b1412; }
+.vid-box [hidden] { display: none; }
+.vid-prog { text-align: center; }
+.vid-prog p { margin: 6px 0 0; }
+.vid-bar { height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.vid-bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .3s linear; }
+.vid-btns { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }

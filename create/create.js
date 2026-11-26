@@ -26,6 +26,7 @@
 
   // ---------- Значки ----------
   const I = {
+    film: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="m10 9 5 3-5 3z"/></svg>',
     plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
     photo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="9" cy="10" r="1.8"/><path d="m21 16-5-5-8 8"/></svg>',
     eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>',
@@ -99,6 +100,7 @@
       checkT: 'Знак уже снят', checkP: 'Мы проверим платёж в течение дня. Можно отправлять приглашение гостям.',
       forgotT: 'Уже оплатили?', forgotP: 'Если вы перевели деньги, нажмите «Я оплатил» — без этого мы не узнаем, чей это платёж, и знак останется.', paidShort: 'Я оплатил', waitT: 'Ждём проверки платежа', waitP: 'Как только проверим (обычно в течение дня), знак исчезнет.',
       upgrade: 'Полная версия приложения',
+      vid: 'Видео-приглашение', vidS: 'Ролик на 20 секунд с вашими именами, фото и музыкой — для WhatsApp-статуса, Instagram и TikTok.', vidBtn: 'Сделать видео', vidWm: 'Пока приглашение не оплачено, на видео будет знак «Образец».', vidMaking: 'Собираем видео…', vidKeep: 'Не закрывайте и не сворачивайте страницу — это займёт около 25 секунд.', vidLoad: 'Готовим фото и музыку…', vidDone: 'Видео готово!', vidSave: 'Сохранить видео', vidShare: 'Отправить', vidAgain: 'Сделать заново', vidHidden: 'Страницу сворачивали — в видео могут быть паузы. Лучше сделать заново.', vidNo: 'Этот браузер не умеет собирать видео. Откройте страницу в Chrome или Safari.', vidErr: 'Не получилось собрать видео. Попробуйте ещё раз.', vKind: { wedding: 'Приглашение на свадьбу', kyz_uzatuu: 'Приглашение на кыз узатуу', sunnot: 'Приглашение на сүннөт той', beshik: 'Приглашение на бешик той', tushoo: 'Приглашение на тушоо кесүү', jubilee: 'Приглашение на юбилей', memorial: 'Приглашение на аш', other: 'Приглашение' }, vDate: 'Дата', vPlace: 'Место', vFinal: 'Ждём вас!', vWm: 'ОБРАЗЕЦ',
       general: 'Общая ссылка', generalS: 'Для групп, статуса WhatsApp и соцсетей. Гость пишет имя и отвечает — ответ появится у вас.',
       personal: 'Личные ссылки', personalS: 'Каждому гостю — приглашение с его именем: «Урматтуу Асан байке». Вы видите, кто открыл и что ответил.',
       toGuests: 'Перейти к гостям', copy: 'Копировать', copied: 'Ссылка скопирована', share: 'В WhatsApp', open: 'Открыть', views: (n) => `Открыли по общей ссылке: ${n}`,
@@ -193,6 +195,7 @@
       checkT: 'Белги алынды', checkP: 'Төлөмдү бир күндүн ичинде текшеребиз. Чакырууну конокторго жөнөтө берсеңиз болот.',
       forgotT: 'Төлөп койдуңузбу?', forgotP: 'Акча которгон болсоңуз, «Төлөдүм» баскычын басыңыз — антпесе кимдин төлөмү экенин билбейбиз жана белги калат.', paidShort: 'Төлөдүм', waitT: 'Төлөм текшерилүүдө', waitP: 'Текшергенден кийин (адатта бир күндүн ичинде) белги жоголот.',
       upgrade: 'Тиркеменин толук версиясы',
+      vid: 'Видео-чакыруу', vidS: 'Аттарыңыз, сүрөт жана музыка менен 20 секунддук ролик — WhatsApp статусу, Instagram жана TikTok үчүн.', vidBtn: 'Видео жасоо', vidWm: 'Чакыруу төлөнмөйүнчө видеодо «Үлгү» белгиси болот.', vidMaking: 'Видео жасалууда…', vidKeep: 'Баракты жаппаңыз жана кичирейтпеңиз — болжол менен 25 секунд.', vidLoad: 'Сүрөт жана музыка даярдалууда…', vidDone: 'Видео даяр!', vidSave: 'Видеону сактоо', vidShare: 'Жөнөтүү', vidAgain: 'Кайра жасоо', vidHidden: 'Барак кичирейтилди — видеодо тыныгуулар болушу мүмкүн. Кайра жасаган жакшы.', vidNo: 'Бул браузер видео жасай албайт. Баракты Chrome же Safari менен ачыңыз.', vidErr: 'Видео жасалган жок. Кайра аракет кылыңыз.', vKind: { wedding: 'Үйлөнүү тоюна чакыруу', kyz_uzatuu: 'Кыз узатуу тоюна чакыруу', sunnot: 'Сүннөт тойго чакыруу', beshik: 'Бешик тойго чакыруу', tushoo: 'Тушоо кесүү тоюна чакыруу', jubilee: 'Мааракеге чакыруу', memorial: 'Эскерүү ашына чакыруу', other: 'Тойго чакыруу' }, vDate: 'Той болот', vPlace: 'Той өтүүчү жер', vFinal: 'Сиздерди күтөбүз!', vWm: 'ҮЛГҮ',
       general: 'Жалпы шилтеме', generalS: 'Топторго, WhatsApp статусуна жана соцтармактарга. Конок атын жазып жооп берет — жообу сизге келет.',
       personal: 'Жеке шилтемелер', personalS: 'Ар бир конокко — өз аты жазылган чакыруу: «Урматтуу Асан байке». Ким ачканын жана эмне деп жооп бергенин көрөсүз.',
       toGuests: 'Конокторго өтүү', copy: 'Көчүрүү', copied: 'Шилтеме көчүрүлдү', share: 'WhatsAppка', open: 'Ачуу', views: (n) => `Жалпы шилтеме боюнча ачышты: ${n}`,
@@ -1271,6 +1274,8 @@
             <a class="btn ghost sm" href="${esc(link)}&amp;own=1" target="_blank" rel="noopener">${I.open}${esc(t.open)}</a></div>
           ${S.toi.views ? `<p class="muted" style="font-size:13px;margin-top:10px">${esc(t.views(S.toi.views))}</p>` : ''}
         </div>
+        <div class="group"><h3>${esc(t.vid)}</h3><p class="muted" style="font-size:14px;margin-bottom:12px">${esc(t.vidS)}${S.toi.plan?.card_paid ? '' : ` ${esc(t.vidWm)}`}</p>
+          <button type="button" class="btn soft block" data-act="video">${I.film}${esc(t.vidBtn)}</button></div>
         <div class="group"><h3>${esc(t.personal)}</h3><p class="muted" style="font-size:14px;margin-bottom:12px">${esc(t.personalS)}</p>
           <a class="btn primary block" href="#/t/${S.toi.id}/guests">${I.users}${esc(t.toGuests)}</a></div>
         <p class="muted" style="font-size:14px">${esc(t.inApp)} <a href="../">toimanager.app</a></p>
@@ -1285,6 +1290,84 @@
     root.querySelectorAll('[data-act="pay"]').forEach((b) => b.addEventListener('click', () => paySheet('invite')));
     root.querySelectorAll('[data-act="paid"]').forEach((b) => b.addEventListener('click', () => paySheet('invite', 'pay')));
     root.querySelector('[data-act="pay-pro"]')?.addEventListener('click', () => paySheet('pro'));
+    root.querySelector('[data-act="video"]')?.addEventListener('click', videoSheet);
+  }
+
+  // ---------- Видео-приглашение (собирается в браузере: /video/video.js) ----------
+  function videoData() {
+    const d = S.draft, lg = d.lang === 'ru' ? 'ru' : 'ky', V = T[lg], iso = startsIso(d);
+    let dateBig = '', dateLine = '';
+    if (iso) {
+      const x = new Date(Date.parse(iso) + 6 * 3600e3), day = V.days[x.getUTCDay()];
+      dateBig = `${pad(x.getUTCDate())} · ${pad(x.getUTCMonth() + 1)} · ${x.getUTCFullYear()}`;
+      dateLine = `${day.charAt(0).toUpperCase()}${day.slice(1)}, ${lg === 'ky' ? 'саат ' : ''}${pad(x.getUTCHours())}:${pad(x.getUTCMinutes())}`;
+    }
+    const tr = curTrack(d);
+    const own = d.music_file ? (d.music_file.startsWith('local:') ? blobUrls.get(d.music_file) : `${SB}/storage/v1/object/public/invite-music/${d.music_file}`) : null;
+    const music = d.music === 'none' ? null : tr === 'own' ? (own || TRACK_URL[kindTrack(d.kind)]) : TRACK_URL[tr] || TRACK_URL[kindTrack(d.kind)];
+    const ownTxt = d.own_text ? (lg === 'ky' ? d.text_ky : d.text_ru).trim() : '';
+    return {
+      theme: d.theme, lang: lg, kindTitle: V.vKind[d.kind] || V.vKind.other,
+      a: d.name_a.trim() || titleFor(d, lg), b: d.kind === 'wedding' ? d.name_b.trim() : '',
+      text: ownTxt || textFor(d, lg), dateBig, dateLine, dateLabel: V.vDate, venueLabel: V.vPlace,
+      venue: d.venue_name.trim(), address: d.venue_address.trim(), finalLine: V.vFinal, sign: d.signature.trim(),
+      photos: [d.hero_photo, ...d.gallery].filter(Boolean).map(photoSrc).filter(Boolean).slice(0, 3),
+      music, paid: Boolean(S.toi?.plan?.card_paid), wm: V.vWm, brand: 'toimanager.app',
+    };
+  }
+  let videoLib = null;
+  const loadVideoLib = () => videoLib || (videoLib = new Promise((res, rej) => {
+    if (window.TMVideo) return res();
+    const sc = document.createElement('script'); sc.src = '/video/video.js?v=1126f'; sc.onload = res; sc.onerror = () => { videoLib = null; rej(new Error('load')); };
+    document.head.appendChild(sc);
+  }));
+  function videoSheet() {
+    const t = L();
+    // звук на iPhone разрешён только если AudioContext создан прямо по нажатию
+    let ac = null;
+    try { ac = new (window.AudioContext || window.webkitAudioContext)(); ac.resume().catch(() => {}); } catch { ac = null; }
+    let url = null, hidden = false, file = null;
+    const onVis = () => { if (document.hidden) hidden = true; };
+    const close = sheet(`<h2>${esc(t.vid)}</h2>
+      <div class="vid-box"><canvas id="vidCanvas" aria-hidden="true"></canvas><video id="vidOut" playsinline controls hidden></video></div>
+      <div class="vid-prog" id="vidProg"><div class="vid-bar"><i id="vidBar"></i></div><p id="vidMsg">${esc(t.vidLoad)}</p><p class="muted" style="font-size:13px">${esc(t.vidKeep)}</p></div>
+      <div class="vid-btns" id="vidBtns" hidden></div>`, () => {});
+    const end = () => { document.removeEventListener('visibilitychange', onVis); try { ac && ac.close(); } catch { /* уже закрыт */ } };
+    const origClose = sheetClose;
+    sheetClose = () => { end(); if (url) URL.revokeObjectURL(url); origClose(); };
+    $('sheetRoot').querySelector('.sheet-bg').addEventListener('click', (e) => { if (e.target.closest('[data-close]') || e.target.classList.contains('sheet-bg')) { end(); if (url) URL.revokeObjectURL(url); } });
+    document.addEventListener('visibilitychange', onVis);
+    const fail = (msg) => { $('vidMsg').textContent = msg; $('vidBar').style.width = '0'; showBtns(false); };
+    function showBtns(ok) {
+      const b = $('vidBtns'); b.hidden = false;
+      const canShare = ok && file && navigator.canShare && navigator.canShare({ files: [file] });
+      b.innerHTML = (ok ? `${canShare ? `<button type="button" class="btn primary block" data-v="share">${esc(t.vidShare)}</button>` : ''}
+        <a class="btn ${canShare ? 'ghost' : 'primary'} block" href="${url}" download="${esc(file.name)}">${esc(t.vidSave)}</a>` : '') +
+        `<button type="button" class="btn ghost block" data-v="again">${esc(t.vidAgain)}</button>`;
+      b.querySelector('[data-v="share"]')?.addEventListener('click', () => navigator.share({ files: [file], title: t.vid }).catch(() => {}));
+      b.querySelector('[data-v="again"]').addEventListener('click', () => { end(); if (url) URL.revokeObjectURL(url); close(); videoSheet(); });
+    }
+    (async () => {
+      try {
+        await loadVideoLib();
+        if (!window.TMVideo.supported()) { fail(t.vidNo); return; }
+        const res = await window.TMVideo.make(videoData(), $('vidCanvas'), (p) => {
+          if (p.stage === 'rec') { $('vidMsg').textContent = `${t.vidMaking} ${Math.round(p.p * 100)}%`; $('vidBar').style.width = `${Math.round(p.p * 100)}%`; }
+        }, ac);
+        if (!$('vidOut')) return;   // окно уже закрыли
+        url = URL.createObjectURL(res.blob);
+        const nm = (S.draft.name_a.trim() || 'toi').replace(/[^\p{L}\p{N}]+/gu, '-').slice(0, 30);
+        file = new File([res.blob], `toimanager-${nm}.${res.ext}`, { type: res.mime });
+        $('vidCanvas').hidden = true;
+        const v = $('vidOut'); v.src = `${url}#t=0.6`; v.hidden = false;   // #t — показать кадр с обложкой, а не чёрный
+        $('vidProg').innerHTML = `<p><b>${esc(t.vidDone)}</b></p>${hidden ? `<p class="muted" style="font-size:13px">${esc(t.vidHidden)}</p>` : ''}`;
+        showBtns(true);
+        track('video_made', { kind: S.draft.kind, secs: Math.round(res.total), ext: res.ext });
+      } catch (e) {
+        console.error(e);
+        if ($('vidMsg')) fail(e && e.message === 'unsupported' ? t.vidNo : t.vidErr);
+      } finally { end(); }
+    })();
   }
 
   // ---------- Оплата ----------
