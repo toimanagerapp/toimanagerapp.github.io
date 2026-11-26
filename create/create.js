@@ -1180,7 +1180,7 @@
     root.querySelectorAll('[data-kind]').forEach((b) => b.addEventListener('click', () => {
       S.draft = newDraft(b.dataset.kind); S.step = 0; S.toi = null; saveLocal();
       track('create_start', { kind: b.dataset.kind });
-      location.hash = '#/new';
+      if (location.hash === '#/new') route(); else location.hash = '#/new';   // уже на #/new — hashchange не сработает
     }));
     root.querySelector('[data-act="drop"]')?.addEventListener('click', () => { store.del(DRAFT_KEY); renderApp(); });
     root.querySelectorAll('[data-act="to-pick"]').forEach((a) => a.addEventListener('click', (e) => {
