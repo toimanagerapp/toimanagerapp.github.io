@@ -56,9 +56,9 @@
   // Готовые видео-конверты (остальные добавляются по мере готовности роликов; неизвестный — обычный конверт)
   const ENVS = { navy: { card: true, webp: true } };   // ivory: { light: true }, garnet: {}, emerald: {}
 
-  // Пример на компьютере: показываем приглашение «в телефоне» по центру (iframe с той же страницей),
-  // фон — размытый кадр конверта/фото пары. ?full=1 — открыть на весь экран. Личные ссылки гостей не трогаем.
-  if (!token && q.get('preview') !== '1' && q.get('full') !== '1' && window.top === window
+  // На компьютере приглашение показываем «в телефоне» по центру (iframe с той же страницей), фон — размытый
+  // кадр оформления / фото пары. Так и для примера, и для настоящих ссылок гостей. ?full=1 — на весь экран.
+  if (q.get('preview') !== '1' && q.get('full') !== '1' && window.top === window
       && matchMedia('(min-width: 860px) and (min-aspect-ratio: 1/1)').matches) {
     const ru = q.get('lang') === 'ru';
     const th = THEMES[q.get('theme')] ? q.get('theme') : 'ak-altyn';
@@ -73,13 +73,25 @@
     document.body.removeAttribute('data-theme');
     document.body.style.setProperty('--dframe-color', THEMES[th].color);
     if (bg) document.body.style.setProperty('--dframe-bg', `url(${bg})`);
+    if (token) {
+      // настоящее приглашение: оформление узнаём из уже начатого запроса (index.html) — фон под цвет приглашения
+      document.body.style.setProperty('--dframe-color', '#2A1A1C'); document.body.style.removeProperty('--dframe-bg');
+      document.documentElement.classList.remove('tm-wait');
+      (window.__tmCard ? window.__tmCard.then((r) => (r.ok ? r.json() : null)) : Promise.resolve(null)).then((r) => {
+        const c = r && r.card; if (!c) return;
+        const t2 = THEMES[c.theme] ? c.theme : 'ak-altyn';
+        document.body.style.setProperty('--dframe-color', THEMES[t2].color);
+        const pic = c.hero_photo ? `${SB}/storage/v1/object/public/invite-photos/${c.hero_photo}` : THEMES[t2].scene ? `/inv/scenes/${t2}-s.webp` : '';
+        if (pic) document.body.style.setProperty('--dframe-bg', `url("${pic}")`);
+      }).catch(() => {});
+    }
     document.body.innerHTML = `<div class="dframe-bg" aria-hidden="true"></div>
-      <div class="dframe"><iframe id="dframe" src="${inner}" title="${ru ? 'Пример приглашения' : 'Чакыруунун үлгүсү'}" allow="autoplay; fullscreen"></iframe></div>
-      <div class="dframe-side">
+      <div class="dframe"><iframe id="dframe" src="${inner}" title="${token ? (ru ? 'Приглашение' : 'Чакыруу') : ru ? 'Пример приглашения' : 'Чакыруунун үлгүсү'}" allow="autoplay; fullscreen"></iframe></div>
+      ${token ? `<div class="dframe-side solo"><a class="dframe-full" href="${full}">${ru ? 'Открыть на весь экран' : 'Толук экранда ачуу'}</a></div>` : `<div class="dframe-side">
         <p>${ru ? 'Так гость увидит приглашение на&nbsp;телефоне' : 'Конок чакырууну телефондон ушинтип көрөт'}</p>
         <a class="dframe-cta" href="${create}">${ru ? 'Создать своё приглашение' : 'Өз чакырууңузду түзүү'}</a>
         <a class="dframe-full" href="${full}">${ru ? 'Открыть на весь экран' : 'Толук экранда ачуу'}</a>
-      </div>`;
+      </div>`}`;
     // колесо мыши и клавиши над размытым фоном листают само приглашение — как обычную страницу
     const fr = document.getElementById('dframe');
     const win = () => { try { return fr.contentWindow; } catch { return null; } };
