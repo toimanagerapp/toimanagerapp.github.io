@@ -1318,7 +1318,7 @@
   let videoLib = null;
   const loadVideoLib = () => videoLib || (videoLib = new Promise((res, rej) => {
     if (window.TMVideo) return res();
-    const sc = document.createElement('script'); sc.src = '/video/video.js?v=1126f'; sc.onload = res; sc.onerror = () => { videoLib = null; rej(new Error('load')); };
+    const sc = document.createElement('script'); sc.src = '/video/video.js?v=1126g'; sc.onload = res; sc.onerror = () => { videoLib = null; rej(new Error('load')); };
     document.head.appendChild(sc);
   }));
   function videoSheet() {

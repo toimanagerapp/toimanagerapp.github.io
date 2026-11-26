@@ -273,7 +273,7 @@
       gain.gain.setValueAtTime(1, t0 + pl.total - 2); gain.gain.linearRampToValueAtTime(0, t0 + pl.total);
       dest.stream.getAudioTracks().forEach((t) => stream.addTrack(t));
     }
-    const rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 6000000, audioBitsPerSecond: 128000 });
+    const rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 3000000, audioBitsPerSecond: 128000 });
     const chunks = [];
     rec.ondataavailable = (e) => { if (e.data && e.data.size) chunks.push(e.data); };
     const done = new Promise((res) => { rec.onstop = res; });
