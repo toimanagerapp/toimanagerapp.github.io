@@ -81,7 +81,7 @@
       gallery: 'Галерея', galleryHint: (n) => `До 10 фото · добавлено ${n}`, uploading: 'Загружаем…', photoErr: 'Не удалось загрузить фото. Попробуйте другое.',
       designH: 'Оформление', designL: 'Выберите оформление и музыку. Всё сразу видно в предпросмотре.',
       theme: 'Оформление', themeHint: 'Сначала — подходящие к вашему тою. Нажмите на любое — образец «Как увидят гости» сразу обновится. Сменить можно в любой момент, даже после отправки.', themesOther: 'Другие оформления', themesAll: (n) => `Все оформления (ещё ${n})`, envelope: 'Конверт', envClassic: 'С восковой печатью', envClassicS: 'Гость ломает печать', envNavy: 'Видео-конверт «Түн»', envNavyS: 'Конверт раскрывается сам',
-      music: 'Музыка', musicS: 'Мелодия «Бакыт кушу» играет, когда гость открывает приглашение', musicSK: 'Песня «Ак жол, кызым» играет, когда гость открывает приглашение', lang: 'Язык приглашения', langS: 'Гость может переключить язык сам',
+      music: 'Музыка', musicS: 'Играет, когда гость открывает приглашение', musicSK: 'Играет, когда гость открывает приглашение', tracks: { 'bakyt-kushu': ['«Бакыт кушу»', 'мелодия'], 'ak-jol-kyzym': ['«Ак жол, кызым»', 'песня для кыз узатуу'], 'komuz-atlas': ['Комуз', 'спокойная мелодия'], tunku: ['Тихая мелодия', 'для аша'], own: ['Своя песня', 'mp3 или m4a, до 15 МБ'] }, listen: 'Послушать', stop: 'Стоп', ownUp: 'Загрузить свою песню', ownRepl: 'Заменить', ownDel: 'Убрать', ownReady: 'Файл загружен ✓', ownRights: 'Подтверждаю, что могу использовать эту песню в приглашении (например, она моя или куплена).', ownRightsNeed: 'Отметьте, что можете использовать эту песню.', ownErr: 'Не удалось загрузить песню. Нужен файл mp3 или m4a до 15 МБ.', lang: 'Язык приглашения', langS: 'Гость может переключить язык сам',
       text: 'Текст приглашения', textAuto: 'Выберите готовый текст — имена подставятся сами:', textVar: (n) => `Вариант ${n}`, textOwn: 'Изменить текст', textUseAuto: 'Вернуть готовый текст', textOwnPh: 'Ваш текст приглашения',
       detH: 'Детали', detL: 'Включите то, что нужно. Всё можно поменять и после отправки — гости увидят изменения по той же ссылке.',
       countdown: 'Обратный отсчёт', countdownS: 'Сколько дней и часов осталось до тоя',
@@ -175,7 +175,7 @@
       gallery: 'Галерея', galleryHint: (n) => `10 сүрөткө чейин · кошулду ${n}`, uploading: 'Жүктөлүүдө…', photoErr: 'Сүрөт жүктөлгөн жок. Башкасын сынап көрүңүз.',
       designH: 'Жасалгасы', designL: 'Көрүнүштү жана музыканы тандаңыз. Баары дароо көрүнөт.',
       theme: 'Көрүнүш', themeHint: 'Адегенде — тоюңузга ылайыктуулары. Каалаганын басыңыз — үлгү дароо жаңырат. Каалаган убакта, жөнөткөндөн кийин деле алмаштырсаңыз болот.', themesOther: 'Башка көрүнүштөр', themesAll: (n) => `Бардык көрүнүштөр (дагы ${n})`, envelope: 'Конверт', envClassic: 'Мөөр басылган', envClassicS: 'Конок мөөрдү сындырат', envNavy: '«Түн» видео-конверти', envNavyS: 'Конверт өзү ачылат',
-      music: 'Музыка', musicS: 'Конок чакырууну ачканда «Бакыт кушу» обону ойнойт', musicSK: 'Конок чакырууну ачканда «Ак жол, кызым» ыры ойнойт', lang: 'Чакыруунун тили', langS: 'Конок тилди өзү алмаштыра алат',
+      music: 'Музыка', musicS: 'Конок чакырууну ачканда ойнойт', musicSK: 'Конок чакырууну ачканда ойнойт', tracks: { 'bakyt-kushu': ['«Бакыт кушу»', 'обон'], 'ak-jol-kyzym': ['«Ак жол, кызым»', 'кыз узатуу үчүн ыр'], 'komuz-atlas': ['Комуз', 'тынч обон'], tunku: ['Тынч обон', 'аш үчүн'], own: ['Өз ырыңыз', 'mp3 же m4a, 15 МБга чейин'] }, listen: 'Угуу', stop: 'Токтотуу', ownUp: 'Өз ырыңызды жүктөө', ownRepl: 'Алмаштыруу', ownDel: 'Алып салуу', ownReady: 'Файл жүктөлдү ✓', ownRights: 'Бул ырды чакырууда колдонууга укугум бар экенин ырастайм (мисалы, ыр меники же сатылып алынган).', ownRightsNeed: 'Ырды колдонууга укугуңуз бар экенин белгилеңиз.', ownErr: 'Ыр жүктөлгөн жок. 15 МБга чейинки mp3 же m4a файл керек.', lang: 'Чакыруунун тили', langS: 'Конок тилди өзү алмаштыра алат',
       text: 'Чакыруунун тексти', textAuto: 'Даяр текстти тандаңыз — аттар өзү коюлат:', textVar: (n) => `${n}-вариант`, textOwn: 'Текстти өзгөртүү', textUseAuto: 'Даяр текстке кайтуу', textOwnPh: 'Чакыруунун тексти',
       detH: 'Кошумча', detL: 'Керектүүсүн күйгүзүңүз. Жөнөткөндөн кийин да өзгөртсө болот — коноктор ошол эле шилтемеден көрүшөт.',
       countdown: 'Тойго чейин канча калды', countdownS: 'Күн, саат, мүнөт',
@@ -317,7 +317,7 @@
     return {
       kind, name_a: '', name_b: '', from_whom: 'groom_parents', title: '', signature: '',
       date: '', time: memorial ? '12:00' : '17:00', venue_name: '', venue_address: '', map_url: '',
-      hero_photo: null, gallery: [], theme: defTheme(kind), theme_chosen: false, envelope: 'classic', music: memorial ? 'none' : 'theme', lang: lang === 'ru' ? 'ru' : 'ky',
+      hero_photo: null, gallery: [], theme: defTheme(kind), theme_chosen: false, envelope: 'classic', music: memorial ? 'none' : 'theme', music_file: null, lang: lang === 'ru' ? 'ru' : 'ky',
       own_text: false, text_v: '1', text_ky: '', text_ru: '',
       show_countdown: !memorial, show_program: false, program: [], show_dress: false, dress_text: '', dress_colors: [],
       rsvp_enabled: true, rsvp_ask_count: true, rsvp_deadline: '', wishes_mode: memorial ? 'off' : 'public',
@@ -368,6 +368,33 @@
     return path;
   }
 
+  // Своя песня: mp3 / m4a до 15 МБ → invite-music/<той>/<имя>
+  const MUSIC_MAX = 15 * 1024 * 1024;
+  const musicExt = (f) => { const m = /\.(mp3|m4a|aac|ogg)$/i.exec(f.name || ''); if (m) return m[1].toLowerCase(); return /mpeg|mp3/.test(f.type) ? 'mp3' : /mp4|m4a/.test(f.type) ? 'm4a' : /aac/.test(f.type) ? 'aac' : /ogg/.test(f.type) ? 'ogg' : ''; };
+  const musicType = { mp3: 'audio/mpeg', m4a: 'audio/mp4', aac: 'audio/aac', ogg: 'audio/ogg' };
+  async function uploadMusic(toiId, blob) {
+    const ext = blob.ext || musicExt(blob) || 'mp3';
+    const path = `${toiId}/${rid()}.${ext}`;
+    const { error } = await sb.storage.from('invite-music').upload(path, blob, { contentType: musicType[ext], upsert: false });
+    if (error) throw error;
+    return path;
+  }
+  // Мелодии сайта: какая играет «по празднику» (theme)
+  const TRACK_URL = { 'bakyt-kushu': '/inv/music/bakyt-kushu.mp3', 'ak-jol-kyzym': '/inv/music/ak-jol-kyzym.mp3', 'komuz-atlas': '/inv/music/komuz-atlas.mp3', tunku: '/inv/music/tunku.mp3' };
+  const kindTrack = (k) => (k === 'memorial' ? 'tunku' : k === 'kyz_uzatuu' ? 'ak-jol-kyzym' : 'bakyt-kushu');
+  const curTrack = (d) => (d.music === 'theme' ? kindTrack(d.kind) : d.music);
+  let listenA = null, listenK = null;
+  function listen(k, btn) {
+    if (listenA) { listenA.pause(); listenA = null; document.querySelectorAll('[data-listen]').forEach((b) => { b.textContent = '▶'; b.setAttribute('aria-label', L().listen); }); }
+    if (listenK === k) { listenK = null; return; }
+    const d = S.draft;
+    const src = k === 'own' ? (d.music_file?.startsWith('local:') ? blobUrls.get(d.music_file) : d.music_file ? `${SB}/storage/v1/object/public/invite-music/${d.music_file}` : '') : TRACK_URL[k];
+    if (!src) return;
+    listenK = k; listenA = new Audio(src); listenA.play().catch(() => {});
+    listenA.onended = () => { listenK = null; btn.textContent = '▶'; };
+    btn.textContent = '■'; btn.setAttribute('aria-label', L().stop);
+  }
+
   // ---------- Дата и время (по Бишкеку) ----------
   const startsIso = (d) => (d.date ? `${d.date}T${/^\d{2}:\d{2}$/.test(d.time) ? d.time : '17:00'}:00+06:00` : null);
   function splitIso(iso) {
@@ -402,6 +429,7 @@
   function cardRow(d) {
     return {
       theme: d.theme, music: d.music, lang: d.lang, envelope: d.envelope,
+      music_file: d.music === 'own' && d.music_file && !d.music_file.startsWith('local:') ? d.music_file : null,
       title: d.kind === 'other' ? (d.title.trim() || null) : null,
       name_a: d.name_a.trim() || null, name_b: d.kind === 'wedding' ? (d.name_b.trim() || null) : null, initials: null,
       from_whom: d.from_whom, signature: d.signature.trim() || null, map_url: /^https:\/\//i.test(d.map_url.trim()) ? d.map_url.trim() : null,
@@ -422,7 +450,7 @@
       name_a: c.name_a || '', name_b: c.name_b || '', from_whom: c.from_whom || 'groom_parents', title: c.title || (toi.kind === 'other' ? toi.title : ''),
       signature: c.signature || '', date: w.date, time: w.time, venue_name: ev?.venue_name || '', venue_address: ev?.venue_address || '', map_url: c.map_url || '',
       hero_photo: c.hero_photo || null, gallery: Array.isArray(c.gallery) ? c.gallery : [], theme: c.theme || d.theme, theme_chosen: Boolean(c.theme), envelope: c.envelope || 'classic',
-      music: c.music || d.music, lang: c.lang || 'ky', own_text: Boolean(c.text_ky || c.text_ru), text_ky: c.text_ky || '', text_ru: c.text_ru || '',
+      music: c.music || d.music, music_file: c.music_file || null, lang: c.lang || 'ky', own_text: Boolean(c.text_ky || c.text_ru), text_ky: c.text_ky || '', text_ru: c.text_ru || '',
       show_countdown: c.show_countdown ?? d.show_countdown, show_program: Boolean(c.show_program), program: Array.isArray(c.program) ? c.program : [],
       show_dress: Boolean(c.show_dress), dress_text: c.dress_text || '', dress_colors: Array.isArray(c.dress_colors) ? c.dress_colors : [],
       rsvp_enabled: c.rsvp_enabled ?? true, rsvp_ask_count: c.rsvp_ask_count ?? true, rsvp_deadline: c.rsvp_deadline || '', wishes_mode: c.wishes_mode || d.wishes_mode,
@@ -535,6 +563,7 @@
     card.initials = null;
     card.hero_photo = d.hero_photo ? (d.hero_photo.startsWith('local:') ? photoSrc(d.hero_photo) || null : d.hero_photo) : null;
     card.gallery = d.gallery.map((p) => (p.startsWith('local:') ? photoSrc(p) : p)).filter(Boolean);
+    card.music_file = d.music === 'own' && d.music_file ? (d.music_file.startsWith('local:') ? blobUrls.get(d.music_file) || null : d.music_file) : null;
     const paid = S.toi ? Boolean(S.toi.plan?.card_paid) : false;
     return {
       mode: 'personal', paid,
@@ -833,9 +862,42 @@
       <div class="group stack">
         ${field(t.lang, seg('lang', [['ky', 'Кыргызча'], ['ru', 'Русский']]), t.langS)}
         <div class="divider"></div>
-        <label class="switch"><span class="t"><b>${esc(t.music)}</b><small>${esc(d.kind === 'kyz_uzatuu' ? t.musicSK : t.musicS)}</small></span><input type="checkbox" data-music ${d.music !== 'none' ? 'checked' : ''}><span class="k"></span></label>
+        <label class="switch"><span class="t"><b>${esc(t.music)}</b><small>${esc(t.musicS)}</small></span><input type="checkbox" data-music ${d.music !== 'none' ? 'checked' : ''}><span class="k"></span></label>
+        ${d.music !== 'none' ? musicList(d, t) : ''}
       </div>
       <div class="group stack">${textBlock}</div>`;
+  }
+  function musicList(d, t) {
+    const cur = curTrack(d);
+    const keys = d.kind === 'memorial' ? ['tunku', 'komuz-atlas', 'own'] : ['bakyt-kushu', 'ak-jol-kyzym', 'komuz-atlas', 'own'];
+    const rows = keys.map((k) => {
+      const on = cur === k, [name, sub] = t.tracks[k];
+      const canListen = k !== 'own' || d.music_file;
+      return `<div class="trk${on ? ' on' : ''}"><button type="button" class="trk-pick" data-track="${k}" aria-pressed="${on}"><i aria-hidden="true"></i><span><b>${esc(name)}</b><small>${esc(k === 'own' && d.music_file ? t.ownReady : sub)}</small></span></button>${canListen ? `<button type="button" class="trk-play" data-listen="${k}" aria-label="${esc(t.listen)}">▶</button>` : ''}</div>`;
+    }).join('');
+    const own = cur === 'own' ? `<div class="own-up">
+        ${d.music_file ? '' : `<label class="chk"><input type="checkbox" id="ownRights"><span>${esc(t.ownRights)}</span></label>`}
+        <div class="row-btns"><button type="button" class="btn ghost sm" id="ownPick">${esc(d.music_file ? t.ownRepl : t.ownUp)}</button>${d.music_file ? `<button type="button" class="link" id="ownDel">${esc(t.ownDel)}</button>` : ''}</div>
+        <p class="hint2" id="ownUp" hidden>${esc(t.uploading)}</p>
+        <input type="file" id="ownFile" accept="audio/mpeg,audio/mp3,audio/mp4,audio/x-m4a,audio/aac,.mp3,.m4a,.aac" hidden></div>` : '';
+    return `<div class="trks">${rows}</div>${own}`;
+  }
+  async function addMusic(f) {
+    const d = S.draft, t = L();
+    const ext = musicExt(f);
+    if (!ext || f.size > MUSIC_MAX) { toast(t.ownErr, true); return; }
+    const up = $('ownUp'); if (up) up.hidden = false;
+    try {
+      const blob = f.slice(0, f.size, musicType[ext]); blob.ext = ext;
+      const old = d.music_file;
+      let path;
+      if (S.toi) path = await uploadMusic(S.toi.id, blob);
+      else { const k = rid(); await idb.put(k, blob); path = `local:${k}`; blobUrls.set(path, URL.createObjectURL(blob)); }
+      d.music_file = path; d.music = 'own';
+      if (old && !old.startsWith('local:') && S.toi) sb.storage.from('invite-music').remove([old]).catch(() => {});
+      changed({ now: true });
+    } catch { toast(t.ownErr, true); }
+    redrawStep();
   }
   function stepDetails() {
     const d = S.draft, t = L();
@@ -916,7 +978,26 @@
       changed(); redrawStep();
     }));
     const music = root.querySelector('[data-music]');
-    if (music) music.addEventListener('change', () => { d.music = music.checked ? 'theme' : 'none'; changed(); });
+    if (music) music.addEventListener('change', () => { d.music = music.checked ? (d.music_file ? 'own' : 'theme') : 'none'; changed(); redrawStep(); });
+    root.querySelectorAll('[data-track]').forEach((b) => b.addEventListener('click', () => {
+      const k = b.dataset.track;
+      d.music = k === kindTrack(d.kind) ? 'theme' : k;
+      changed(); redrawStep();
+    }));
+    root.querySelectorAll('[data-listen]').forEach((b) => b.addEventListener('click', () => listen(b.dataset.listen, b)));
+    const ownFile = $('ownFile');
+    if (ownFile) {
+      $('ownPick')?.addEventListener('click', () => {
+        const r = $('ownRights');
+        if (r && !r.checked) { toast(L().ownRightsNeed, true); r.focus(); return; }
+        ownFile.click();
+      });
+      ownFile.addEventListener('change', async () => { const f = ownFile.files[0]; ownFile.value = ''; if (f) await addMusic(f); });
+      $('ownDel')?.addEventListener('click', () => {
+        if (d.music_file && !d.music_file.startsWith('local:') && S.toi) sb.storage.from('invite-music').remove([d.music_file]).catch(() => {});
+        d.music_file = null; d.music = 'theme'; changed({ now: true }); redrawStep();
+      });
+    }
     root.querySelectorAll('[data-prog]').forEach((el) => el.addEventListener('input', () => { d.program[+el.dataset.prog][el.dataset.k] = el.value; changed(); }));
     root.querySelectorAll('[data-pdel]').forEach((b) => b.addEventListener('click', () => { d.program.splice(+b.dataset.pdel, 1); changed(); redrawStep(); }));
     root.querySelectorAll('[data-color]').forEach((b) => b.addEventListener('click', () => {
@@ -1014,6 +1095,11 @@
       const move = async (p) => { if (!p || !p.startsWith('local:')) return p; const b = await idb.get(p.slice(6)); if (!b) return null; const np = await uploadPhoto(toiId, b); idb.del(p.slice(6)); return np; };
       d.hero_photo = await move(d.hero_photo).catch(() => null);
       d.gallery = (await Promise.all(d.gallery.map((p) => move(p).catch(() => null)))).filter(Boolean);
+      if (d.music_file?.startsWith('local:')) {
+        const b = await idb.get(d.music_file.slice(6)).catch(() => null);
+        d.music_file = b ? await uploadMusic(toiId, b).catch(() => null) : null;
+        if (!d.music_file && d.music === 'own') d.music = 'theme';
+      }
       const up = await sb.from('invite_cards').update(cardRow(d)).eq('toi_id', toiId);
       if (up.error) throw up.error;
       store.del(DRAFT_KEY); store.del('tm_pending_save');
@@ -1454,10 +1540,11 @@
       if (!S.draft) { const l = loadLocal(); if (l) { S.draft = l.d; S.step = l.step || 0; if (S.draft.theme_chosen === undefined) { if (S.draft.theme === 'tun' && S.draft.envelope === 'navy') { S.draft.theme = defTheme(S.draft.kind); S.draft.envelope = 'classic'; } S.draft.theme_chosen = S.draft.theme !== defTheme(S.draft.kind); } } }
       if (!S.draft) { S.view = 'pick'; renderApp(); return; }
       // фото черновика из браузера
-      const keys = [S.draft.hero_photo, ...S.draft.gallery].filter((p) => p && p.startsWith('local:'));
+      const keys = [S.draft.hero_photo, ...S.draft.gallery, S.draft.music_file].filter((p) => p && p.startsWith('local:'));
       await Promise.all(keys.map((k) => localUrl(k)));
       S.draft.gallery = S.draft.gallery.filter((p) => !p.startsWith('local:') || blobUrls.has(p));
       if (S.draft.hero_photo?.startsWith('local:') && !blobUrls.has(S.draft.hero_photo)) S.draft.hero_photo = null;
+      if (S.draft.music_file?.startsWith('local:') && !blobUrls.has(S.draft.music_file)) { S.draft.music_file = null; if (S.draft.music === 'own') S.draft.music = 'theme'; }
       S.view = 'new'; renderApp();
       if (prevView !== 'new') scrollTo(0, 0);   // из лендинга — к началу мастера, а не на середину
       if (store.get('tm_pending_save') && S.user) { store.del('tm_pending_save'); createFromDraft(); }

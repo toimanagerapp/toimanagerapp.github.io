@@ -641,7 +641,13 @@
     document.querySelector('meta[name="theme-color"]').content = THEMES[theme].color;
   }
   // Одна мелодия для всех оформлений; для кыз узатуу — песня «Ак жол, кызым», для аша (поминки) — спокойная
-  const musicSrc = () => (C.kind === 'memorial' ? '/inv/music/tunku.mp3' : C.kind === 'kyz_uzatuu' ? '/inv/music/ak-jol-kyzym.mp3' : THEMES[theme].music);
+  // Мелодии сайта по имени (invite_cards.music); own — своя песня из хранилища invite-music
+  const TRACKS = { 'bakyt-kushu': '/inv/music/bakyt-kushu.mp3', 'ak-jol-kyzym': '/inv/music/ak-jol-kyzym.mp3', 'komuz-atlas': '/inv/music/komuz-atlas.mp3', tunku: '/inv/music/tunku.mp3' };
+  const musicSrc = () => {
+    if (C.music === 'own' && C.music_file) return /^(blob:|https?:)/.test(C.music_file) ? C.music_file : `${SB}/storage/v1/object/public/invite-music/${C.music_file}`;
+    if (TRACKS[C.music]) return TRACKS[C.music];
+    return C.kind === 'memorial' ? TRACKS.tunku : C.kind === 'kyz_uzatuu' ? TRACKS['ak-jol-kyzym'] : THEMES[theme].music;
+  };
   function start(r) {
     R = r; C = withDefaults(r); theme = C.theme; applyTheme();
     let saved = null; try { saved = localStorage.getItem('invLang'); } catch {}

@@ -534,3 +534,19 @@ body { background: var(--bg); overflow-x: clip; }
 .hx-phone { border: 6px solid #fff; box-shadow: 0 30px 60px rgba(60, 30, 20, .22); aspect-ratio: 1 / 2; }
 .hx-phone img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .lbar .btn.gold { background: #7A1E2C; color: #FFF7EE; border-color: #7A1E2C; }
+
+/* Музыка: выбор мелодии и своя песня */
+.trks { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.trk { display: flex; align-items: stretch; gap: 8px; }
+.trk-pick { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 8px 14px; border-radius: 14px; border: 1px solid var(--line-2); background: var(--surface); text-align: left; cursor: pointer; font: inherit; color: inherit; }
+.trk-pick i { flex: none; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--line-2); }
+.trk.on .trk-pick { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+.trk.on .trk-pick i { border-color: var(--accent); background: radial-gradient(circle, var(--accent) 0 5px, transparent 6px); }
+.trk-pick span { display: flex; flex-direction: column; min-width: 0; }
+.trk-pick b { font-size: 15px; font-weight: 600; }
+.trk-pick small { font-size: 13px; color: var(--muted, #6b6b6b); }
+.trk-play { flex: none; width: 52px; border-radius: 14px; border: 1px solid var(--line-2); background: var(--surface); font-size: 16px; cursor: pointer; color: var(--accent); }
+.own-up { margin-top: 10px; display: flex; flex-direction: column; gap: 10px; }
+.chk { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.4; cursor: pointer; }
+.chk input { flex: none; width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--accent); }
+.row-btns { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
