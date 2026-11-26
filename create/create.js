@@ -12,7 +12,21 @@
     link: 'https://pay.payqr.kg/qr/#00020101021132840012c2b.mbank.kg010202101610301200052444961132%D0%98%D0%9F%20%D0%9E%D1%80%D0%BE%D0%B7%D0%B0%D0%BB%D0%B8%D0%B5%D0%B2%20%D0%9C%D0%B0%D1%80%D0%B0%D1%82%20%D0%9A%D0%BE%D0%B6%D0%BE%D0%B3%D0%B5%D0%BB%D0%B4%D0%B8%D0%B5%D0%B2%D0%B8%D1%871302123422mbiz%3A48222517%3A124412495204999953034175925IP%20Orozaliev%20Marat%20Kozhog63047ebe',
   };
   const FREE_PEOPLE = 35;
-  const sb = supabase.createClient(SB, KEY, { auth: { flowType: 'pkce', detectSessionInUrl: true, persistSession: true } });
+  // Режим приложения: конструктор открыт внутри «Той Менеджер» (Android). Вход — сессией приложения (без своего обновления токена,
+  // чтобы не испортить вход в приложении), без оплаты и цен (правила Google Play), «Гости» — в самом приложении.
+  const APP = Boolean(window.TM_APP) || new URLSearchParams(location.search).get('app') === '1';
+  const toApp = (msg) => { try { window.ReactNativeWebView && window.ReactNativeWebView.postMessage(JSON.stringify(msg)); } catch { /* не в приложении */ } };
+  if (APP) document.documentElement.classList.add('tm-app');
+  const sb = supabase.createClient(SB, KEY, { auth: APP
+    ? { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+    : { flowType: 'pkce', detectSessionInUrl: true, persistSession: true } });
+  // Приложение присылает свежий токен (при открытии и когда обновит его у себя)
+  const appSession = async (tok) => {
+    if (!tok) return null;
+    const { data, error } = await sb.auth.setSession({ access_token: tok, refresh_token: 'app' });
+    return error ? null : data.session;
+  };
+  window.tmAppToken = (tok) => { appSession(tok).catch(() => null); };
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const store = {
@@ -95,7 +109,7 @@
       google: 'Войти через Google', loginAlt: 'Не получается? Войти другим способом', loginErr: 'Не удалось войти. Попробуйте ещё раз.', creating: 'Сохраняем приглашение…',
       createErr: 'Не удалось сохранить. Проверьте интернет и попробуйте ещё раз.',
       tabCard: 'Приглашение', tabGuests: 'Гости', tabSend: 'Отправить', allInv: 'Все приглашения',
-      trialT: 'Пробная версия', trialP: 'На приглашении знак «Образец». Уберите его — и можно отправлять гостям.',
+      trialT: 'Пробная версия', trialP: 'На приглашении знак «Образец». Уберите его — и можно отправлять гостям.', appTrialP: 'На приглашении знак «Образец». Он снимается после подключения на сайте toimanager.app.',
       removeWm: 'Убрать знак', paidT: 'Оплачено', paidP: (d) => `Приглашение без знака до ${d}.`, proP: (d) => `Полная версия приложения до ${d}.`,
       checkT: 'Знак уже снят', checkP: 'Мы проверим платёж в течение дня. Можно отправлять приглашение гостям.',
       forgotT: 'Уже оплатили?', forgotP: 'Если вы перевели деньги, нажмите «Я оплатил» — без этого мы не узнаем, чей это платёж, и знак останется.', paidShort: 'Я оплатил', waitT: 'Ждём проверки платежа', waitP: 'Как только проверим (обычно в течение дня), знак исчезнет.',
@@ -190,7 +204,7 @@
       google: 'Google аркылуу кирүү', loginAlt: 'Болбой жатабы? Башка жол менен кирүү', loginErr: 'Кирүү болгон жок. Кайра аракет кылыңыз.', creating: 'Чакыруу сакталууда…',
       createErr: 'Сакталган жок. Интернетти текшерип, кайра аракет кылыңыз.',
       tabCard: 'Чакыруу', tabGuests: 'Коноктор', tabSend: 'Жөнөтүү', allInv: 'Бардык чакыруулар',
-      trialT: 'Сынамык версия', trialP: 'Чакырууда «Үлгү» белгиси бар. Аны алып салыңыз — анан конокторго жөнөтсө болот.',
+      trialT: 'Сынамык версия', trialP: 'Чакырууда «Үлгү» белгиси бар. Аны алып салыңыз — анан конокторго жөнөтсө болот.', appTrialP: 'Чакырууда «Үлгү» белгиси бар. Ал toimanager.app сайтында туташтырылгандан кийин алынат.',
       removeWm: 'Белгини алып салуу', paidT: 'Төлөндү', paidP: (d) => `Чакыруу белгисиз — ${d} чейин.`, proP: (d) => `Тиркеменин толук версиясы ${d} чейин.`,
       checkT: 'Белги алынды', checkP: 'Төлөмдү бир күндүн ичинде текшеребиз. Чакырууну конокторго жөнөтө берсеңиз болот.',
       forgotT: 'Төлөп койдуңузбу?', forgotP: 'Акча которгон болсоңуз, «Төлөдүм» баскычын басыңыз — антпесе кимдин төлөмү экенин билбейбиз жана белги калат.', paidShort: 'Төлөдүм', waitT: 'Төлөм текшерилүүдө', waitP: 'Текшергенден кийин (адатта бир күндүн ичинде) белги жоголот.',
@@ -751,6 +765,7 @@
     } catch (e) { return false; }
   }
   function loginSheet(reasonSave) {
+    if (APP) { toApp({ type: 'auth' }); return; }
     const anon = !!S.user?.is_anonymous;
     sheet(`<h2>${esc(anon ? L().anonH : reasonSave ? L().saveH : L().login)}</h2><p class="lead3">${esc(anon ? L().anonL : L().saveL)}</p>
       <div id="gisSlot" style="display:flex;justify-content:center;min-height:44px"><button class="google" type="button" id="gBtn">${G_LOGO}<span>${esc(L().google)}</span></button></div>
@@ -1073,6 +1088,7 @@
   async function finish() {
     const t = L();
     for (let k = 0; k < 2; k++) if (!validStep(k)) { goStep(k); setTimeout(() => { const e = $('stepErr'); e.textContent = k === 1 ? t.dateNeed : t.namesNeed; e.hidden = false; }, 30); return; }
+    if (!S.user && APP) { toApp({ type: 'auth' }); return; }
     if (!S.user) {
       // Ссылка без входа: гостевой аккаунт на этом телефоне. Войти через Google можно потом — тои сохранятся.
       const { data, error } = await sb.auth.signInAnonymously();
@@ -1106,7 +1122,8 @@
       const up = await sb.from('invite_cards').update(cardRow(d)).eq('toi_id', toiId);
       if (up.error) throw up.error;
       store.del(DRAFT_KEY); store.del('tm_pending_save');
-      track('invite_created', { kind: d.kind });
+      track('invite_created', { kind: d.kind, app: APP ? 1 : 0 });
+      toApp({ type: 'created', toiId });
       S.tois = null;
       location.hash = `#/t/${toiId}/send`;
     } catch (e) {
@@ -1214,7 +1231,7 @@
     return `<div class="toi-head"><a class="back" href="#/">${I.back}${esc(t.allInv)}</a>${x.plan?.card_paid ? `<span class="pill2 ok">${esc(t.paidT)}</span>` : `<span class="pill2 warn">${esc(t.trialT)}</span>`}
       <h1>${esc(x.title)}</h1></div>
       <nav class="tabs"><a href="#/t/${x.id}" ${tab === 'card' ? 'aria-current="page"' : ''}>${esc(t.tabCard)}</a>
-        <a href="#/t/${x.id}/guests" ${tab === 'guests' ? 'aria-current="page"' : ''}>${esc(t.tabGuests)}${n ? ` <span class="n">${n}</span>` : ''}</a>
+        ${APP ? '' : `<a href="#/t/${x.id}/guests" ${tab === 'guests' ? 'aria-current="page"' : ''}>${esc(t.tabGuests)}${n ? ` <span class="n">${n}</span>` : ''}</a>`}
         <a href="#/t/${x.id}/send" ${tab === 'send' ? 'aria-current="page"' : ''}>${esc(t.tabSend)}</a></nav>`;
   }
   async function loadToi(id) {
@@ -1242,6 +1259,10 @@
   const personalLink = (token) => `${PUBLIC}/i/?t=${token}`;
   function statusCard() {
     const t = L(), p = S.toi.plan || {};
+    if (APP) {
+      if (p.card_paid) return `<div class="status paid"><div class="ic">${I.check}</div><div><b>${esc(t.paidT)}</b></div></div>`;
+      return `<div class="status trial"><div class="ic">${I.star}</div><div><b>${esc(t.trialT)}</b><p>${esc(t.appTrialP)}</p></div></div>`;
+    }
     if (p.prov_plan && !p.invite_until && !p.pro_until) return `<div class="status check"><div class="ic">${I.clock}</div><div><b>${esc(t.checkT)}</b><p>${esc(t.checkP)}</p></div></div>`;
     if (p.card_paid) {
       const until = p.pro_until && Date.parse(p.pro_until) > Date.now() ? t.proP(fmtDay(p.pro_until)) : p.invite_until ? t.paidP(fmtDay(p.invite_until)) : '';
@@ -1277,8 +1298,8 @@
         <div class="group"><h3>${esc(t.vid)}</h3><p class="muted" style="font-size:14px;margin-bottom:12px">${esc(t.vidS)}${S.toi.plan?.card_paid ? '' : ` ${esc(t.vidWm)}`}</p>
           <button type="button" class="btn soft block" data-act="video">${I.film}${esc(t.vidBtn)}</button></div>
         <div class="group"><h3>${esc(t.personal)}</h3><p class="muted" style="font-size:14px;margin-bottom:12px">${esc(t.personalS)}</p>
-          <a class="btn primary block" href="#/t/${S.toi.id}/guests">${I.users}${esc(t.toGuests)}</a></div>
-        <p class="muted" style="font-size:14px">${esc(t.inApp)} <a href="../">toimanager.app</a></p>
+          ${APP ? `<button type="button" class="btn primary block" data-act="app-guests">${I.users}${esc(t.toGuests)}</button>` : `<a class="btn primary block" href="#/t/${S.toi.id}/guests">${I.users}${esc(t.toGuests)}</a>`}</div>
+        ${APP ? '' : `<p class="muted" style="font-size:14px">${esc(t.inApp)} <a href="../">toimanager.app</a></p>`}
       </div>
       <div class="bar"><div class="in"><button type="button" class="btn ghost pv-open-btn block" data-act="preview">${I.eye}${esc(t.preview)}</button></div></div>
     </div><div class="pv-slot"></div></div>`;
@@ -1291,6 +1312,7 @@
     root.querySelectorAll('[data-act="paid"]').forEach((b) => b.addEventListener('click', () => paySheet('invite', 'pay')));
     root.querySelector('[data-act="pay-pro"]')?.addEventListener('click', () => paySheet('pro'));
     root.querySelector('[data-act="video"]')?.addEventListener('click', videoSheet);
+    root.querySelector('[data-act="app-guests"]')?.addEventListener('click', () => toApp({ type: 'guests', toiId: S.toi.id }));
   }
 
   // ---------- Видео-приглашение (собирается в браузере: /video/video.js) ----------
@@ -1340,6 +1362,12 @@
     const fail = (msg) => { $('vidMsg').textContent = msg; $('vidBar').style.width = '0'; showBtns(false); };
     function showBtns(ok) {
       const b = $('vidBtns'); b.hidden = false;
+      if (APP) {
+        b.innerHTML = (ok ? `<button type="button" class="btn primary block" data-v="app">${esc(t.vidShare)}</button>` : '') + `<button type="button" class="btn ghost block" data-v="again">${esc(t.vidAgain)}</button>`;
+        b.querySelector('[data-v="app"]')?.addEventListener('click', () => sendVideoToApp(file));
+        b.querySelector('[data-v="again"]').addEventListener('click', () => { end(); if (url) URL.revokeObjectURL(url); close(); videoSheet(); });
+        return;
+      }
       const canShare = ok && file && navigator.canShare && navigator.canShare({ files: [file] });
       b.innerHTML = (ok ? `${canShare ? `<button type="button" class="btn primary block" data-v="share">${esc(t.vidShare)}</button>` : ''}
         <a class="btn ${canShare ? 'ghost' : 'primary'} block" href="${url}" download="${esc(file.name)}">${esc(t.vidSave)}</a>` : '') +
@@ -1370,8 +1398,20 @@
     })();
   }
 
+  // Видео в приложение: частями (base64), приложение соберёт файл и откроет «Поделиться»
+  async function sendVideoToApp(file) {
+    const buf = new Uint8Array(await file.arrayBuffer()), CH = 384 * 1024, n = Math.ceil(buf.length / CH), id = rid();
+    for (let i = 0; i < n; i++) {
+      let bin = ''; const part = buf.subarray(i * CH, (i + 1) * CH);
+      for (let j = 0; j < part.length; j += 0x8000) bin += String.fromCharCode.apply(null, part.subarray(j, j + 0x8000));
+      toApp({ type: 'video', id, i, n, name: file.name, mime: file.type, b64: btoa(bin) });
+      await new Promise((r) => setTimeout(r, 0));
+    }
+  }
+
   // ---------- Оплата ----------
   function paySheet(initial, startStage) {
+    if (APP) return;   // в приложении оплаты нет (правила Google Play)
     const t = L(), p = S.toi.plan || {};
     let plan = APP_SOON ? 'invite' : (p.invite_until || p.card_paid ? 'pro' : initial || 'invite');
     const invPaid = Boolean(p.invite_until);
@@ -1621,6 +1661,7 @@
     if (h.startsWith('/new')) {
       S.toi = null; S.guests = null;
       if (!S.draft) { const l = loadLocal(); if (l) { S.draft = l.d; S.step = l.step || 0; if (S.draft.theme_chosen === undefined) { if (S.draft.theme === 'tun' && S.draft.envelope === 'navy') { S.draft.theme = defTheme(S.draft.kind); S.draft.envelope = 'classic'; } S.draft.theme_chosen = S.draft.theme !== defTheme(S.draft.kind); } } }
+      if (!S.draft && APP && kindFromLink) { S.draft = newDraft(kindFromLink); kindFromLink = null; S.step = 0; saveLocal(); track('create_start', { kind: S.draft.kind, from: 'app' }); }
       if (!S.draft) { S.view = 'pick'; renderApp(); return; }
       // фото черновика из браузера
       const keys = [S.draft.hero_photo, ...S.draft.gallery, S.draft.music_file].filter((p) => p && p.startsWith('local:'));
@@ -1634,6 +1675,7 @@
       return;
     }
     S.toi = null; S.guests = null; S.draft = null;
+    if (APP) { toApp({ type: 'home' }); S.view = null; renderApp(); return; }
     S.view = 'home';
     if (S.user && !S.tois) { renderApp(); const { data } = await sb.rpc('web_my_tois'); S.tois = (data || []).filter((x) => !x.is_demo); }
     renderApp();
@@ -1691,7 +1733,7 @@
   // ---------- Запуск ----------
   (async () => {
     // вернулись со входа Google на главную страницу сайта, а не сюда — главная перекинула нас сюда с ?code=
-    const { data } = await sb.auth.getSession();
+    const { data } = APP ? { data: { session: await appSession(window.TM_APP && window.TM_APP.token).catch(() => null) } } : await sb.auth.getSession();
     S.user = data.session?.user || null;
     // после входа Google возвращаемся на тот экран, с которого уходили (адрес без #, поэтому запоминали его заранее)
     const back = store.get('tm_auth_return');
@@ -1701,6 +1743,7 @@
       history.replaceState(null, '', location.pathname + (location.hash && location.hash !== '#' ? location.hash : hh));
     } else if (/[?&](code|error)=/.test(location.search)) history.replaceState(null, '', location.pathname + location.hash);
     renderAcct();
+    if (APP) { $('app').classList.add('ready'); toApp({ type: 'ready', user: Boolean(S.user) }); }
     sb.auth.onAuthStateChange((ev, session) => {
       const was = S.user?.id; S.user = session?.user || null;
       if ((S.user?.id || null) !== (was || null)) { S.tois = null; renderAcct(); }
