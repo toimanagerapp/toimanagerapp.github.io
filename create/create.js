@@ -1085,17 +1085,27 @@
   }
 
   // Сохранить новый черновик: вход → создать той → фото → открытка
+  // Двойное нажатие «Сохранить» (медленный интернет) не должно создавать два тоя и два гостевых аккаунта
+  let finishing = false;
   async function finish() {
+    if (finishing) return;
     const t = L();
     for (let k = 0; k < 2; k++) if (!validStep(k)) { goStep(k); setTimeout(() => { const e = $('stepErr'); e.textContent = k === 1 ? t.dateNeed : t.namesNeed; e.hidden = false; }, 30); return; }
     if (!S.user && APP) { toApp({ type: 'auth' }); return; }
-    if (!S.user) {
-      // Ссылка без входа: гостевой аккаунт на этом телефоне. Войти через Google можно потом — тои сохранятся.
-      const { data, error } = await sb.auth.signInAnonymously();
-      if (error || !data?.user) { loginSheet(true); return; }
-      S.user = data.user; renderAcct(); track('login', { method: 'anon' });
+    finishing = true;
+    document.querySelectorAll('[data-act="finish"]').forEach((b) => { b.disabled = true; });
+    try {
+      if (!S.user) {
+        // Ссылка без входа: гостевой аккаунт на этом телефоне. Войти через Google можно потом — тои сохранятся.
+        const { data, error } = await sb.auth.signInAnonymously();
+        if (error || !data?.user) { loginSheet(true); return; }
+        S.user = data.user; renderAcct(); track('login', { method: 'anon' });
+      }
+      await createFromDraft();
+    } finally {
+      finishing = false;
+      document.querySelectorAll('[data-act="finish"]').forEach((b) => { b.disabled = false; });
     }
-    await createFromDraft();
   }
   async function createFromDraft() {
     const t = L(), d = S.draft;
