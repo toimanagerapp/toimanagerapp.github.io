@@ -110,6 +110,7 @@
       createErr: 'Не удалось сохранить. Проверьте интернет и попробуйте ещё раз.',
       tabCard: 'Приглашение', tabGuests: 'Гости', tabSend: 'Отправить', allInv: 'Все приглашения',
       trialT: 'Пробная версия', trialP: 'На приглашении знак «Образец». Уберите его — и можно отправлять гостям.', appTrialP: 'На приглашении знак «Образец». Он снимается после подключения на сайте toimanager.app/pro по номеру тоя — 490 сом, один раз.', numL: 'Номер тоя',
+      promoBtn: 'Есть промо-код?', promoT: 'Промо-код', promoL: 'Введите код, который вам дал тамада или организатор тоя — приглашение станет без знака «Образец» бесплатно.', promoPh: 'Например, AIBEK-2026', promoApply: 'Применить', promoOk: 'Промо-код применён — знак «Образец» убран!', promoBanner: (c) => `Промо-код ${c}: приглашение будет без знака «Образец» — бесплатно.`, promoErr: { bad: 'Такого промо-кода нет. Проверьте, как он написан.', off: 'Этот промо-код больше не действует.', expired: 'Срок промо-кода закончился.', used_up: 'Этот промо-код уже использован полностью.', already_paid: 'Это приглашение уже без знака «Образец».', limit_user: 'С этого аккаунта промо-код уже использован.', too_many: 'Слишком много попыток. Попробуйте через час.', net: 'Не получилось проверить код. Попробуйте ещё раз.' },
       removeWm: 'Убрать знак', paidT: 'Оплачено', paidP: (d) => `Приглашение без знака до ${d}.`, proP: (d) => `Полная версия приложения до ${d}.`,
       checkT: 'Знак уже снят', checkP: 'Мы проверим платёж в течение дня. Можно отправлять приглашение гостям.',
       forgotT: 'Уже оплатили?', forgotP: 'Если вы перевели деньги, нажмите «Я оплатил» — без этого мы не узнаем, чей это платёж, и знак останется.', paidShort: 'Я оплатил', waitT: 'Ждём проверки платежа', waitP: 'Как только проверим (обычно в течение дня), знак исчезнет.',
@@ -205,6 +206,7 @@
       createErr: 'Сакталган жок. Интернетти текшерип, кайра аракет кылыңыз.',
       tabCard: 'Чакыруу', tabGuests: 'Коноктор', tabSend: 'Жөнөтүү', allInv: 'Бардык чакыруулар',
       trialT: 'Сынамык версия', trialP: 'Чакырууда «Үлгү» белгиси бар. Аны алып салыңыз — анан конокторго жөнөтсө болот.', appTrialP: 'Чакырууда «Үлгү» белгиси бар. Ал toimanager.app/pro сайтында тойдун номери менен туташтырылгандан кийин алынат — 490 сом, бир жолу.', numL: 'Тойдун номери',
+      promoBtn: 'Промокод барбы?', promoT: 'Промокод', promoL: 'Тамада же той уюштуруучу берген кодду жазыңыз — чакыруу «Үлгү» белгисиз, акысыз болот.', promoPh: 'Мисалы, AIBEK-2026', promoApply: 'Колдонуу', promoOk: 'Промокод колдонулду — «Үлгү» белгиси алынды!', promoBanner: (c) => `Промокод ${c}: чакыруу «Үлгү» белгисиз — акысыз болот.`, promoErr: { bad: 'Мындай промокод жок. Туура жазылганын текшериңиз.', off: 'Бул промокод мындан ары иштебейт.', expired: 'Промокоддун мөөнөтү бүттү.', used_up: 'Бул промокод толук колдонулуп бүткөн.', already_paid: 'Бул чакыруу «Үлгү» белгисиз эле.', limit_user: 'Бул аккаунттан промокод колдонулуп калган.', too_many: 'Аракет өтө көп болду. Бир сааттан кийин кайталаңыз.', net: 'Кодду текшерүү мүмкүн болгон жок. Кайра аракет кылыңыз.' },
       removeWm: 'Белгини алып салуу', paidT: 'Төлөндү', paidP: (d) => `Чакыруу белгисиз — ${d} чейин.`, proP: (d) => `Тиркеменин толук версиясы ${d} чейин.`,
       checkT: 'Белги алынды', checkP: 'Төлөмдү бир күндүн ичинде текшеребиз. Чакырууну конокторго жөнөтө берсеңиз болот.',
       forgotT: 'Төлөп койдуңузбу?', forgotP: 'Акча которгон болсоңуз, «Төлөдүм» баскычын басыңыз — антпесе кимдин төлөмү экенин билбейбиз жана белги калат.', paidShort: 'Төлөдүм', waitT: 'Төлөм текшерилүүдө', waitP: 'Текшергенден кийин (адатта бир күндүн ичинде) белги жоголот.',
@@ -314,6 +316,9 @@
 
   // ---------- Состояние ----------
   const qs = new URLSearchParams(location.search);
+  // Промо-код из ссылки тамады: toimanager.app/create/?promo=CODE — запоминаем и применяем после сохранения приглашения
+  const PROMO_KEY = 'tm_promo';
+  if (!window.TM_APP && /^[A-Za-z0-9-]{4,24}$/.test(qs.get('promo') || '')) { try { localStorage.setItem(PROMO_KEY, qs.get('promo').toUpperCase()); } catch { /* приватный режим */ } }
   let lang = qs.get('lang') === 'ky' || qs.get('lang') === 'ru' ? qs.get('lang') : (store.get('lang') || ((navigator.language || '').startsWith('ky') ? 'ky' : 'ru'));
   const S = {
     user: null, tois: null,           // мои тои (web_my_tois)
@@ -956,6 +961,7 @@
       ? (last ? `<button type="button" class="btn primary" data-act="finish">${esc(t.save)}</button>` : `<button type="button" class="btn primary" data-act="next">${esc(t.next)}</button>`)
       : (last ? `<a class="btn primary" href="#/t/${S.toi.id}/send">${esc(t.tabSend)} →</a>` : `<button type="button" class="btn primary" data-act="next">${esc(t.next)}</button>`);
     const body = `
+      ${isNew && !APP && store.get(PROMO_KEY) ? `<div class="promo-banner">${I.star}<span>${esc(t.promoBanner(store.get(PROMO_KEY)))}</span></div>` : ''}
       ${isNew ? `<div class="steps-top"><div class="meta"><span>${esc(t.stepOf(i + 1, n))} · <b>${esc(t.steps[i])}</b></span>${i > 0 ? `<button type="button" class="link" data-act="back">${esc(t.back)}</button>` : ''}</div>
         <div class="progress"><i style="width:${((i + 1) / n) * 100}%"></i></div></div>` : ''}
       <nav class="chips" aria-label="${esc(t.steps.join(', '))}">${chips}</nav>
@@ -1135,6 +1141,13 @@
       track('invite_created', { kind: d.kind, app: APP ? 1 : 0 });
       toApp({ type: 'created', toiId });
       S.tois = null;
+      const promo = !APP && store.get(PROMO_KEY);
+      if (promo) {
+        const r = await sb.rpc('redeem_promo', { p_toi: toiId, p_code: promo }).catch(() => null);
+        if (r && r.data && r.data.ok) { toast(t.promoOk); track('promo_used', { code: promo, auto: 1 }); }
+        else if (r && r.data && r.data.error) toast(t.promoErr[r.data.error] || t.promoErr.net, true);
+        if (r && r.data) store.del(PROMO_KEY);
+      }
       location.hash = `#/t/${toiId}/send`;
     } catch (e) {
       console.error(e);
@@ -1293,7 +1306,7 @@
     if (started && Date.now() - started < 30 * 864e5) {
       return `<div class="status check"><div class="ic">${I.clock}</div><div><b>${esc(t.forgotT)}</b><p>${esc(t.forgotP)}</p><div class="btns"><button type="button" class="btn primary sm" data-act="paid">${esc(t.paidShort)}</button><button type="button" class="btn ghost sm" data-act="pay">${esc(t.removeWm)} · ${p.invite_price || 490} ${esc(t.som)}</button></div></div></div>`;
     }
-    return `<div class="status trial"><div class="ic">${I.star}</div><div><b>${esc(t.trialT)}</b><p>${esc(t.trialP)}</p><div class="btns"><button type="button" class="btn primary sm" data-act="pay">${esc(t.removeWm)} · ${p.invite_price || 490} ${esc(t.som)}</button></div></div></div>`;
+    return `<div class="status trial"><div class="ic">${I.star}</div><div><b>${esc(t.trialT)}</b><p>${esc(t.trialP)}</p><div class="btns"><button type="button" class="btn primary sm" data-act="pay">${esc(t.removeWm)} · ${p.invite_price || 490} ${esc(t.som)}</button><button type="button" class="link" data-act="promo">${esc(t.promoBtn)}</button></div></div></div>`;
   }
   function renderSend() {
     const t = L(), link = generalLink(), d = S.draft;
@@ -1324,6 +1337,7 @@
     root.querySelectorAll('[data-act="pay"]').forEach((b) => b.addEventListener('click', () => paySheet('invite')));
     root.querySelectorAll('[data-act="paid"]').forEach((b) => b.addEventListener('click', () => paySheet('invite', 'pay')));
     root.querySelector('[data-act="pay-pro"]')?.addEventListener('click', () => paySheet('pro'));
+    root.querySelector('[data-act="promo"]')?.addEventListener('click', promoSheet);
     root.querySelector('[data-act="video"]')?.addEventListener('click', videoSheet);
     root.querySelector('[data-act="app-guests"]')?.addEventListener('click', () => toApp({ type: 'guests', toiId: S.toi.id }));
   }
@@ -1420,6 +1434,30 @@
       toApp({ type: 'video', id, i, n, name: file.name, mime: file.type, b64: btoa(bin) });
       await new Promise((r) => setTimeout(r, 0));
     }
+  }
+
+  // ---------- Промо-код (от тамады): приглашение без знака бесплатно ----------
+  function promoSheet() {
+    const t = L();
+    sheet(`<h2>${esc(t.promoT)}</h2><p class="muted" style="font-size:14px;margin:-4px 0 14px">${esc(t.promoL)}</p>
+      <form id="promoForm" class="stack" style="gap:12px" novalidate>
+        <input class="input" id="promoCode" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="24" placeholder="${esc(t.promoPh)}" value="${esc(store.get(PROMO_KEY) || '')}" style="text-transform:uppercase;letter-spacing:.06em;font-weight:600">
+        <p class="err" id="promoErr" role="alert" hidden></p>
+        <button type="submit" class="btn primary block">${esc(t.promoApply)}</button></form>`, (el, close) => {
+      el.querySelector('#promoForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const code = el.querySelector('#promoCode').value.trim(), err = el.querySelector('#promoErr'), btn = el.querySelector('button[type=submit]');
+        if (code.length < 4) { err.textContent = t.promoErr.bad; err.hidden = false; return; }
+        btn.disabled = true; err.hidden = true;
+        const { data, error } = await sb.rpc('redeem_promo', { p_toi: S.toi.id, p_code: code });
+        btn.disabled = false;
+        if (error || !data) { err.textContent = t.promoErr.net; err.hidden = false; return; }
+        if (!data.ok) { err.textContent = t.promoErr[data.error] || t.promoErr.net; err.hidden = false; return; }
+        store.del(PROMO_KEY); track('promo_used', { code: code.toUpperCase() });
+        close(); toast(t.promoOk);
+        await refreshPlan(); renderApp(); pvUpdate();
+      });
+    });
   }
 
   // ---------- Оплата ----------

@@ -152,6 +152,7 @@
       <button role="tab" data-tab="claims" aria-selected="true">Оплаты <span class="count" id="claimsCount" hidden></span></button>
       <button role="tab" data-tab="search">Поиск</button>
       <button role="tab" data-tab="catalog">Каталог <span class="count" id="vclaimsCount" hidden></span></button>
+      <button role="tab" data-tab="promo">Промо-коды</button>
       <button role="tab" data-tab="stats">Статистика</button>
       <button role="tab" data-tab="users" data-owner>Пользователи</button>
       <button role="tab" data-tab="errors" data-owner>Ошибки</button>
@@ -265,6 +266,26 @@
     </section>
 
     <!-- Администраторы -->
+    <section data-view="promo" class="stack" hidden>
+      <div class="card how"><b>Промо-код для тамады</b>
+        <ol><li>Придумайте код (латиница и цифры, например <b>AIBEK-2026</b>) и укажите, кому он выдан.</li>
+          <li>Передайте тамаде код или готовую ссылку — клиент открывает её, делает приглашение, и знак «Образец» снимается бесплатно.</li>
+          <li>Здесь видно, сколько раз и для каких тоев использован каждый код.</li></ol></div>
+      <div class="card stack" id="promoNew" data-owner>
+        <h3>Новый промо-код</h3>
+        <div class="inline">
+          <div><label class="flabel" for="pCode">Код</label><input class="input" id="pCode" maxlength="24" autocomplete="off" placeholder="AIBEK-2026" style="text-transform:uppercase"></div>
+          <div style="flex:2 1 220px"><label class="flabel" for="pPartner">Кому выдан</label><input class="input" id="pPartner" maxlength="120" placeholder="Тамада Айбек"></div>
+          <div><label class="flabel" for="pPhone">Телефон · необяз.</label><input class="input" id="pPhone" maxlength="40" placeholder="0700 123 456"></div>
+        </div>
+        <div class="inline">
+          <div><label class="flabel" for="pMax">Сколько раз можно использовать</label><input class="input" id="pMax" type="number" min="1" max="100000" value="20"></div>
+          <div><label class="flabel" for="pUntil">Действует до · необяз.</label><input class="input" id="pUntil" type="date"></div>
+          <button class="b primary" type="button" id="pSave">Создать</button>
+        </div>
+      </div>
+      <div class="grid" id="promoList"></div>
+    </section>
     <section data-view="admins" class="stack" hidden>
       <div class="card"><div class="list" id="adminList"></div></div>
       <div class="card stack">
@@ -365,9 +386,55 @@
     try { localStorage.setItem('adminTab', name); } catch {}
     document.querySelectorAll('[data-tab]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === name)));
     document.querySelectorAll('[data-view]').forEach((s) => s.hidden = s.dataset.view !== name);
-    ({ claims: loadClaims, search: () => $('q').focus(), catalog: loadCatalog, stats: loadStats, users: loadUsers, errors: loadErrors, income: loadIncome, admins: loadAdmins })[name]?.();
+    ({ claims: loadClaims, search: () => $('q').focus(), catalog: loadCatalog, stats: loadStats, promo: loadPromo, users: loadUsers, errors: loadErrors, income: loadIncome, admins: loadAdmins })[name]?.();
   }
   document.querySelectorAll('[data-tab]').forEach((b) => b.onclick = () => show(b.dataset.tab));
+
+  // ---------- промо-коды ----------
+  const promoLink = (code) => `https://toimanager.app/create/?promo=${encodeURIComponent(code)}`;
+  async function loadPromo() {
+    let list;
+    try { list = await rpc('admin_promo_list'); } catch (e) { toast(errRu(e), true); return; }
+    const owner = isOwner();
+    $('promoNew').hidden = !owner;
+    $('promoList').innerHTML = list.length ? list.map((p) => {
+      const left = p.max_uses ? `${p.used} из ${p.max_uses}` : `${p.used}`;
+      const expired = p.expires_at && Date.parse(p.expires_at) < Date.now();
+      const state = !p.active ? '<span class="badge gray">Выключен</span>' : expired ? '<span class="badge gray">Срок вышел</span>'
+        : p.max_uses && p.used >= p.max_uses ? '<span class="badge warn">Использован полностью</span>' : '<span class="badge ok">Работает</span>';
+      return `<div class="card claim">
+        <div class="row"><span class="sum" style="letter-spacing:.04em">${esc(p.code)}</span>${state}</div>
+        <dl class="kv"><dt>Кому</dt><dd>${esc(p.partner)}${p.phone ? ` · ${esc(p.phone)}` : ''}</dd>
+          <dt>Использован</dt><dd><b>${left}</b> раз${p.expires_at ? ` · до ${day(p.expires_at)}` : ''}</dd>
+          <dt>Ссылка</dt><dd><span class="meta" style="user-select:all">${esc(promoLink(p.code))}</span></dd></dl>
+        ${p.uses.length ? `<div><div class="hd">Для каких тоев</div><div class="list">${p.uses.map((x) => `<div><button class="row-link" data-open="${x.num}">${esc(x.title)}</button><div class="meta">№ ${fmtNum(x.num)} · ${when(x.at)}</div></div>`).join('')}</div></div>` : ''}
+        <div class="actions" style="margin-top:0">
+          <button class="b sec" data-pcopy="${esc(p.code)}">Скопировать ссылку</button>
+          ${waNum(p.phone) ? `<a class="b sec" target="_blank" rel="noopener" href="https://wa.me/${waNum(p.phone)}?text=${encodeURIComponent(`Здравствуйте! Ваш промо-код для клиентов: ${p.code}\nС ним онлайн-приглашение на той — бесплатно, без знака «Образец».\nСсылка для клиентов: ${promoLink(p.code)}`)}">Отправить тамаде в WhatsApp</a>` : ''}
+          ${owner ? `<button class="b ${p.active ? 'danger' : 'sec'}" data-ptoggle="${esc(p.code)}" data-on="${p.active ? '0' : '1'}">${p.active ? 'Выключить' : 'Включить'}</button>` : ''}
+        </div></div>`;
+    }).join('') : '<p class="empty">Промо-кодов пока нет.</p>';
+  }
+  $('pSave').onclick = async () => {
+    const code = $('pCode').value.trim().toUpperCase().replace(/\s+/g, ''), partner = $('pPartner').value.trim();
+    if (!/^[A-Z0-9-]{4,24}$/.test(code)) { toast('Код: 4–24 символа, латинские буквы, цифры и дефис', true); return; }
+    if (!partner) { toast('Укажите, кому выдан код', true); return; }
+    const max = Number($('pMax').value) || null, until = $('pUntil').value ? new Date(`${$('pUntil').value}T23:59:59+06:00`).toISOString() : null;
+    try {
+      await rpc('admin_promo_save', { p_code: code, p_partner: partner, p_phone: $('pPhone').value.trim() || null, p_max: max, p_expires: until, p_note: null });
+      toast(`Промо-код ${code} создан`); ['pCode', 'pPartner', 'pPhone', 'pUntil'].forEach((id) => { $(id).value = ''; }); loadPromo();
+    } catch (e) { toast(errRu(e), true); }
+  };
+  document.addEventListener('click', async (e) => {
+    const c = e.target.closest('[data-pcopy]');
+    if (c) { try { await navigator.clipboard.writeText(promoLink(c.dataset.pcopy)); toast('Ссылка скопирована'); } catch { toast(promoLink(c.dataset.pcopy)); } return; }
+    const tg = e.target.closest('[data-ptoggle]');
+    if (tg) {
+      const on = tg.dataset.on === '1';
+      if (!on && !confirm(`Выключить промо-код ${tg.dataset.ptoggle}? Новые клиенты не смогут его применить.`)) return;
+      try { await rpc('admin_promo_toggle', { p_code: tg.dataset.ptoggle, p_active: on }); loadPromo(); } catch (err) { toast(errRu(err), true); }
+    }
+  });
 
   // Телефон плательщика → номер для wa.me (996XXXXXXXXX); пусто, если не похоже на номер
   const waNum = (ph) => { const d = String(ph || '').replace(/\D/g, ''); if (/^996\d{9}$/.test(d)) return d; if (/^0\d{9}$/.test(d)) return '996' + d.slice(1); if (/^\d{9}$/.test(d)) return '996' + d; return ''; };
@@ -508,7 +575,7 @@
     const invPaid = t.invite_until && Date.parse(t.invite_until) > Date.now();
     const canMark = !paidAny && !t.claims.some((c) => c.status === 'pending');   // есть заявка — подтверждают её во вкладке «Оплаты»
     const history = [
-      ...t.grants.map((g) => ({ at: g.created_at, html: `<div><b>${g.kind === 'gift' ? 'Подарок' : 'Оплата'}${g.amount != null && g.kind === 'paid' ? ' · ' + money(g.amount) + ' сом' : ''}</b>
+      ...t.grants.map((g) => ({ at: g.created_at, html: `<div><b>${g.kind === 'gift' ? (/^Промо-код/.test(g.note || '') ? 'Промо-код' : 'Подарок') : 'Оплата'}${g.amount != null && g.kind === 'paid' ? ' · ' + money(g.amount) + ' сом' : ''}</b>
         ${g.revoked ? ' <span class="badge gray">отменено</span>' : ''}
         <div class="meta">${day(g.created_at)} → до ${day(g.until)}${g.note ? ' · ' + esc(g.note) : ''}${g.by ? ' · ' + esc(g.by) : ''}</div></div>` })),
       ...t.claims.map((c) => ({ at: c.created_at, html: `<div>Клиент нажал «Я оплатил»: <b>${esc(c.payer_name)}</b>${c.phone ? ' · ' + esc(c.phone) : ''}

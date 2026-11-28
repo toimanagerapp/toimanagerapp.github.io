@@ -570,3 +570,8 @@ body { background: var(--bg); overflow-x: clip; }
 .tm-app #app:not(.ready) > * { display: none !important; }
 .tm-app .foot, .tm-app body > jdiv { display: none !important; }
 .tm-app .toi-head .back { display: none; }
+
+/* Промо-код */
+.promo-banner { display: flex; gap: 10px; align-items: center; padding: 10px 14px; margin-bottom: 12px; border-radius: 14px; background: #FFF6E5; border: 1px solid #F1DDB8; font-size: 14px; font-weight: 600; color: #6B4A12; }
+.promo-banner svg { flex: none; width: 18px; height: 18px; color: #C49A4A; }
+.status .btns .link { font-size: 14px; }
